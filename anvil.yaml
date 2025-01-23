@@ -1,12 +1,42 @@
 allow_embedding: false
+db_schema:
+  users:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: email
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: enabled
+      type: bool
+    - admin_ui: {order: 2, width: 200}
+      name: last_login
+      type: datetime
+    - admin_ui: {order: 3, width: 200}
+      name: password_hash
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      name: n_password_failures
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      name: confirmed_email
+      type: bool
+    - admin_ui: {order: 6, width: 200}
+      name: signed_up
+      type: datetime
+    - admin_ui: {order: 7, width: 200}
+      name: remembered_logins
+      type: simpleObject
+    server: full
+    title: Users
 dependencies:
 - config: {}
   dep_id: dep_lin1x4oec0ytd
   resolution_hints: {app_id: 4UK6WHQ6UX7AKELK, name: Material 3 Theme, package_name: m3}
   version: {version_tag: v1.2.1}
-name: M3 App 3
+name: M3 (beta) App 3
 native_deps: null
-package_name: M3_App_3
+package_name: M3__beta__App_3
 runtime_options:
   client_version: '3'
   server_spec: {base: python310-minimal}
@@ -16,3 +46,13 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/tables.yml
+- client_config: {allow_remember_me: true, allow_signup: true, confirm_email: true, enable_automatically: true, remember_me_days: 30, require_secure_passwords: true, use_email: true, use_facebook: false, use_google: true, use_token: true}
+  server_config: {user_table: users}
+  source: /runtime/services/anvil/users.yml
+- client_config: {}
+  server_config: {}
+  source: /runtime/services/facebook.yml
+- client_config: {}
+  server_config: {}
+  source: /runtime/services/google.yml
+startup_form: Form1
