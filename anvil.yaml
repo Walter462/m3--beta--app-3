@@ -1,5 +1,6 @@
 allow_embedding: false
 db_schema:
+  subscription: {title: Subscription}
   users:
     client: none
     columns:
@@ -27,6 +28,9 @@ db_schema:
     - admin_ui: {order: 7, width: 200}
       name: remembered_logins
       type: simpleObject
+    - admin_ui: {width: 200}
+      name: email_confirmation_key
+      type: string
     server: full
     title: Users
 dependencies:
