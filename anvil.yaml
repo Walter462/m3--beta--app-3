@@ -1,6 +1,37 @@
 allow_embedding: false
 db_schema:
-  subscription: {title: Subscription}
+  subscription:
+    client: none
+    columns:
+    - admin_ui: {width: 200}
+      name: subscription_id
+      type: number
+    - admin_ui: {width: 200}
+      name: Loan_DB_profile_name
+      type: string
+    - admin_ui: {width: 200}
+      name: active
+      type: bool
+    server: full
+    title: Subscription
+  subscription_owner:
+    client: none
+    columns:
+    - admin_ui: {width: 200}
+      name: subscription_id
+      target: subscription
+      type: link_single
+    - admin_ui: {width: 200}
+      name: user_email
+      target: users
+      type: link_single
+    server: full
+    title: Subscription_owner
+  table_4:
+    client: none
+    columns: []
+    server: full
+    title: Table 4
   users:
     client: none
     columns:
