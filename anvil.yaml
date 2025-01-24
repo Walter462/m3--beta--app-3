@@ -1,5 +1,29 @@
 allow_embedding: false
 db_schema:
+  company:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: subscription_id
+      target: subscription
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: name
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: website
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      name: functional_currency
+      type: string
+    - admin_ui: {order: -1, width: 200}
+      name: company_id
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: created_on
+      type: datetime
+    server: full
+    title: Company
   subscription:
     client: none
     columns:
@@ -12,6 +36,9 @@ db_schema:
     - admin_ui: {width: 200}
       name: active
       type: bool
+    - admin_ui: {order: 2, width: 200}
+      name: created_on
+      type: datetime
     server: full
     title: Subscription
   subscription_owner:
@@ -25,13 +52,11 @@ db_schema:
       name: user_email
       target: users
       type: link_single
+    - admin_ui: {order: 2, width: 200}
+      name: created_on
+      type: datetime
     server: full
     title: Subscription_owner
-  table_4:
-    client: none
-    columns: []
-    server: full
-    title: Table 4
   users:
     client: none
     columns:
