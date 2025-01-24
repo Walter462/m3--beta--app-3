@@ -1,7 +1,24 @@
 components:
 - layout_properties: {grid_position: 'TFTROU,WXMCOH'}
   name: image_1
-  properties: {height: 51.060546875, horizontal_align: left, source: _/theme/WhiteStarC_logo.webp}
+  properties: {height: 51.060546875, horizontal_align: left, source: _/theme/WhiteStarC_logo.webp, visible: true}
   type: Image
-container: {type: ColumnPanel}
+- components:
+  - data_bindings: []
+    layout_properties: {slot: card-content-slot}
+    name: heading_1
+    properties: {icon: 'mi:add_box', scale: small, style: headline, text: New subscription}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - data_bindings: []
+    layout_properties: {slot: card-content-slot}
+    name: text_box_1
+    properties: {align: left, appearance: outlined, background_color: '#f7f3fb', border_color: '#714b86', enabled: true, label: Profile name, label_bold: true, label_italic: false, label_underline: false, placeholder: Enter loan database profile name (your subscription profile name), text: ''}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  layout_properties: {grid_position: 'AIFBNM,JVVDSW'}
+  name: card_1
+  properties: {}
+  type: form:dep_lin1x4oec0ytd:_Components.Card
+container:
+  properties: {col_spacing: medium, wrap_on: mobile}
+  type: ColumnPanel
 is_package: true
