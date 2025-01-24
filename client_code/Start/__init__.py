@@ -15,13 +15,21 @@ class Start(StartTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     anvil.users.login_with_form()
+    self.repeating_panel_1.items = app_tables.subscription.search()
+    self.repeating_panel_2.items = app_tables.users.search()
 
     # Any code you write here will run before the form opens.
+  def subscriptionSubmit_btn_click(self, **event_args):
+    """This method is called when the component is clicked."""
+    name = self.NewLoanDB_name_input_text_box.text
+    anvil.server.call('add_subscrition', name)
+    alert('New subscription saved successfully')
+    self.NewLoanDB_name_input_text_box.text =""
+
+  
+  
   def logout_btn_click(self, **event_args):
     """This method is called when the component is clicked."""
     anvil.users.logout()
     anvil.users.login_with_form()
 
-  def subscriptionSubmit_btn_click(self, **event_args):
-    """This method is called when the component is clicked."""
-    pass

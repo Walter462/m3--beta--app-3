@@ -1,7 +1,7 @@
 allow_embedding: false
 db_schema:
   company:
-    client: none
+    client: search
     columns:
     - admin_ui: {order: 0, width: 200}
       name: subscription_id
@@ -25,7 +25,7 @@ db_schema:
     server: full
     title: Company
   subscription:
-    client: none
+    client: search
     columns:
     - admin_ui: {width: 200}
       name: subscription_id
@@ -58,7 +58,7 @@ db_schema:
     server: full
     title: Subscription_owner
   users:
-    client: none
+    client: search
     columns:
     - admin_ui: {order: 0, width: 200}
       name: email

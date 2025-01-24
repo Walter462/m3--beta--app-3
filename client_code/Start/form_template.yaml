@@ -1,7 +1,7 @@
 components:
 - layout_properties: {grid_position: 'TFTROU,WXMCOH'}
   name: image_1
-  properties: {height: 51.060546875, horizontal_align: left, source: _/theme/WhiteStarC_logo.webp, visible: true}
+  properties: {height: 57.66461181640625, horizontal_align: left, source: _/theme/WhiteStarC_logo.webp, visible: true}
   type: Image
 - components:
   - data_bindings: []
@@ -18,7 +18,7 @@ components:
   - components:
     - data_bindings: []
       layout_properties: {grid_position: 'HNRTCM,VMTLWK'}
-      name: text_box_1
+      name: NewLoanDB_name_input_text_box
       properties:
         align: left
         appearance: filled
@@ -54,60 +54,49 @@ components:
   name: card_1
   properties: {}
   type: form:dep_lin1x4oec0ytd:_Components.Card
+- layout_properties: {grid_position: 'NQYTAH,CJOBPH'}
+  name: heading_2
+  properties:
+    spacing:
+      padding: [null, null, null, 15]
+    text: Existing subscriptions
+  type: form:dep_lin1x4oec0ytd:_Components.Heading
 - components:
-  - data_bindings: []
-    layout_properties: {slot: card-content-slot}
-    name: heading_1_copy
-    properties:
-      icon: mi:add_box
-      scale: small
-      spacing:
-        padding: [null, null, null, 15]
-      style: headline
-      text: New subscription
-    type: form:dep_lin1x4oec0ytd:_Components.Heading
-  - components:
-    - data_bindings: []
-      layout_properties: {grid_position: 'HNRTCM,VMTLWK'}
-      name: text_box_1_copy
-      properties:
-        align: left
-        appearance: filled
-        background_color: '#f7f3fb'
-        border_color: '#714b86'
-        enabled: true
-        error: false
-        label: Profile name
-        label_bold: true
-        label_italic: false
-        label_underline: false
-        margin: [null, 15, null, 15]
-        placeholder: Enter loan database profile name (your subscription profile name)
-        text: ''
-      type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
-    layout_properties: {slot: card-content-slot}
-    name: column_panel_1_copy
-    properties: {}
-    type: ColumnPanel
-  - layout_properties: {slot: card-content-slot}
-    name: subscriptionSubmit_btn_copy
-    properties:
-      align: right
-      appearance: elevated
-      spacing:
-        margin: [null, 15, null, 15]
-        padding: [null, null, null, 24]
-      text: Submit
-    type: form:dep_lin1x4oec0ytd:_Components.Button
-  - event_bindings: {click: logout_btn_click}
-    layout_properties: {slot: card-content-slot}
-    name: logout_btn
-    properties: {align: left, appearance: elevated, text: Log out}
-    type: form:dep_lin1x4oec0ytd:_Components.Button
-  layout_properties: {grid_position: 'NKYHGM,STYHYQ'}
-  name: card_1_copy
-  properties: {}
-  type: form:dep_lin1x4oec0ytd:_Components.Card
+  - name: repeating_panel_1
+    properties: {item_template: Start.RowTemplate1}
+    type: RepeatingPanel
+  layout_properties: {grid_position: 'BXUDWY,HIVVVR'}
+  name: data_grid_1
+  properties:
+    columns:
+    - {data_key: created_on, expand: false, id: VSSJNW, title: Creation date, width: 299.66943359375}
+    - {data_key: Loan_DB_profile_name, id: LCCDBR, title: Loan Data Base profile name}
+  type: DataGrid
+- layout_properties: {grid_position: 'PDPTLX,TUWUGU'}
+  name: heading_3
+  properties:
+    spacing:
+      padding: [null, null, null, 15]
+    text: Registered users
+  type: form:dep_lin1x4oec0ytd:_Components.Heading
+- components:
+  - name: repeating_panel_2
+    properties: {item_template: Start.RowTemplate3}
+    type: RepeatingPanel
+  layout_properties: {grid_position: 'BQYJWV,NXGXYK'}
+  name: data_grid_2
+  properties:
+    columns:
+    - {data_key: email, expand: false, id: LFZRCP, title: Email, width: 206.90960693359375}
+    - {data_key: signed_up, id: WMQRCN, title: Signed up}
+    - {data_key: last_login, id: EWREQS, title: Last login}
+    - {data_key: password_hash, id: FSUWRT, title: Password hash}
+  type: DataGrid
+- event_bindings: {click: logout_btn_click}
+  layout_properties: {grid_position: 'YASKOY,OATTGM'}
+  name: logout_btn
+  properties: {align: left, appearance: elevated, text: Log out}
+  type: form:dep_lin1x4oec0ytd:_Components.Button
 container:
   properties: {col_spacing: medium, wrap_on: mobile}
   type: ColumnPanel

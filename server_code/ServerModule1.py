@@ -6,6 +6,7 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
+from datetime import datetime
 
 # This is a server module. It runs on the Anvil server,
 # rather than in the user's browser.
@@ -19,3 +20,9 @@ import anvil.server
 #   print("Hello, " + name + "!")
 #   return 42
 #
+@anvil.server.callable
+def add_subscrition(Loan_DB_name):
+  app_tables.subscription.add_row(
+    created_on=datetime.now(),
+    Loan_DB_profile_name=Loan_DB_name
+  )
