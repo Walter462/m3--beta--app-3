@@ -24,7 +24,7 @@ from typing import Union, Literal, Optional, Tuple
 class Loan:
 	def __init__(self, loan_id, currency_ticker = None):
 		self.loan_id = loan_id 			#assigned by the database
-		self.currency_ticker = currency_ticker or "GBP"
+		self.loan_currency_ticker = currency_ticker or "GBP"
 		self.loan_events_list = []
 		#self.sorted_loan_events_list = []
 	def loan_events_list_method(self, events):
@@ -43,7 +43,7 @@ class EventTimeSchedule:
 class EventParams:
 	def __init__(self, 
 							date: Optional[dt.date]  = None, 
-							time: Optional[dt.timetz] =None):
+							time: Optional[dt.timetz] = None):
 		self.loan_id:			Optional[int] = 0	#Fetch from DB
 		self.event_id:		Optional[int] = 0	#Assigned by DB
 		self.event_date = date or dt.now().date()
@@ -60,31 +60,35 @@ class EventParams:
 class PrincipalLending(EventParams):
 	def __init__(self, 
 							event_date: Optional[dt.date] = None,
-							principal_lending_sum = 0,
-							currency_ticker = None,
-							currency_to_loan_rate = None
+							principal_lending_currency_sum = None,
+							event_currency_ticker = None,
+							event_currency_to_loan_rate = None
               ):
 		super().__init__()
-		self.principal_lending_sum = principal_lending_sum
+		self.principal_lending_currency_sum = principal_lending_currency_sum or 0
 		self.event_date = event_date
 		self.event_name = "Principal lending"
 		self.event_type = "User input"
-		self.currency_ticker = currency_ticker
-		self.currency_to_loan_rate = currency_to_loan_rate or 1
+		self.event_currency_ticker = event_currency_ticker
+		self.event_currency_to_loan_rate = event_currency_to_loan_rate or 1
 	@property
 	def principal_lending_sum(self): #convert to loan_currency
-		return self.currency.rate * self.currency.sum
+		return  self.principal_lending_currency_sum * self.event_currency_to_loan_rate
 
 class Repayment(EventParams):
-	def __init__(self, repayment_sum = None):
-		super().__init__()
-		self.repayment_sum = 0
-		self.event_name = "Repayment"
-		self.event_type = "User input"
+  def __init__(self, repayment_currency_sum = None, 
+      event_currency_ticker = None, 
+      event_currency_to_loan_rate = None):
+    super().__init__()
+    self.repayment_currency_sum = repayment_currency_sum or 0
+    self.event_name = "Repayment"
+    self.event_type = "User input"
+    self.event_currency_ticker = event_currency_ticker or "GBP"
+    self.event_currency_to_loan_rate = event_currency_to_loan_rate or 1
 
-Lending_1 = PrincipalLending(event_date = "2025-01-13", principal_lending_sum = 300000)
+Lending_1 = PrincipalLending(event_date = "2025-01-13", principal_lending_currency_sum = 300000)
 Lending_1.loan_id = 1
-Lending_2 = PrincipalLending(event_date = "2025-01-01", principal_lending_sum = 330000)
+Lending_2 = PrincipalLending(event_date = "2025-01-01", principal_lending_currency_sum = 330000)
 Lending_1.loan_id = 1
 
 Loan_1 = Loan(1)
