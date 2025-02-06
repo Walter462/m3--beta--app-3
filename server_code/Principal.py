@@ -8,7 +8,7 @@ from anvil.tables import app_tables
 import anvil.server
 from datetime import datetime as dt
 from typing import Union, Literal, Optional, Tuple
-qweq
+
 # This is a server module. It runs on the Anvil server,
 # rather than in the user's browser.
 #
@@ -38,6 +38,7 @@ class EventTimeSchedule:
 			@property
 			def event_days_count(self):
 				return (self.event_ending_date - self.event_beggining_date).days
+
 
 class EventParams:
 	def __init__(self, 
@@ -69,10 +70,19 @@ class Currency:
     def convert_to(self, target_currency):
         """Converts the current sum to another currency based on exchange rate."""
         return self.sum * target_currency.rate
+    @staticmethod
+    def fetch_from_db(ticker):
+        """Simulated database fetch."""
+        currency_data = {
+            "GBP": ("Great Britain pounds", 1.0),
+            "USD": ("US Dollar", 1.3),
+            "EUR": ("Euro", 1.1),
+        }
+        name, rate = currency_data.get(ticker, ("Unknown", 1.0))
+        return Currency(ticker, name, rate)
     def __str__(self):
         return f"{self.sum:.2f} {self.ticker} ({self.name})"
 
-		
 class PrincipalLending(EventParams):
 	def __init__(self, 
 							event_date: Optional[dt.date] = None,
