@@ -8,7 +8,7 @@ from anvil.tables import app_tables
 import anvil.server
 from datetime import datetime as dt
 from typing import Union, Literal, Optional, Tuple
-
+qweq
 # This is a server module. It runs on the Anvil server,
 # rather than in the user's browser.
 #
@@ -27,7 +27,6 @@ class Loan:
 		self.loan_currency = Currency()
 		self.loan_events_list = []
 		#self.sorted_loan_events_list = []
-
 	def loan_events_list_method(self, events):
 		self.loan_events_list = [event for event in events if event.loan_id == self.loan_id]
 		#self.sorted_loan_events_list = sorted(loan_events_list, key=lambda x: x.event_date)
