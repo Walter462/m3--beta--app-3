@@ -2,11 +2,24 @@ from dataclasses import dataclass, field, asdict
 from typing import Optional, List
 from datetime import datetime, timedelta
 from collections import defaultdict
+from decimal import Decimal
 import pandas as pd
 
 # ==============================
 # 1. Define Data Classes
 # ==============================
+@dataclass
+class Currency:
+    """Represents a monetary value with its currency.
+    - [ ] add currency_to_loan_rate (transaction currency != loan_currency)
+    - [ ] add support for currency conversion
+    - [ ] add ticker consistency check (USD+EUR->error (-,/,*< sum, == etc.))
+    """
+    def __init__(self, amount, ticker="USD"):
+        self.amount = Decimal(amount)
+        self.ticker = ticker  # Default currency ticker
+
+
 @dataclass
 class Event:
     """Represents an individual financial event."""
@@ -17,22 +30,23 @@ class Event:
     capitalization: float = 0.0
     repayment: float = 0.0
     principal_balance_correction: float = 0.0
-    principal_balance: float = 0.0
+    interest_balance_correction: float = 0.0
 
 @dataclass
 class AggregatedEvent:
     """Represents aggregated events grouped by date."""
     date: datetime
-    days_count: int = 0
     principal_lending: float = 0.0
     currency: Optional[str] = None
     capitalization: float = 0.0
     repayment: float = 0.0
     principal_balance_correction: float = 0.0
-    principal_balance: float = 0.0
-    interest_accrued: float = 0.0
-    interest_balance: float = 0.0
+    interest_balance_correction: float = 0.0
     event_ids: List[int] = field(default_factory=list)
+    #days_count: int = 0
+    #principal_balance: float = 0.0
+    #interest_accrued: float = 0.0
+    #interest_balance: float = 0.0
     
 # ==============================
 # 2. Sample Events
@@ -40,7 +54,7 @@ class AggregatedEvent:
 events_list_raw = [
     {"event_id": 1, "date": "2024-02-01", "principal_lending": 300, "currency": "USD"},
     {"event_id": 2, "date": "2024-01-03", "principal_lending": 400, "currency": "USD"},
-    {"event_id": 3, "date": "2025-02-01", "principal_lending": 120, "currency": "USD"},
+    {"event_id": 3, "date": "2025-02-18", "principal_lending": 120, "currency": "USD"},
     {"event_id": 4, "date": "2024-01-03", "principal_lending": 333, "currency": "USD"},
     {"event_id": 5, "date": "2023-02-01", "principal_lending": 3366, "currency": "USD"},
     {"event_id": 6, "date": "2024-01-04", "repayment": 21302, "currency": "USD"},
@@ -54,12 +68,13 @@ events_list = [
         event_id=event["event_id"],
         date=datetime.strptime(event["date"], "%Y-%m-%d"),
         principal_lending=event.get("principal_lending", 0),
-        repayment=event.get("repayment", 0),
         currency=event.get("currency", None),
+        repayment=event.get("repayment", 0),
+        principal_balance_correction=event.get("principal_balance_correction", 0),
+        interest_balance_correction = event.get("interest_balance_correction", 0)
     )
     for event in events_list_raw
 ]
-
 # Sort events by date and event_id
 events_list_sorted = sorted(events_list, key=lambda e: (e.date, e.event_id))
 
@@ -75,17 +90,23 @@ for event in events_list:
     
     aggregated_events[date_key].principal_lending += event.principal_lending
     aggregated_events[date_key].repayment += event.repayment
+    aggregated_events[date_key].principal_balance_correction += event.principal_balance_correction
+    aggregated_events[date_key].interest_balance_correction += event.interest_balance_correction
     aggregated_events[date_key].event_ids.append(event.event_id)
 
 # ==============================
-# 4. Generate Missing Dates
+# 4. Generate Dates
 # ==============================
 def generate_date_list(start_date: str, end_date: str, frequency: str) -> List[datetime]:
     """Generate a list of datetime objects at a given frequency."""
     return pd.date_range(start=start_date, end=end_date, freq=frequency, inclusive='left').to_list()
 
 # Generate missing dates (Monthly start 'MS' frequency)
-generated_dates = generate_date_list(start_date="2023-01-03", end_date="2025-02-05", frequency="MS")
+generated_dates = generate_date_list(
+  start_date=min(*aggregated_events), 
+  end_date=max(*aggregated_events)+timedelta(days=31), 
+  frequency="MS")
+
 
 # Add missing dates to aggregated_events
 for date in generated_dates:
@@ -95,6 +116,13 @@ for date in generated_dates:
 # Convert to sorted list
 events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.date)
 
+print("-" * 120)
+print(f"{'Date':<12} {'Lending':>8} {'Repayment':>10}{'Event IDs'}")
+print("-" * 120)
+for event in events_list_date_aggregated_sorted:
+    print(f"{event.date.date()} {event.principal_lending:>8} {event.repayment:>10} "
+          f" {event.event_ids}")
+print("-" * 120)
 
 # ==============================
 # 5. Calculate Principal Balances, Days Count & Interest
