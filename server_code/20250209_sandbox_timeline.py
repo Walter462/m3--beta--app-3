@@ -22,7 +22,6 @@ class Currency:
     currency_amount: Decimal
     ticker: str
     currency_to_loan_rate: Decimal = Decimal('1.0')  # Conversion rate to loan currency
-
     def converted_amount(self) -> Decimal:
         return self.currency_amount * self.currency_to_loan_rate
 
@@ -32,25 +31,25 @@ class Event:
     event_id: int
     date: datetime
     principal_lending_currency: Optional[Currency] = None
-    capitalization: Decimal = Decimal('0.0')
-    interest_rate: Decimal = Decimal('0.0')
-    repayment: Optional[Currency] = None
-    principal_balance_correction: Decimal = Decimal('0.0')
-    interest_balance_correction: Decimal = Decimal('0.0')
     principal_lending: Decimal = Decimal('0.0')
-
-@dataclass
-class AggregatedEvent:
-    loan: Loan
-    date: datetime
-    principal_lending_currency: Optional[Currency] = None
     capitalization: Decimal = Decimal('0.0')
     interest_rate: Decimal = Decimal('0.0')
     repayment: Decimal = Decimal('0.0')
     principal_balance_correction: Decimal = Decimal('0.0')
     interest_balance_correction: Decimal = Decimal('0.0')
+
+@dataclass
+class AggregatedEvent:
+    date: datetime
+    loan: Loan
     event_ids: List[int] = field(default_factory=list)
+    principal_lending_currency: Optional[Currency] = None
     principal_lending: Decimal = Decimal('0.0')
+    capitalization: Decimal = Decimal('0.0')
+    interest_rate: Decimal = Decimal('0.0')
+    repayment: Decimal = Decimal('0.0')
+    principal_balance_correction: Decimal = Decimal('0.0')
+    interest_balance_correction: Decimal = Decimal('0.0')
     principal_balance: Decimal = Decimal('0.0')
     days_count: int = 0
     interest_accrued: Decimal  = Decimal('0.0')
@@ -80,9 +79,9 @@ events_list_raw = [
 # Convert raw data into `Event` objects with Currency attributes and associated loans
 events_list = []
 for event in events_list_raw:
-    principal_lending_currency = None
-    principal_lending = None
-    repayment = None
+    principal_lending_currency = Decimal('0.0')
+    principal_lending = Decimal('0.0')
+    repayment = Decimal('0.0')
     loan = loan_mapping.get(event.get("loan_id"))
     if not loan:
         raise ValueError(f"Loan with ID {event.get('loan_id')} not found.")
@@ -90,7 +89,6 @@ for event in events_list_raw:
     if "principal_lending_currency" in event:
         currency_ticker = event.get("currency", loan.base_currency)  # Event currency
         currency_rate = event.get("currency_to_loan_rate")  # Fetch conversion rate
-
         # If currencies are different but no conversion rate is provided, raise an error
         if currency_ticker != loan.base_currency and currency_rate is None:
             raise ValueError(
@@ -111,11 +109,14 @@ for event in events_list_raw:
             if currency_ticker != loan.base_currency
             else principal_lending_currency.currency_amount
         )
+    else:
+        principal_lending = Decimal('0.0')
 
     if "repayment" in event:
         currency_ticker = event.get("currency", loan.base_currency)
         currency_rate = event.get("currency_to_loan_rate")
         currency_rate = Decimal(str(currency_rate)) if currency_rate is not None else Decimal('1.0')
+        # Create Currency object
         repayment = Currency(
             currency_amount=Decimal(event["repayment"]),
             ticker=currency_ticker,
@@ -129,22 +130,21 @@ for event in events_list_raw:
             date=datetime.strptime(event["date"], "%Y-%m-%d"),
             loan=loan,
             principal_lending_currency=principal_lending_currency,
-            principal_lending = principal_lending if principal_lending else Decimal('0.0'),
+            principal_lending = principal_lending,
             capitalization=Decimal(event.get("capitalization", '0.0')),
+            interest_rate=Decimal(event.get("interest_rate", '0.0')),
             repayment=repayment,
             principal_balance_correction=Decimal(event.get("principal_balance_correction",  '0.0')),
-            interest_balance_correction=Decimal(event.get("interest_balance_correction", '0.0')),
-            interest_rate=Decimal(event.get("interest_rate", '0.0'))
+            interest_balance_correction=Decimal(event.get("interest_balance_correction", '0.0'))
         )
     )
-
+print(*events_list, sep="\n")
 # Sort events by date and event_id
 events_list_sorted = sorted(events_list, key=lambda e: (e.date, e.event_id))
 
 print("-" * 120)
 print(f"{'Date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Repayment':>12} {'Event IDs':>12}")
 print("-" * 120)
-
 for event in events_list_sorted:
     date = str(event.date.date())  # Ensure date is a string
     lending_amount = f"{event.principal_lending_currency.currency_amount:.2f}" if event.principal_lending_currency and event.principal_lending_currency.currency_amount is not None else ""
@@ -173,6 +173,9 @@ for event in events_list_sorted:
         aggregated_events[date_key].repayment +=event.repayment.converted_amount()
 
     if event.principal_lending_currency:
+        '''
+        - [ ] or just event.principal_lending?
+        '''
         aggregated_events[date_key].principal_lending +=event.principal_lending
     # Aggregate other fields (assumed to be in base currency)
     aggregated_events[date_key].capitalization += event.capitalization
@@ -335,7 +338,7 @@ fig_interest.update_layout(
     template='plotly_white'
 )
 
-fig_interest.show()
+#fig_interest.show()
 
 # Plot Principal Balance Over Time
 # Add markers for Repayment dates
@@ -370,7 +373,7 @@ fig_principal.update_layout(
     template='plotly_white'
 )
 
-fig_principal.show()
+#fig_principal.show()
 
 """fig_principal = px.line(
     df,
@@ -416,4 +419,4 @@ fig_combined.update_xaxes(title_text="Date")
 fig_combined.update_yaxes(title_text="Principal Balance (USD)", secondary_y=False)
 fig_combined.update_yaxes(title_text="Interest Balance (USD)", secondary_y=True)
 
-fig_combined.show()
+#fig_combined.show()
