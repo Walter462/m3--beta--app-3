@@ -30,7 +30,7 @@ class Event:
     loan: Loan
     event_id: int
     date: datetime
-    principal_lending_currency: Optional[Currency] = None
+    principal_lending_currency: Decimal = Decimal('0.0')
     principal_lending: Decimal = Decimal('0.0')
     capitalization: Decimal = Decimal('0.0')
     interest_rate: Decimal = Decimal('0.0')
@@ -43,7 +43,7 @@ class AggregatedEvent:
     date: datetime
     loan: Loan
     event_ids: List[int] = field(default_factory=list)
-    principal_lending_currency: Optional[Currency] = None
+    principal_lending_currency: Decimal = Decimal('0.0')
     principal_lending: Decimal = Decimal('0.0')
     capitalization: Decimal = Decimal('0.0')
     interest_rate: Decimal = Decimal('0.0')
