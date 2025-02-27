@@ -65,6 +65,9 @@ loans_list_raw = [
 loans_list = [Loan(**loan) for loan in loans_list_raw]
 loan_mapping = {loan.loan_id: loan for loan in loans_list}
 
+'''
+- [ ] interset rate 0.6 is poorly reprsented (0.59....) check precision settings
+'''
 events_list_raw = [
     {"event_id": 1, "date": "2024-02-01", "principal_lending_currency": 300, "loan_id": 101},
     {"event_id": 2, "date": "2024-01-03", "principal_lending_currency": 400, "loan_id": 101},
@@ -79,16 +82,13 @@ events_list_raw = [
 # Convert raw data into `Event` objects with Currency attributes and associated loans
 events_list = []
 for event in events_list_raw:
-    principal_lending_currency = Decimal('0.0')
-    principal_lending = Decimal('0.0')
-    repayment = Decimal('0.0')
     loan = loan_mapping.get(event.get("loan_id"))
     if not loan:
         raise ValueError(f"Loan with ID {event.get('loan_id')} not found.")
 
     if "principal_lending_currency" in event:
         currency_ticker = event.get("currency", loan.base_currency)  # Event currency
-        currency_rate = event.get("currency_to_loan_rate")  # Fetch conversion rate
+        currency_rate = event.get("currency_to_loan_rate")  # Fetch conversion rate, leave None for error raise
         # If currencies are different but no conversion rate is provided, raise an error
         if currency_ticker != loan.base_currency and currency_rate is None:
             raise ValueError(
@@ -109,8 +109,8 @@ for event in events_list_raw:
             if currency_ticker != loan.base_currency
             else principal_lending_currency.currency_amount
         )
-    else:
-        principal_lending = Decimal('0.0')
+#    else:
+#        principal_lending = Decimal('0.0')
 
     if "repayment" in event:
         currency_ticker = event.get("currency", loan.base_currency)
@@ -133,7 +133,7 @@ for event in events_list_raw:
             principal_lending = principal_lending,
             capitalization=Decimal(event.get("capitalization", '0.0')),
             interest_rate=Decimal(event.get("interest_rate", '0.0')),
-            repayment=repayment,
+#            repayment=repayment,
             principal_balance_correction=Decimal(event.get("principal_balance_correction",  '0.0')),
             interest_balance_correction=Decimal(event.get("interest_balance_correction", '0.0'))
         )
