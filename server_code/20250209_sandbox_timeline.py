@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, asdict
-from typing import Optional, List
+from typing import Optional, List, Dict
 from datetime import datetime, timedelta
 from collections import defaultdict
 from decimal import Decimal, getcontext, localcontext
@@ -27,23 +27,32 @@ class Currency:
 
 @dataclass
 class Event:
-    loan: Loan
-    event_id: int
-    date: datetime
-    principal_lending_currency: Decimal = Decimal('0.0')
-    principal_lending: Decimal = Decimal('0.0')
-    capitalization: Decimal = Decimal('0.0')
-    interest_rate: Decimal = Decimal('0.0')
-    repayment: Decimal = Decimal('0.0')
-    principal_balance_correction: Decimal = Decimal('0.0')
-    interest_balance_correction: Decimal = Decimal('0.0')
+    '''
+    Populated with None values for safety reasons.
+    Default values do not make effect as they should be overwritten (None or input for each event in the event class builder loop (.:89-149)
+    '''
+    loan: Optional[Loan] = None
+    date: Optional[datetime] = None
+    event_id: Optional[int] = None
+    principal_lending_currency: Optional[Currency] = None
+    principal_lending: Optional[Decimal] = None
+    capitalization: Decimal = None
+    interest_rate: Optional[Decimal] = None
+    repayment: Optional[Decimal] = None
+    principal_balance_correction: Optional[Decimal] = None
+    interest_balance_correction: Optional[Decimal] = None
 
 @dataclass
 class AggregatedEvent:
-    date: datetime
+    '''
+    Assign default values to Decimal('0.0') at aggregation stage (.:173-195) if values not provided.
+    Avoids NoneType errors when performing balance calculations (:248).
+    '''
     loan: Loan
+    date: datetime
+    days_count: int = 0
     event_ids: List[int] = field(default_factory=list)
-    principal_lending_currency: Decimal = Decimal('0.0')
+    principal_lending_currency: Currency = Decimal('0.0')
     principal_lending: Decimal = Decimal('0.0')
     capitalization: Decimal = Decimal('0.0')
     interest_rate: Decimal = Decimal('0.0')
@@ -51,7 +60,6 @@ class AggregatedEvent:
     principal_balance_correction: Decimal = Decimal('0.0')
     interest_balance_correction: Decimal = Decimal('0.0')
     principal_balance: Decimal = Decimal('0.0')
-    days_count: int = 0
     interest_accrued: Decimal  = Decimal('0.0')
     interest_balance: Decimal  = Decimal ('0.0')
 
@@ -66,7 +74,9 @@ loans_list = [Loan(**loan) for loan in loans_list_raw]
 loan_mapping = {loan.loan_id: loan for loan in loans_list}
 
 '''
-- [ ] interset rate 0.6 is poorly reprsented (0.59....) check precision settings
+TODO Use string or float for numeric values (inclding interest_rate, principal_lending_currency, repayment, capitalization, principal_balance_correction, interest_balance_correction)
+- "interest_rate": 0.06 - > 0.059999999999999997779553950749686919152736663818359375
+- "interest_rate": '0.06' -> 0.06
 '''
 events_list_raw = [
     {"event_id": 1, "date": "2024-02-01", "principal_lending_currency": 300, "loan_id": 101},
@@ -80,14 +90,18 @@ events_list_raw = [
 ]
 
 # Convert raw data into `Event` objects with Currency attributes and associated loans
-events_list = []
+events_list: List[Event] = []
 for event in events_list_raw:
-    principal_lending_currency = Decimal('0.0')
-    principal_lending = Decimal('0.0')
-    repayment = Decimal('0.0')
     loan = loan_mapping.get(event.get("loan_id"))
     if not loan:
         raise ValueError(f"Loan with ID {event.get('loan_id')} not found.")
+    principal_lending_currency = None
+    principal_lending = None
+    repayment = None
+    capitalization = None
+    interest_rate = None
+    principal_balance_correction = None
+    interest_balance_correction = None
 
     if "principal_lending_currency" in event:
         currency_ticker = event.get("currency", loan.base_currency)  # Event currency
@@ -112,8 +126,9 @@ for event in events_list_raw:
             if currency_ticker != loan.base_currency
             else principal_lending_currency.currency_amount
         )
-    else:
-        principal_lending = Decimal('0.0')
+    # deafault value (excluded at first stage: None)
+    #else:
+    #    principal_lending = Decimal('0.0')
 
     if "repayment" in event:
         currency_ticker = event.get("currency", loan.base_currency)
@@ -125,7 +140,14 @@ for event in events_list_raw:
             ticker=currency_ticker,
             currency_to_loan_rate=currency_rate
         )
-
+    if "capitalization" in event:
+      capitalization=Decimal(event.get("capitalization"))
+    if "interest_rate" in event:
+      interest_rate=Decimal(event.get("interest_rate"))
+    if "principal_balance_correction" in event:
+      principal_balance_correction=Decimal(event.get("principal_balance_correction"))
+    if "interest_balance_correction" in event:
+      interest_balance_correction=Decimal(event.get("interest_balance_correction"))
     # Create the Event instance
     events_list.append(
         Event(
@@ -134,16 +156,16 @@ for event in events_list_raw:
             loan=loan,
             principal_lending_currency=principal_lending_currency,
             principal_lending = principal_lending,
-            capitalization=Decimal(event.get("capitalization", '0.0')),
-            interest_rate=Decimal(event.get("interest_rate", '0.0')),
             repayment=repayment,
-            principal_balance_correction=Decimal(event.get("principal_balance_correction",  '0.0')),
-            interest_balance_correction=Decimal(event.get("interest_balance_correction", '0.0'))
+            capitalization=capitalization,
+            interest_rate=interest_rate,
+            principal_balance_correction=principal_balance_correction,
+            interest_balance_correction=interest_balance_correction
         )
     )
 print(*events_list, sep="\n")
 # Sort events by date and event_id
-events_list_sorted = sorted(events_list, key=lambda e: (e.date, e.event_id))
+events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.date, e.event_id))
 
 print("-" * 120)
 print(f"{'Date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Repayment':>12} {'Event IDs':>12}")
@@ -165,26 +187,29 @@ print("-" * 120)
 # ==============================
 # 3. Aggregate Events by Date
 # ==============================
-aggregated_events = defaultdict(lambda: AggregatedEvent(loan=loan_mapping[101], date=None))
-
+aggregated_events: Dict[datetime, AggregatedEvent] = defaultdict(lambda: AggregatedEvent(loan=loan_mapping[101], date=None))
+'''
+Sum existing values for each date.
+Insert deafault values from AggregatedEvents class if event does not have a value (None)
+'''
 for event in events_list_sorted:
     date_key = event.date
     if aggregated_events[date_key].date is None:
         aggregated_events[date_key].date = event.date
     # Convert repayment to loan currency and aggregate
+    if event.principal_lending:
+        aggregated_events[date_key].principal_lending +=event.principal_lending
     if event.repayment:
         aggregated_events[date_key].repayment +=event.repayment.converted_amount()
-
-    if event.principal_lending_currency:
-        '''
-        - [ ] or just event.principal_lending?
-        '''
-        aggregated_events[date_key].principal_lending +=event.principal_lending
     # Aggregate other fields (assumed to be in base currency)
-    aggregated_events[date_key].capitalization += event.capitalization
-    aggregated_events[date_key].principal_balance_correction += event.principal_balance_correction
-    aggregated_events[date_key].interest_balance_correction += event.interest_balance_correction
-    aggregated_events[date_key].interest_rate = event.interest_rate  # Assuming last rate applies
+    if event.capitalization:
+      aggregated_events[date_key].capitalization += event.capitalization
+    if event.interest_rate:
+      aggregated_events[date_key].interest_rate = event.interest_rate
+    if event.principal_balance_correction:
+      aggregated_events[date_key].principal_balance_correction += event.principal_balance_correction
+    if event.interest_balance_correction:
+      aggregated_events[date_key].interest_balance_correction += event.interest_balance_correction
     aggregated_events[date_key].event_ids.append(event.event_id)
 
 # ==============================
