@@ -87,6 +87,9 @@ loan_mapping = {loan.loan_id: loan for loan in loans_list}
 TODO Use string or float for numeric values (inclding interest_rate, principal_lending_currency, repayment, capitalization, principal_balance_correction, interest_balance_correction)
 - "interest_rate": 0.06 - > 0.059999999999999997779553950749686919152736663818359375
 - "interest_rate": '0.06' -> 0.06
+This lead to glitches in the balance calculations and printing (15.49+17.5 != 32.65):
+2023-02-01        28     3366.00        0.00       3366.00         15.49        0.00         15.49
+2023-03-01        31        0.00        0.00       3366.00         17.15        0.00         32.65
 '''
 events_list_raw = [
     {"event_id": 1, "date": "2024-02-01", "principal_lending_currency": 300, "loan_id": 101},
@@ -97,9 +100,9 @@ events_list_raw = [
     {"event_id": 6, "date": "2024-01-04", "principal_repayment_currency": 21302, "currency": "USD", "loan_id": 101},
     {"event_id": 7, "date": "2023-02-01", "interest_rate": 0.06, "loan_id": 101},
     {"event_id": 8, "date": "2023-07-22", "principal_lending_currency": 43200, "currency": "USD", "loan_id": 101},
-
     {"event_id": 9, "date": "2024-03-14", "principal_repayment_currency": 10302, "currency": "USD", "loan_id": 101},
-    {"event_id": 10, "date": "2024-03-15", "interest_repayment_currency": 1302, "currency": "USD", "loan_id": 101},
+    {"event_id": 10, "date": "2024-03-15", "interest_repayment_currency": 1302, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.1},
+    {"event_id": 11, "date": "2024-03-17", "interest_repayment_currency": 200, "currency": "USD", "loan_id": 101},
 ]
 
 # Convert raw data into `Event` objects with Currency attributes and associated loans
@@ -400,10 +403,10 @@ def balance_report(data: List[AggregatedEvent], report_date: str) -> float:
     return previous_balance  # Return last balance if report_date is in the future
 
 # Test balance report
-print("\nBalance Report:")
-print(f"Balance on 2024-01-03: {balance_report(events_list_date_aggregated_sorted, '2024-01-03')}")
-print(f"Balance on 2025-01-01: {balance_report(events_list_date_aggregated_sorted, '2025-01-01')}")
-print(f"Balance on 2022-12-31: {balance_report(events_list_date_aggregated_sorted, '2022-12-31')}")
+print("\nPrincipal balance Report:")
+print(f"Principal balance on 2024-01-03: {balance_report(events_list_date_aggregated_sorted, '2024-01-03')}")
+print(f"Principal balance on 2025-01-01: {balance_report(events_list_date_aggregated_sorted, '2025-01-01')}")
+print(f"Principal balance on 2022-12-31: {balance_report(events_list_date_aggregated_sorted, '2022-12-31')}")
 
 
 
