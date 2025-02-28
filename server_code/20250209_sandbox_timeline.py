@@ -101,8 +101,8 @@ events_list_raw = [
     {"event_id": 7, "date": "2023-02-01", "interest_rate": 0.06, "loan_id": 101},
     {"event_id": 8, "date": "2023-07-22", "principal_lending_currency": 43200, "currency": "USD", "loan_id": 101},
     {"event_id": 9, "date": "2024-03-14", "principal_repayment_currency": 10302, "currency": "USD", "loan_id": 101},
-    {"event_id": 10, "date": "2024-03-15", "interest_repayment_currency": 1302, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.1},
-    {"event_id": 11, "date": "2024-03-17", "interest_repayment_currency": 200, "currency": "USD", "loan_id": 101},
+    {"event_id": 10, "date": "2024-01-15", "interest_repayment_currency": 130, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.1},
+    {"event_id": 11, "date": "2024-11-03", "interest_repayment_currency": 200, "currency": "USD", "loan_id": 101},
 ]
 
 # Convert raw data into `Event` objects with Currency attributes and associated loans
@@ -265,8 +265,8 @@ for event in events_list_sorted:
     if event.interest_repayment:
         aggregated_events[date_key].interest_repayment +=event.interest_repayment
     # Aggregate other fields (assumed to be in base currency)
-    if event.capitalization:
-      aggregated_events[date_key].capitalization += event.capitalization
+    #if event.capitalization:
+    #  aggregated_events[date_key].capitalization += event.capitalization
     if event.interest_rate:
       aggregated_events[date_key].interest_rate = event.interest_rate
     if event.principal_balance_correction:
@@ -282,9 +282,21 @@ def generate_date_list(start_date: str, end_date: str, frequency: str) -> List[d
     """Generate a list of datetime objects at a given frequency."""
     return pd.date_range(start=start_date, end=end_date, freq=frequency, inclusive='left').to_list()
 
-# Generate missing dates (Monthly start 'MS' frequency)
+# Date range for the entire timeline
 start_date = min(aggregated_events.keys())
 end_date = max(aggregated_events.keys()) + timedelta(days=31)
+
+# Generate capitalization dates (Quarterly start 'QS' frequency)
+capitalization_generated_dates = generate_date_list(
+  start_date=start_date.strftime("%Y-%m-%d"), 
+  end_date=end_date.strftime("%Y-%m-%d"), 
+  frequency="QS")
+# Add capitalization dates to aggregated_events
+for date in capitalization_generated_dates:
+  aggregated_events[date] = AggregatedEvent(loan=loan_mapping[101], date=date, capitalization=Decimal('0.0'))
+
+
+# Generate missing dates (Monthly start 'MS' frequency)
 generated_dates = generate_date_list(
   start_date=start_date.strftime("%Y-%m-%d"), 
   end_date=end_date.strftime("%Y-%m-%d"), 
@@ -298,7 +310,6 @@ for date in generated_dates:
 # Convert to sorted list
 events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.date)
 
-
 print("-" * 140)
 print(f"{'Date':<12} {'Lending':>8} {'Pr_rep':>10}{'Int_rep':>10}{'Event IDs':>12}")
 print("-" * 140)
@@ -311,6 +322,7 @@ for event in events_list_date_aggregated_sorted:
           f"{str(event.event_ids):>12}")
 print("-" * 140)
 
+
 # ==============================
 # 5. Calculate Principal Balances, Days Count & Interest
 # ==============================
@@ -322,6 +334,9 @@ for i, event in enumerate(events_list_date_aggregated_sorted):
     # Update current_interest_rate if there's a rate change on this date
     if event.interest_rate > 0:
         current_interest_rate = Decimal(str(event.interest_rate))
+    if event.date in capitalization_generated_dates:
+        event.capitalization = interest_balance
+        print(f"Capitalization on {event.date} amount: {interest_balance}")
     # Update principal balance
     principal_balance += (
         Decimal(event.principal_lending) +
