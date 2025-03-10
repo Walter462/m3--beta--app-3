@@ -1,3 +1,10 @@
+'''
+- [ ] starting and ending period dates
+- [ ] cleanup capitalization attribute
+- [ ] prescision issues
+- [ ] lending and repayment offset (inclusive counting)
+'''
+
 from dataclasses import dataclass, field, asdict
 from typing import Optional, List, Dict
 from datetime import datetime, timedelta
@@ -16,6 +23,8 @@ getcontext().prec = 6
 class Loan:
     loan_id: int
     base_currency: str
+    lending_date_exclusive_counting: bool = False
+    repayment_date_exclusive_counting: bool = True
 
 @dataclass
 class Currency:
@@ -32,7 +41,8 @@ class Event:
     Default values do not make effect as they should be overwritten (None or input for each event in the event class builder loop (.:89-149)
     '''
     loan: Optional[Loan] = None
-    date: Optional[datetime] = None
+    event_fact_date: Optional[datetime] = None
+    event_start_date: Optional[datetime] = None
     event_id: Optional[int] = None
     principal_lending_currency: Optional[Currency] = None
     principal_lending: Optional[Decimal] = None
@@ -54,7 +64,8 @@ class AggregatedEvent:
     Avoids NoneType errors when performing balance calculations (:248).
     '''
     loan: Loan
-    date: datetime
+    event_fact_date: datetime
+    event_start_date: Optional[datetime] = None
     days_count: int = 0
     event_ids: List[int] = field(default_factory=list)
     principal_lending_currency: Currency = field(default_factory=lambda: Currency(currency_amount=Decimal('0.0'), ticker=None, currency_to_loan_rate=None))
@@ -78,7 +89,10 @@ class AggregatedEvent:
 # ==============================
 
 loans_list_raw = [
-    {'loan_id':101, 'base_currency': 'USD'}
+    {'loan_id':101, 
+    'base_currency': 'USD',
+    'lending_date_exclusive_counting': False,
+    'repayment_date_exclusive_counting': True}
 ]
 loans_list = [Loan(**loan) for loan in loans_list_raw]
 loan_mapping = {loan.loan_id: loan for loan in loans_list}
@@ -92,17 +106,17 @@ This lead to glitches in the balance calculations and printing (15.49+17.5 != 32
 2023-03-01        31        0.00        0.00       3366.00         17.15        0.00         32.65
 '''
 events_list_raw = [
-    {"event_id": 1, "date": "2024-02-01", "principal_lending_currency": 300, "loan_id": 101},
-    {"event_id": 2, "date": "2024-01-03", "principal_lending_currency": 400, "loan_id": 101},
-    {"event_id": 3, "date": "2025-02-18", "principal_lending_currency": 140, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.15},
-    {"event_id": 4, "date": "2024-01-03", "principal_lending_currency": 333, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.2},
-    {"event_id": 5, "date": "2023-02-01", "principal_lending_currency": 3366, "loan_id": 101},
-    {"event_id": 6, "date": "2024-01-04", "principal_repayment_currency": 21302, "currency": "USD", "loan_id": 101},
-    {"event_id": 7, "date": "2023-02-01", "interest_rate": 0.06, "loan_id": 101},
-    {"event_id": 8, "date": "2023-07-22", "principal_lending_currency": 43200, "currency": "USD", "loan_id": 101},
-    {"event_id": 9, "date": "2024-03-14", "principal_repayment_currency": 10302, "currency": "USD", "loan_id": 101},
-    {"event_id": 10, "date": "2024-01-15", "interest_repayment_currency": 130, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.1},
-    {"event_id": 11, "date": "2024-11-03", "interest_repayment_currency": 200, "currency": "USD", "loan_id": 101},
+    {"event_id": 1, "event_fact_date": "2024-02-01", "principal_lending_currency": 300, "loan_id": 101},
+    {"event_id": 2, "event_fact_date": "2024-01-03", "principal_lending_currency": 400, "loan_id": 101},
+    {"event_id": 3, "event_fact_date": "2025-02-18", "principal_lending_currency": 140, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.15},
+    {"event_id": 4, "event_fact_date": "2024-01-03", "principal_lending_currency": 333, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.2},
+    {"event_id": 5, "event_fact_date": "2023-02-01", "principal_lending_currency": 3366, "loan_id": 101},
+    {"event_id": 6, "event_fact_date": "2024-01-04", "principal_repayment_currency": 21302, "currency": "USD", "loan_id": 101},
+    {"event_id": 7, "event_fact_date": "2023-02-01", "interest_rate": 0.06, "loan_id": 101},
+    {"event_id": 8, "event_fact_date": "2023-07-22", "principal_lending_currency": 43200, "currency": "USD", "loan_id": 101},
+    {"event_id": 9, "event_fact_date": "2024-03-14", "principal_repayment_currency": 10302, "currency": "USD", "loan_id": 101},
+    {"event_id": 10, "event_fact_date": "2024-01-15", "interest_repayment_currency": 130, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.1},
+    {"event_id": 11, "event_fact_date": "2024-11-03", "interest_repayment_currency": 200, "currency": "USD", "loan_id": 101},
 ]
 
 # Convert raw data into `Event` objects with Currency attributes and associated loans
@@ -111,7 +125,8 @@ for event in events_list_raw:
     loan = loan_mapping.get(event.get("loan_id"))
     if not loan:
         raise ValueError(f"Loan with ID {event.get('loan_id')} not found.")
-    principal_lending_currency = None
+    event_fact_date = datetime.strptime(event["event_fact_date"], "%Y-%m-%d")
+    event_start_date: Optional[datetime] = event_fact_date
     principal_lending_currency = None
     principal_lending = None
 
@@ -126,6 +141,7 @@ for event in events_list_raw:
     interest_balance_correction = None
 
     if "principal_lending_currency" in event:
+        lending_date_exclusive_counting = loan.lending_date_exclusive_counting
         currency_ticker = event.get("currency", loan.base_currency)  # Event currency
         currency_rate = event.get("currency_to_loan_rate", None)  # Fetch conversion rate
         # If currencies are different but no conversion rate is provided, raise an error
@@ -148,8 +164,13 @@ for event in events_list_raw:
             if currency_ticker != loan.base_currency
             else principal_lending_currency.currency_amount
         )
+        if lending_date_exclusive_counting == True:
+            event_start_date += timedelta(days=1)
+        else:
+          event_start_date = event_fact_date
 
     if "principal_repayment_currency" in event:
+        repayment_date_exclusive_counting = loan.repayment_date_exclusive_counting
         currency_ticker = event.get("currency", loan.base_currency)  # Event currency
         currency_rate = event.get("currency_to_loan_rate", None)  # Fetch conversion rate
         # If currencies are different but no conversion rate is provided, raise an error
@@ -172,8 +193,13 @@ for event in events_list_raw:
             if currency_ticker != loan.base_currency
             else principal_repayment_currency.currency_amount
         )
+        if repayment_date_exclusive_counting == True:
+            event_start_date += timedelta(days=1)
+        else:
+          event_start_date = event_fact_date
 
     if "interest_repayment_currency" in event:
+        repayment_date_exclusive_counting = loan.repayment_date_exclusive_counting
         currency_ticker = event.get("currency", loan.base_currency)  # Event currency
         currency_rate = event.get("currency_to_loan_rate", None)  # Fetch conversion rate
         # If currencies are different but no conversion rate is provided, raise an error
@@ -196,6 +222,10 @@ for event in events_list_raw:
             if currency_ticker != loan.base_currency
             else interest_repayment_currency.currency_amount
         )
+        if repayment_date_exclusive_counting == True:
+            event_start_date += timedelta(days=1)
+        else:
+          event_start_date = event_fact_date
     
     if "capitalization" in event:
       capitalization=Decimal(event.get("capitalization"))
@@ -209,7 +239,8 @@ for event in events_list_raw:
     events_list.append(
         Event(
             event_id=event["event_id"],
-            date=datetime.strptime(event["date"], "%Y-%m-%d"),
+            event_fact_date=event_fact_date,
+            event_start_date = event_start_date,
             loan=loan,
             principal_lending_currency=principal_lending_currency,
             principal_lending = principal_lending,
@@ -224,14 +255,15 @@ for event in events_list_raw:
         )
     )
 print(*events_list, sep="\n")
-# Sort events by date and event_id
-events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.date, e.event_id))
+# Sort events by event_fact_date and event_id
+events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.event_fact_date, e.event_id))
 
 print("-" * 140)
-print(f"{'Date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Principal repayment':>18} {'Interest repayment':>18} {'Event IDs':>12}")
+print(f"{'Date':<12} {'Start event_fact_date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Principal repayment':>18} {'Interest repayment':>18} {'Event IDs':>12}")
 print("-" * 140)
 for event in events_list_sorted:
-    date = str(event.date.date())  # Ensure date is a string
+    event_fact_date = str(event.event_fact_date.date())  # Ensure event_fact_date is a string
+    event_start_date = str(event.event_start_date.date()) 
     lending_amount = f"{event.principal_lending_currency.currency_amount:.2f}" if event.principal_lending_currency and event.principal_lending_currency.currency_amount is not None else ""
     lending_currency = event.principal_lending_currency.ticker if event.principal_lending_currency else ""
     currency_rate = f"{event.principal_lending_currency.currency_to_loan_rate:.4f}" if event.principal_lending_currency and event.principal_lending_currency.currency_to_loan_rate is not None else ""
@@ -240,7 +272,7 @@ for event in events_list_sorted:
     interest_repayment = f"{event.interest_repayment:.2f}" if event.interest_repayment is not None else ""
     event_id = str(event.event_id) if event.event_id is not None else ""
 
-    print(f"{date:<12} {lending_amount:>18} {lending_currency:>10} {currency_rate:>10} {principal_lending:>18} {principal_repayment:>18} {interest_repayment:>18} {event_id:>12}")
+    print(f"{event_fact_date:<12} {event_start_date:<12}{lending_amount:>18} {lending_currency:>10} {currency_rate:>10} {principal_lending:>18} {principal_repayment:>18} {interest_repayment:>18} {event_id:>12}")
 
 print("-" * 140)
 
@@ -248,15 +280,15 @@ print("-" * 140)
 # ==============================
 # 3. Aggregate Events by Date
 # ==============================
-aggregated_events: Dict[datetime, AggregatedEvent] = defaultdict(lambda: AggregatedEvent(loan=loan_mapping[101], date=None))
+aggregated_events: Dict[datetime, AggregatedEvent] = defaultdict(lambda: AggregatedEvent(loan=loan_mapping[101], event_fact_date=None))
 '''
-Sum existing values for each date.
+Sum existing values for each event_fact_date.
 Insert deafault values from AggregatedEvents class if event does not have a value (None)
 '''
 for event in events_list_sorted:
-    date_key = event.date
-    if aggregated_events[date_key].date is None:
-        aggregated_events[date_key].date = event.date
+    date_key = event.event_fact_date
+    if aggregated_events[date_key].event_fact_date is None:
+        aggregated_events[date_key].event_fact_date = event.event_fact_date
     # Convert repayment to loan currency and aggregate
     if event.principal_lending:
         aggregated_events[date_key].principal_lending +=event.principal_lending
@@ -278,44 +310,49 @@ for event in events_list_sorted:
 # ==============================
 # 4. Generate Dates
 # ==============================
-def generate_date_list(start_date: str, end_date: str, frequency: str) -> List[datetime]:
+def generate_date_list(dates_generator_range_start: str, 
+                      dates_generator_range_end: str, 
+                      dates_generator_frequency: str) -> List[datetime]:
     """Generate a list of datetime objects at a given frequency."""
-    return pd.date_range(start=start_date, end=end_date, freq=frequency, inclusive='left').to_list()
+    return pd.date_range(start=dates_generator_range_start, 
+                        end=dates_generator_range_end, 
+                        freq=dates_generator_frequency, 
+                        inclusive='left').to_list()
 
 # Date range for the entire timeline
-start_date = min(aggregated_events.keys())
-end_date = max(aggregated_events.keys()) + timedelta(days=31)
+dates_generator_range_start = min(aggregated_events.keys())
+dates_generator_range_end = max(aggregated_events.keys()) + timedelta(days=31)
 
 # Generate capitalization dates (Quarterly start 'QS' frequency)
 capitalization_generated_dates = generate_date_list(
-  start_date=start_date.strftime("%Y-%m-%d"), 
-  end_date=end_date.strftime("%Y-%m-%d"), 
-  frequency="QS")
+  dates_generator_range_start=dates_generator_range_start.strftime("%Y-%m-%d"), 
+  dates_generator_range_end=dates_generator_range_end.strftime("%Y-%m-%d"), 
+  dates_generator_frequency="QS")
 # Add capitalization dates to aggregated_events
-for date in capitalization_generated_dates:
-  aggregated_events[date] = AggregatedEvent(loan=loan_mapping[101], date=date, capitalization=Decimal('0.0'))
+for event_fact_date in capitalization_generated_dates:
+  aggregated_events[event_fact_date] = AggregatedEvent(loan=loan_mapping[101], event_fact_date=event_fact_date, capitalization=Decimal('0.0'))
 
 
 # Generate missing dates (Monthly start 'MS' frequency)
 generated_dates = generate_date_list(
-  start_date=start_date.strftime("%Y-%m-%d"), 
-  end_date=end_date.strftime("%Y-%m-%d"), 
-  frequency="MS")
+  dates_generator_range_start=dates_generator_range_start.strftime("%Y-%m-%d"), 
+  dates_generator_range_end=dates_generator_range_end.strftime("%Y-%m-%d"), 
+  dates_generator_frequency="MS")
 
 # Add missing dates to aggregated_events
-for date in generated_dates:
-    if date not in aggregated_events:
-        aggregated_events[date] = AggregatedEvent(loan=loan_mapping[101], date=date)
+for event_fact_date in generated_dates:
+    if event_fact_date not in aggregated_events:
+        aggregated_events[event_fact_date] = AggregatedEvent(loan=loan_mapping[101], event_fact_date=event_fact_date)
 
 # Convert to sorted list
-events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.date)
+events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.event_fact_date)
 
 print("-" * 140)
 print(f"{'Date':<12} {'Lending':>8} {'Pr_rep':>10}{'Int_rep':>10}{'Event IDs':>12}")
 print("-" * 140)
 for event in events_list_date_aggregated_sorted:
-    date = str(event.date.date())
-    print(f"{date:<12}" 
+    event_fact_date = str(event.event_fact_date.date())
+    print(f"{event_fact_date:<12}" 
           f"{event.principal_lending:>8}" 
           f"{event.principal_repayment:>10}"
           f"{event.interest_repayment:>10}"
@@ -331,12 +368,12 @@ interest_balance = Decimal('0.0')
 current_interest_rate = Decimal('0.0')  # Default interest rate
 
 for i, event in enumerate(events_list_date_aggregated_sorted):
-    # Update current_interest_rate if there's a rate change on this date
+    # Update current_interest_rate if there's a rate change on this event_fact_date
     if event.interest_rate > 0:
         current_interest_rate = Decimal(str(event.interest_rate))
-    if event.date in capitalization_generated_dates:
+    if event.event_fact_date in capitalization_generated_dates:
         event.capitalization = interest_balance
-        print(f"Capitalization on {event.date} amount: {interest_balance}")
+        print(f"Capitalization on {event.event_fact_date} amount: {interest_balance}")
     # Update principal balance
     principal_balance += (
         Decimal(event.principal_lending) +
@@ -346,14 +383,18 @@ for i, event in enumerate(events_list_date_aggregated_sorted):
     )
     event.principal_balance = principal_balance  
     
-    # Calculate days_count (difference between next event date and current date)
+    # Calculate days_count (difference between next event event_fact_date and current event_fact_date)
     if i < len(events_list_date_aggregated_sorted) - 1:
         next_event = events_list_date_aggregated_sorted[i + 1]
-        event.days_count = (next_event.date - event.date).days
+        event.days_count = (next_event.event_fact_date - event.event_fact_date).days
     else:
-        event.days_count = 0  # Last event has no next date
+        event.days_count = 0  # Last event has no next event_fact_date
     
     # Calculate interest accrued
+    '''
+    TODO
+    - [ ] add year days count base(360,365,366, calendar) 
+    '''
     event.interest_accrued = (current_interest_rate / Decimal('365')) * Decimal(event.days_count) * event.principal_balance
     
     # Update interest balance
@@ -383,8 +424,8 @@ f"{'Int_balance'  :>14}")
 print("-" * 140)
 
 for event in events_list_date_aggregated_sorted:
-    date = str(event.date.date())
-    print(f"{date:<12}" 
+    event_fact_date = str(event.event_fact_date.date())
+    print(f"{event_fact_date:<12}" 
           f"{event.days_count:>8}" 
           f"{event.principal_lending:>12.2f}" 
           f"{event.principal_repayment:>12.2f}" 
@@ -401,17 +442,17 @@ print("-" * 140)
 # 7. Analytical Function: Balance Report
 # ==============================
 def balance_report(data: List[AggregatedEvent], report_date: str) -> float:
-    """Returns the principal balance on a given date."""
+    """Returns the principal balance on a given event_fact_date."""
     report_date = datetime.strptime(report_date, "%Y-%m-%d")
 
-    if report_date < data[0].date:
+    if report_date < data[0].event_fact_date:
         return 0  # Before any recorded events
 
     previous_balance = 0
     for event in data:
-        if event.date == report_date:
+        if event.event_fact_date == report_date:
             return float(event.principal_balance)
-        elif event.date > report_date:
+        elif event.event_fact_date > report_date:
             return previous_balance  # Last known balance before the report_date
         previous_balance = float(event.principal_balance)
 
@@ -435,7 +476,7 @@ from plotly.subplots import make_subplots
 
 # Convert Aggregated Events to a DataFrame—
 data = {
-    'Date': [event.date for event in events_list_date_aggregated_sorted],
+    'Date': [event.event_fact_date for event in events_list_date_aggregated_sorted],
     'Days Count': [event.days_count for event in events_list_date_aggregated_sorted],
     'Lending': [float(event.principal_lending) for event in events_list_date_aggregated_sorted],
     'Repayment': [float(event.principal_repayment) for event in events_list_date_aggregated_sorted],
