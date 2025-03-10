@@ -1,12 +1,13 @@
 '''
-- [ ] starting and ending period dates
+- [ ] add year days count base(360,365,366, calendar) 
 - [ ] cleanup capitalization attribute
 - [ ] prescision issues
-- [ ] lending and repayment offset (inclusive counting)
+- [x] starting and ending period dates
+- [x] lending and repayment offset (inclusive counting)
 '''
 
 from dataclasses import dataclass, field, asdict
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 from datetime import datetime, timedelta
 from collections import defaultdict
 from decimal import Decimal, getcontext, localcontext
@@ -65,7 +66,8 @@ class AggregatedEvent:
     '''
     loan: Loan
     event_fact_date: datetime
-    event_start_date: Optional[datetime] = None
+    event_start_date: Optional[datetime]
+    event_end_date: Optional[datetime] = None
     days_count: int = 0
     event_ids: List[int] = field(default_factory=list)
     principal_lending_currency: Currency = field(default_factory=lambda: Currency(currency_amount=Decimal('0.0'), ticker=None, currency_to_loan_rate=None))
@@ -116,7 +118,7 @@ events_list_raw = [
     {"event_id": 8, "event_fact_date": "2023-07-22", "principal_lending_currency": 43200, "currency": "USD", "loan_id": 101},
     {"event_id": 9, "event_fact_date": "2024-03-14", "principal_repayment_currency": 10302, "currency": "USD", "loan_id": 101},
     {"event_id": 10, "event_fact_date": "2024-01-15", "interest_repayment_currency": 130, "currency": "EUR", "loan_id": 101, "currency_to_loan_rate": 1.1},
-    {"event_id": 11, "event_fact_date": "2024-11-03", "interest_repayment_currency": 200, "currency": "USD", "loan_id": 101},
+    {"event_id": 11, "event_fact_date": "2024-11-03", "interest_repayment_currency": 180, "currency": "USD", "loan_id": 101},
 ]
 
 # Convert raw data into `Event` objects with Currency attributes and associated loans
@@ -254,12 +256,10 @@ for event in events_list_raw:
             interest_balance_correction=interest_balance_correction
         )
     )
-print(*events_list, sep="\n")
 # Sort events by event_fact_date and event_id
-events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.event_fact_date, e.event_id))
-
+events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.event_start_date, e.event_id))
 print("-" * 140)
-print(f"{'Date':<12} {'Start event_fact_date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Principal repayment':>18} {'Interest repayment':>18} {'Event IDs':>12}")
+print(f"{'Date':<12} {'Start event date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Principal repayment':>18} {'Interest repayment':>18} {'Event IDs':>12}")
 print("-" * 140)
 for event in events_list_sorted:
     event_fact_date = str(event.event_fact_date.date())  # Ensure event_fact_date is a string
@@ -280,13 +280,17 @@ print("-" * 140)
 # ==============================
 # 3. Aggregate Events by Date
 # ==============================
-aggregated_events: Dict[datetime, AggregatedEvent] = defaultdict(lambda: AggregatedEvent(loan=loan_mapping[101], event_fact_date=None))
+aggregated_events: Dict[datetime, AggregatedEvent] = defaultdict(lambda: AggregatedEvent(loan=loan_mapping[101], 
+                                                                                        event_fact_date = None,
+                                                                                        event_start_date =None))
 '''
 Sum existing values for each event_fact_date.
 Insert deafault values from AggregatedEvents class if event does not have a value (None)
 '''
 for event in events_list_sorted:
-    date_key = event.event_fact_date
+    date_key = event.event_start_date
+    if aggregated_events[date_key].event_start_date is None:
+        aggregated_events[date_key].event_start_date = event.event_start_date
     if aggregated_events[date_key].event_fact_date is None:
         aggregated_events[date_key].event_fact_date = event.event_fact_date
     # Convert repayment to loan currency and aggregate
@@ -297,8 +301,8 @@ for event in events_list_sorted:
     if event.interest_repayment:
         aggregated_events[date_key].interest_repayment +=event.interest_repayment
     # Aggregate other fields (assumed to be in base currency)
-    #if event.capitalization:
-    #  aggregated_events[date_key].capitalization += event.capitalization
+    if event.capitalization:
+      aggregated_events[date_key].capitalization += event.capitalization
     if event.interest_rate:
       aggregated_events[date_key].interest_rate = event.interest_rate
     if event.principal_balance_correction:
@@ -325,34 +329,41 @@ dates_generator_range_end = max(aggregated_events.keys()) + timedelta(days=31)
 
 # Generate capitalization dates (Quarterly start 'QS' frequency)
 capitalization_generated_dates = generate_date_list(
-  dates_generator_range_start=dates_generator_range_start.strftime("%Y-%m-%d"), 
-  dates_generator_range_end=dates_generator_range_end.strftime("%Y-%m-%d"), 
+  dates_generator_range_start=dates_generator_range_start,  #datetime .strftime("%Y-%m-%d"), 
+  dates_generator_range_end=dates_generator_range_end,      #datetime .strftime("%Y-%m-%d"), 
   dates_generator_frequency="QS")
 # Add capitalization dates to aggregated_events
-for event_fact_date in capitalization_generated_dates:
-  aggregated_events[event_fact_date] = AggregatedEvent(loan=loan_mapping[101], event_fact_date=event_fact_date, capitalization=Decimal('0.0'))
+for capitalization_generated_date in capitalization_generated_dates:
+  aggregated_events[event_start_date] = AggregatedEvent(loan=loan_mapping[101], 
+                                                        event_start_date=capitalization_generated_date,
+                                                        event_fact_date=capitalization_generated_date, 
+                                                        capitalization=Decimal('0.0'))
+
 
 
 # Generate missing dates (Monthly start 'MS' frequency)
 generated_dates = generate_date_list(
-  dates_generator_range_start=dates_generator_range_start.strftime("%Y-%m-%d"), 
-  dates_generator_range_end=dates_generator_range_end.strftime("%Y-%m-%d"), 
+  dates_generator_range_start=dates_generator_range_start,  #datetime .strftime("%Y-%m-%d"), 
+  dates_generator_range_end=dates_generator_range_end,      #datetime .strftime("%Y-%m-%d"), 
   dates_generator_frequency="MS")
 
 # Add missing dates to aggregated_events
-for event_fact_date in generated_dates:
-    if event_fact_date not in aggregated_events:
-        aggregated_events[event_fact_date] = AggregatedEvent(loan=loan_mapping[101], event_fact_date=event_fact_date)
+for generated_date in generated_dates:
+    if generated_date not in aggregated_events:
+        aggregated_events[generated_date] = AggregatedEvent(loan=loan_mapping[101], 
+                                                              event_fact_date=generated_date, 
+                                                              event_start_date=generated_date)
+
 
 # Convert to sorted list
-events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.event_fact_date)
+events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.event_start_date)
 
 print("-" * 140)
 print(f"{'Date':<12} {'Lending':>8} {'Pr_rep':>10}{'Int_rep':>10}{'Event IDs':>12}")
 print("-" * 140)
 for event in events_list_date_aggregated_sorted:
-    event_fact_date = str(event.event_fact_date.date())
-    print(f"{event_fact_date:<12}" 
+    event_start_date = str(event.event_start_date)
+    print(f"{event_start_date:<12}" 
           f"{event.principal_lending:>8}" 
           f"{event.principal_repayment:>10}"
           f"{event.interest_repayment:>10}"
@@ -371,9 +382,9 @@ for i, event in enumerate(events_list_date_aggregated_sorted):
     # Update current_interest_rate if there's a rate change on this event_fact_date
     if event.interest_rate > 0:
         current_interest_rate = Decimal(str(event.interest_rate))
-    if event.event_fact_date in capitalization_generated_dates:
+    if event.event_start_date in capitalization_generated_dates:
         event.capitalization = interest_balance
-        print(f"Capitalization on {event.event_fact_date} amount: {interest_balance}")
+        print(f"Capitalization on {event.event_start_date} amount: {interest_balance}")
     # Update principal balance
     principal_balance += (
         Decimal(event.principal_lending) +
@@ -386,17 +397,17 @@ for i, event in enumerate(events_list_date_aggregated_sorted):
     # Calculate days_count (difference between next event event_fact_date and current event_fact_date)
     if i < len(events_list_date_aggregated_sorted) - 1:
         next_event = events_list_date_aggregated_sorted[i + 1]
-        event.days_count = (next_event.event_fact_date - event.event_fact_date).days
+        event.days_count = (next_event.event_start_date - event.event_start_date).days
     else:
         event.days_count = 0  # Last event has no next event_fact_date
-    
+
+    if i < len(events_list_date_aggregated_sorted) - 1 and event.days_count >1:
+        event.event_end_date = (event.event_start_date+timedelta(event.days_count-1))
+    else:
+        event.event_end_date = event.event_start_date
+
     # Calculate interest accrued
-    '''
-    TODO
-    - [ ] add year days count base(360,365,366, calendar) 
-    '''
     event.interest_accrued = (current_interest_rate / Decimal('365')) * Decimal(event.days_count) * event.principal_balance
-    
     # Update interest balance
     interest_balance += (
         Decimal(event.interest_accrued) -
@@ -405,29 +416,36 @@ for i, event in enumerate(events_list_date_aggregated_sorted):
         Decimal(event.interest_balance_correction)
     )
     event.interest_balance = interest_balance
-
-
+    
 # ==============================
 # 6. Print Results
 # ==============================
 
 print("-" * 140)
-print(f"\
-{'Date'           :<12}" \
-f"{'Days'         :>8}" \
-f"{'Lending'      :>12}" \
-f"{'Pr_rep'       :>12}" \
-f"{'Pr_balance'   :>14}" \
-f"{'Int_accrued'  :>14}" \
-f"{'Int_rep'      :>12}" \
-f"{'Int_balance'  :>14}")
+print(
+  f"{'Event'        :<12}"\
+  f"{'Start'        :>12}" \
+  f"{'Days'         :>8}" \
+  f"{'End'          :>12}" \
+  f"{'Lending'      :>12}" \
+  f"{'Cap'          :>12}" \
+  f"{'Pr_rep'       :>12}" \
+  f"{'Pr_balance'   :>14}" \
+  f"{'Int_accrued'  :>14}" \
+  f"{'Int_rep'      :>12}" \
+  f"{'Int_balance'  :>14}")
 print("-" * 140)
 
 for event in events_list_date_aggregated_sorted:
     event_fact_date = str(event.event_fact_date.date())
+    event_start_date = str(event.event_start_date.date())
+    event_end_date = str(event.event_end_date.date())
     print(f"{event_fact_date:<12}" 
+        f"{event_start_date:>12}" 
           f"{event.days_count:>8}" 
+          f"{event_end_date:>12}"  # Right-aligned for consistency
           f"{event.principal_lending:>12.2f}" 
+          f"{event.capitalization:>12.2f}"
           f"{event.principal_repayment:>12.2f}" 
           f"{event.principal_balance:>14.2f}" 
           f"{float(event.interest_accrued):>14.2f}" 
@@ -450,7 +468,7 @@ def balance_report(data: List[AggregatedEvent], report_date: str) -> float:
 
     previous_balance = 0
     for event in data:
-        if event.event_fact_date == report_date:
+        if event.event_start_date == report_date:
             return float(event.principal_balance)
         elif event.event_fact_date > report_date:
             return previous_balance  # Last known balance before the report_date
