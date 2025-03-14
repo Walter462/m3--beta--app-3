@@ -3,15 +3,10 @@ components:
   name: image_1
   properties: {height: 57.66461181640625, horizontal_align: left, source: _/theme/WhiteStarC_logo.webp, visible: true}
   type: Image
-- event_bindings: {click: button_1_click}
-  layout_properties: {grid_position: 'AYGKGU,OYHHNB'}
-  name: button_1
-  properties: {appearance: outlined}
-  type: form:dep_lin1x4oec0ytd:_Components.Button
-- layout_properties: {grid_position: 'BIYWXS,LTTOVC'}
-  name: linear_panel_1
+- layout_properties: {grid_position: 'MAWNCI,PFPVQF'}
+  name: column_panel_1
   properties: {}
-  type: LinearPanel
+  type: ColumnPanel
 container:
   properties: {col_spacing: medium, wrap_on: mobile}
   type: ColumnPanel
