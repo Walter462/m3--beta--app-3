@@ -14,7 +14,7 @@ components:
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: none, spacing_below: none, text: 'Description:', tooltip: '', underline: false, visible: true}
       type: Label
     - data_bindings:
-      - {code: 'self.item[''description'']', property: text, writeback: true}
+      - {code: 'self.item['''']', property: text, writeback: false}
       event_bindings: {change: description_box_change}
       layout_properties: {grid_position: 'EJEXZK,BGBLGJ'}
       name: description_box
@@ -22,7 +22,7 @@ components:
       type: TextBox
     - layout_properties: {grid_position: 'UATTPD,KYAWSG'}
       name: label_3
-      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: 'Amount:', tooltip: '', underline: false, visible: true}
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Lender, tooltip: '', underline: false, visible: true}
       type: Label
     - data_bindings:
       - {code: 'self.item[''amount'']', property: text, writeback: true}
@@ -33,46 +33,44 @@ components:
       type: TextBox
     - layout_properties: {grid_position: 'OPXEZO,JCARUM'}
       name: label_4
-      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: 'Merchant:', tooltip: '', underline: false, visible: true}
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Borrower, tooltip: '', underline: false, visible: true}
       type: Label
     - data_bindings:
       - {code: 'self.item[''merchant'']', property: text, writeback: true}
       layout_properties: {grid_position: 'OPXEZO,XYMLIW'}
       name: merchant_box
+      properties: {visible: true}
+      type: TextBox
+    - layout_properties: {grid_position: 'DSMWLP,PSAKYK'}
+      name: label_4_copy
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Currency, tooltip: '', underline: false, visible: true}
+      type: Label
+    - data_bindings:
+      - {code: 'self.item[''merchant'']', property: text, writeback: true}
+      layout_properties: {grid_position: 'DSMWLP,XWAAEN'}
+      name: merchant_box_copy
+      properties: {hide_text: false}
+      type: TextBox
+    - layout_properties: {grid_position: 'EJXEDK,CZWOXA'}
+      name: label_4_copy_copy_copy
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate, tooltip: '', underline: false, visible: true}
+      type: Label
+    - data_bindings:
+      - {code: 'self.item[''merchant'']', property: text, writeback: true}
+      layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,JLBTMP'}
+      name: merchant_box_copy_copy_copy
       properties: {}
       type: TextBox
-    - layout_properties: {grid_position: 'BPFJWG,RCSMWG'}
-      name: label_5
-      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: 'Attachment:', tooltip: '', underline: false, visible: true}
+    - layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,EGOUKI'}
+      name: label_4_copy_copy
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate base, tooltip: '', underline: false, visible: true}
       type: Label
-    - event_bindings: {change: receipt_upload_change}
-      layout_properties: {grid_position: 'BPFJWG,JVGCSY'}
-      name: receipt_upload
-      properties:
-        align: left
-        background: ''
-        bold: false
-        border: ''
-        enabled: true
-        file: null
-        file_types: null
-        files: []
-        font: ''
-        font_size: null
-        foreground: ''
-        icon: fa:upload
-        icon_align: left
-        italic: false
-        multiple: false
-        role: outlined
-        show_state: true
-        spacing_above: small
-        spacing_below: small
-        text: Attach receipt
-        tooltip: ''
-        underline: false
-        visible: true
-      type: FileLoader
+    - data_bindings:
+      - {code: 'self.item[''merchant'']', property: text, writeback: true}
+      layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,EWBDTN'}
+      name: merchant_box_copy_copy
+      properties: {}
+      type: TextBox
     - components:
       - event_bindings: {click: save_button_click}
         layout_properties: {grid_position: 'JSCBTN,XLTHLD'}
@@ -90,7 +88,7 @@ components:
       type: FlowPanel
     layout_properties: {grid_position: 'RFCGGO,UOOTAC'}
     name: column_panel_1_copy
-    properties: {col_widths: '{"WBSNKB":10,"BGBLGJ":50,"JCARUM":10,"XYMLIW":50,"KYAWSG":10,"IPOYKR":50,"RCSMWG":10,"JVGCSY":50}'}
+    properties: {col_widths: '{"WBSNKB":10,"BGBLGJ":50,"JCARUM":10,"XYMLIW":50,"KYAWSG":10,"IPOYKR":50,"PSAKYK":10,"XWAAEN":50,"CZWOXA":10,"TAXSNX":50,"JLBTMP":25,"EGOUKI":15,"EWBDTN":20}'}
     type: ColumnPanel
   layout_properties: {grid_position: 'LLMHCT,XKWXJU'}
   name: column_panel_1
