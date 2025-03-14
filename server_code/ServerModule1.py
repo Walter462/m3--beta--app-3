@@ -48,7 +48,7 @@ def add_loan(lender,
               lending_date_exclusive_counting,
               repayment_date_exclusive_counting,
               capitalization):
-  app_tables.feedback.add_row(id=str(str(uuid4())),
+  app_tables.loan.add_row(id=str(str(uuid4())),
                               created_on = datetime.now(),
                               lender = lender,
                               borrower = borrower,

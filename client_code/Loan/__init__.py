@@ -33,11 +33,11 @@ class Loan(LoanTemplate):
     self.lender_box.text = ""
     self.borrower_box.text = ""
     self.description_box.text = ""
-    self.base_currency_ticker_dropdown = ""
-    self.interest_rate_base_dropdown = ""
-    self.lending_date_exclusive_counting_checkbox = ""
-    self.repayment_date_exclusive_checkbox = ""
-    self.capitalization_checkbox = ""
+    #self.base_currency_ticker_dropdown = ""
+    #self.interest_rate_base_dropdown = ""
+    self.lending_date_exclusive_counting_checkbox.checked = False
+    self.repayment_date_exclusive_counting_checkbox.checked = True
+    self.capitalization_checkbox.checked = False
 
   def save_button_click(self, **event_args):
     """This method is called when the button is clicked"""
