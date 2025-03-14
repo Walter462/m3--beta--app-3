@@ -73,15 +73,15 @@ components:
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'GJQMZZ,ICFWZG'}
-      name: lending_date_exclusive_chckbox
+      name: lending_date_exclusive_counting_checkbox
       properties: {text: Lending date exclusive counting}
       type: form:dep_lin1x4oec0ytd:_Components.Checkbox
     - layout_properties: {grid_position: 'ZWJIOK,PGZHML'}
-      name: repayment_date_exclusive_chckbox
+      name: repayment_date_exclusive_counting_checkbox
       properties: {checked: true, text: Repayment date exclusive counting}
       type: form:dep_lin1x4oec0ytd:_Components.Checkbox
     - layout_properties: {grid_position: 'LVFCWZ,BJNKKL'}
-      name: repayment_date_exclusive_chckbox_copy
+      name: capitalization_checkbox
       properties: {checked: false, text: Capitalization}
       type: form:dep_lin1x4oec0ytd:_Components.Checkbox
     - components:

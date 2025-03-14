@@ -30,7 +30,24 @@ class Loan(LoanTemplate):
     anvil.server.call('say_hello', name)
   
   def clear_inputs(self):
-    self.Name.text = ""
-    self.Email.text = ""
-    self.Feedback.text = ""
+    self.lender_box.text = ""
+    self.borrower_box.text = ""
+    self.description_box.text = ""
+    self.currency_ticker_dropdown = ""
+    self.lending_date_exclusive_counting_checkbox = ""
+    self.repayment_date_exclusive_checkbox = ""
+    self.capitalization_checkbox = ""
+
+  def save_button_click(self, **event_args):
+    """This method is called when the button is clicked"""
+    lender = self.lender_box.text
+    borrower = self.borrower_box.text
+    description = self.description_box.text
+    base_currency = self.currency_ticker_dropdown
+    interest_rate_base = self.interest_rate_base_dropdown
+    
+    anvil.server.call('add_feedback', name, email, feedback)
+    #alert('Feedback submited')
+    Notification('Loan saved').show()
+    self.clear_inputs()
     
