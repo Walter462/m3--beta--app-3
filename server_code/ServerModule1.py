@@ -16,14 +16,15 @@ from datetime import datetime
 # them with @anvil.server.callable.
 # Here is an example - you can replace it with your own:
 #
-# @anvil.server.callable
-# def say_hello(name):
-#   print("Hello, " + name + "!")
-#   return 42
-#
+@anvil.server.callable
+def say_hello(name):
+   print("Hello, " + name + "!")
+   return 42
+
 @anvil.server.callable
 def add_subscrition(Loan_DB_name):
   app_tables.subscription.add_row(
     created_on=datetime.now(),
     Loan_DB_profile_name=Loan_DB_name
   )
+

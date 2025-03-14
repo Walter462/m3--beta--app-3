@@ -87,11 +87,11 @@ class Repayment(EventParams):
 
 
 #Instantiate classes
-Lending_1 = PrincipalLending(event_date = "2025-01-13", principal_lending_currency_sum = 300000)
-Lending_1.loan_id = 1
-Lending_2 = PrincipalLending(event_date = "2025-01-01", principal_lending_currency_sum = 330000)
-Lending_1.loan_id = 1
+#Lending_1 = PrincipalLending(event_date = "2025-01-13", principal_lending_currency_sum = 300000)
+#Lending_1.loan_id = 1
+#Lending_2 = PrincipalLending(event_date = "2025-01-01", principal_lending_currency_sum = 330000)
+#Lending_1.loan_id = 1
 
-Loan_1 = Loan(1)
-Loan_1.loan_events_list_method([Lending_1, Lending_2])
-print(i.event_date for i in Loan_1.loan_events_list)
+#Loan_1 = Loan(1)
+#Loan_1.loan_events_list_method([Lending_1, Lending_2])
+#print(i.event_date for i in Loan_1.loan_events_list)
