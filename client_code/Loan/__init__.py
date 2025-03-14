@@ -15,6 +15,7 @@ class Loan(LoanTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
+    self.dropdown_menu_1.items = anvil.server.call('get_interest_rate_bases')
     
   def subscriptionSubmit_btn_click(self, **event_args):
     """This method is called when the component is clicked."""
@@ -27,4 +28,5 @@ class Loan(LoanTemplate):
     """This method is called when the component is clicked."""
     name = 'Vova'
     anvil.server.call('say_hello', name)
+
     

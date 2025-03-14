@@ -28,3 +28,7 @@ def add_subscrition(Loan_DB_name):
     Loan_DB_profile_name=Loan_DB_name
   )
 
+@anvil.server.callable
+def get_interest_rate_bases():
+  interest_rate_bases =['360', '365', 'calendar']
+  return(interest_rate_bases)
