@@ -54,6 +54,9 @@ db_schema:
     - admin_ui: {order: 4.5, width: 200}
       name: interest_rate_base
       type: string
+    - admin_ui: {order: 8, width: 200}
+      name: created_on
+      type: datetime
     server: full
     title: Loan
   subscription:

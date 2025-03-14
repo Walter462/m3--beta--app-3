@@ -7,6 +7,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
 from datetime import datetime
+from uuid import uuid4
 
 
 # This is a server module. It runs on the Anvil server,
@@ -38,5 +39,23 @@ def get_currency_ticker():
   currency_tickers =['USD', 'EUR', 'GBP', 'JPY']
   return(currency_tickers)
 
-
+@anvil.server.callable
+def add_loan(lender,
+              borrower,
+              description,
+              base_currency,
+              interest_rate_base,
+              lending_date_exclusive_counting,
+              repayment_date_exclusive_counting,
+              capitalization):
+  app_tables.feedback.add_row(id=str(str(uuid4())),
+                              created_on = datetime.now(),
+                              lender = lender,
+                              borrower = borrower,
+                              description = description,
+                              base_currency = base_currency,
+                              interest_rate_base = interest_rate_base,
+                              lending_date_exclusive_counting = lending_date_exclusive_counting,
+                              repayment_date_exclusive_counting = repayment_date_exclusive_counting,
+                              capitalization = capitalization)
   

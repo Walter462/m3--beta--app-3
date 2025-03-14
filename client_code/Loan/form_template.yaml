@@ -13,8 +13,7 @@ components:
       name: label_3
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Lender, tooltip: '', underline: false, visible: true}
       type: Label
-    - data_bindings:
-      - {code: 'self.item[''amount'']', property: text, writeback: true}
+    - data_bindings: []
       event_bindings: {change: amount_box_change}
       layout_properties: {grid_position: 'UATTPD,IPOYKR'}
       name: lender_box
@@ -24,8 +23,7 @@ components:
       name: label_4
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Borrower, tooltip: '', underline: false, visible: true}
       type: Label
-    - data_bindings:
-      - {code: 'self.item[''merchant'']', property: text, writeback: true}
+    - data_bindings: []
       layout_properties: {grid_position: 'OPXEZO,XYMLIW'}
       name: borrower_box
       properties: {visible: true}
