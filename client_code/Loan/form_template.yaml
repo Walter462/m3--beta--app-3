@@ -14,10 +14,9 @@ components:
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Lender, tooltip: '', underline: false, visible: true}
       type: Label
     - data_bindings: []
-      event_bindings: {change: amount_box_change}
-      layout_properties: {grid_position: 'UATTPD,IPOYKR'}
+      layout_properties: {grid_position: 'UATTPD,LQQWKJ'}
       name: lender_box
-      properties: {align: left, background: '', bold: false, border: '', enabled: true, font: '', font_size: null, foreground: '', hide_text: false, italic: false, placeholder: '', role: null, spacing_above: small, spacing_below: small, text: '', tooltip: '', type: number, underline: false, visible: true}
+      properties: {visible: true}
       type: TextBox
     - layout_properties: {grid_position: 'OPXEZO,JCARUM'}
       name: label_4
@@ -99,7 +98,7 @@ components:
       type: FlowPanel
     layout_properties: {grid_position: 'RFCGGO,UOOTAC'}
     name: column_panel_1_copy
-    properties: {col_widths: '{"JCARUM":10,"XYMLIW":50,"KYAWSG":10,"IPOYKR":50,"CZWOXA":10,"TAXSNX":50,"JLBTMP":25,"EGOUKI":15,"FGYSTN":10,"ROQVMN":50,"NCGJJI":5,"QXSRVH":39}'}
+    properties: {col_widths: '{"JCARUM":10,"XYMLIW":50,"KYAWSG":10,"CZWOXA":10,"TAXSNX":50,"JLBTMP":25,"EGOUKI":15,"FGYSTN":10,"ROQVMN":50,"NCGJJI":5,"QXSRVH":39,"LQQWKJ":32}'}
     type: ColumnPanel
   layout_properties: {grid_position: 'LLMHCT,XKWXJU'}
   name: column_panel_1

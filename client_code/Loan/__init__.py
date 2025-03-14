@@ -44,11 +44,11 @@ class Loan(LoanTemplate):
     lender = self.lender_box.text
     borrower = self.borrower_box.text
     description = self.description_box.text
-    base_currency = self.base_currency_ticker_dropdown
-    interest_rate_base = self.interest_rate_base_dropdown
-    lending_date_exclusive_counting = self.lending_date_exclusive_counting_checkbox
-    repayment_date_exclusive_counting = self.repayment_date_exclusive_checkbox
-    capitalization = self.capitalization_checkbox
+    base_currency = self.base_currency_ticker_dropdown.selected_value
+    interest_rate_base = self.interest_rate_base_dropdown.selected_value
+    lending_date_exclusive_counting = self.lending_date_exclusive_counting_checkbox.checked
+    repayment_date_exclusive_counting = self.repayment_date_exclusive_counting_checkbox.checked
+    capitalization = self.capitalization_checkbox.checked
     anvil.server.call('add_loan',
                       lender,
                       borrower,
