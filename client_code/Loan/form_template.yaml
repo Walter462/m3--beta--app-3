@@ -50,7 +50,7 @@ components:
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Base currency ticker, tooltip: '', underline: false, visible: true}
       type: Label
     - layout_properties: {grid_position: 'ZEBCXT,QXSRVH'}
-      name: currency_ticker_dropdown
+      name: base_currency_ticker_dropdown
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'EJXEDK,CZWOXA'}
