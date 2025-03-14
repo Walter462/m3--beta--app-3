@@ -16,6 +16,7 @@ class Loan(LoanTemplate):
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
     self.dropdown_menu_1.items = anvil.server.call('get_interest_rate_bases')
+    self.dropdown_menu_2.items = anvil.server.call('get_currency_ticker')
     
   def subscriptionSubmit_btn_click(self, **event_args):
     """This method is called when the component is clicked."""
