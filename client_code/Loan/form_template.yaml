@@ -17,7 +17,7 @@ components:
       - {code: 'self.item[''amount'']', property: text, writeback: true}
       event_bindings: {change: amount_box_change}
       layout_properties: {grid_position: 'UATTPD,IPOYKR'}
-      name: amount_box
+      name: lender_box
       properties: {align: left, background: '', bold: false, border: '', enabled: true, font: '', font_size: null, foreground: '', hide_text: false, italic: false, placeholder: '', role: null, spacing_above: small, spacing_below: small, text: '', tooltip: '', type: number, underline: false, visible: true}
       type: TextBox
     - layout_properties: {grid_position: 'OPXEZO,JCARUM'}
@@ -47,7 +47,7 @@ components:
       type: Label
     - layout_properties: {grid_position: 'ZEBCXT,NCGJJI'}
       name: label_4_copy
-      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Currency ticker, tooltip: '', underline: false, visible: true}
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Base currency ticker, tooltip: '', underline: false, visible: true}
       type: Label
     - layout_properties: {grid_position: 'ZEBCXT,QXSRVH'}
       name: dropdown_menu_2
@@ -55,13 +55,13 @@ components:
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'EJXEDK,CZWOXA'}
       name: label_4_copy_copy_copy
-      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate, tooltip: '', underline: false, visible: true}
+      properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate, tooltip: '', underline: false, visible: false}
       type: Label
     - data_bindings:
       - {code: 'self.item[''merchant'']', property: text, writeback: true}
       layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,JLBTMP'}
       name: merchant_box_copy_copy_copy
-      properties: {}
+      properties: {visible: false}
       type: TextBox
     - layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,EGOUKI'}
       name: label_4_copy_copy
@@ -82,7 +82,7 @@ components:
       type: form:dep_lin1x4oec0ytd:_Components.Checkbox
     - layout_properties: {grid_position: 'LVFCWZ,BJNKKL'}
       name: repayment_date_exclusive_chckbox_copy
-      properties: {checked: true, text: Capitalization}
+      properties: {checked: false, text: Capitalization}
       type: form:dep_lin1x4oec0ytd:_Components.Checkbox
     - components:
       - event_bindings: {click: save_button_click}

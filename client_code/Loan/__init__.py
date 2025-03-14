@@ -29,5 +29,9 @@ class Loan(LoanTemplate):
     """This method is called when the component is clicked."""
     name = 'Vova'
     anvil.server.call('say_hello', name)
-
+  
+  def clear_inputs(self):
+    self.Name.text = ""
+    self.Email.text = ""
+    self.Feedback.text = ""
     

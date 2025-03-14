@@ -32,7 +32,11 @@ def add_subscrition(Loan_DB_name):
 def get_interest_rate_bases():
   interest_rate_bases =['360', '365', 'calendar']
   return(interest_rate_bases)
-
+  
+@anvil.server.callable
 def get_currency_ticker():
   currency_tickers =['USD', 'EUR', 'GBP', 'JPY']
   return(currency_tickers)
+
+
+  

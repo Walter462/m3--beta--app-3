@@ -24,6 +24,38 @@ db_schema:
       type: datetime
     server: full
     title: Company
+  loan:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: id
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: lender
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: borrower
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      name: description
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      name: base_currency
+      type: string
+    - admin_ui: {order: 5, width: 200}
+      name: lending_date_exclusive_counting
+      type: bool
+    - admin_ui: {order: 6, width: 200}
+      name: repayment_date_exclusive_counting
+      type: bool
+    - admin_ui: {order: 7, width: 200}
+      name: capitalization
+      type: bool
+    - admin_ui: {order: 4.5, width: 200}
+      name: interest_rate_base
+      type: string
+    server: full
+    title: Loan
   subscription:
     client: search
     columns:
