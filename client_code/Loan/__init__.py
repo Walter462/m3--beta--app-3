@@ -9,14 +9,13 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.users
 
-
 class Loan(LoanTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
-    self.dropdown_menu_1.items = anvil.server.call('get_interest_rate_bases')
-    self.dropdown_menu_2.items = anvil.server.call('get_currency_ticker')
+    self.interest_rate_base_dropdown.items = anvil.server.call('get_interest_rate_bases')
+    self.currency_ticker_dropdown.items = anvil.server.call('get_currency_ticker')
     
   def subscriptionSubmit_btn_click(self, **event_args):
     """This method is called when the component is clicked."""

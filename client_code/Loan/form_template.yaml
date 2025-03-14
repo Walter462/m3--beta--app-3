@@ -27,7 +27,7 @@ components:
     - data_bindings:
       - {code: 'self.item[''merchant'']', property: text, writeback: true}
       layout_properties: {grid_position: 'OPXEZO,XYMLIW'}
-      name: merchant_box
+      name: borrower_box
       properties: {visible: true}
       type: TextBox
     - layout_properties: {grid_position: 'KDSRYZ,FGYSTN'}
@@ -46,30 +46,30 @@ components:
       properties: {align: center, background: '', bold: true, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: headline, spacing_above: small, spacing_below: medium, text: Loan financial terms, tooltip: '', underline: false, visible: true}
       type: Label
     - layout_properties: {grid_position: 'ZEBCXT,NCGJJI'}
-      name: label_4_copy
+      name: label_5
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Base currency ticker, tooltip: '', underline: false, visible: true}
       type: Label
     - layout_properties: {grid_position: 'ZEBCXT,QXSRVH'}
-      name: dropdown_menu_2
+      name: currency_ticker_dropdown
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'EJXEDK,CZWOXA'}
-      name: label_4_copy_copy_copy
+      name: label_7
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate, tooltip: '', underline: false, visible: false}
       type: Label
     - data_bindings:
       - {code: 'self.item[''merchant'']', property: text, writeback: true}
       layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,JLBTMP'}
-      name: merchant_box_copy_copy_copy
+      name: interest_rate_textbox
       properties: {visible: false}
       type: TextBox
     - layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,EGOUKI'}
-      name: label_4_copy_copy
+      name: label_8
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate base, tooltip: '', underline: false, visible: true}
       type: Label
     - event_bindings: {change: dropdown_menu_1_change}
       layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,QFSWUS'}
-      name: dropdown_menu_1
+      name: interest_rate_base_dropdown
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'GJQMZZ,ICFWZG'}
