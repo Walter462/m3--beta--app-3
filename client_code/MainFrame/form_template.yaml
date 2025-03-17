@@ -1,4 +1,31 @@
 components_by_slot:
-  navigation: []
+  navigation:
+  - layout_properties: {}
+    name: spacer_1
+    properties: {height: '32'}
+    type: Spacer
+  - layout_properties: {}
+    name: navigation_link_5
+    properties: {icon: 'mi:payment', text: Subscriptions, visible: false}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+  - layout_properties: {}
+    name: navigation_link_4
+    properties: {icon: 'mi:user_attributes', text: User Profile, visible: false}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+  - layout_properties: {}
+    name: navigation_link_1
+    properties: {icon: 'mi:corporate_fare', italic: false, text: Companies}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+  - layout_properties: {}
+    name: navigation_link_2
+    properties: {icon: 'mi:handshake', text: Loans}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+  - layout_properties: {}
+    name: navigation_link_3
+    properties: {icon: 'mi:leaderboard', text: Reports}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
 is_package: true
 layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationRailLayout'}
+layout_metadata: {title: Main_template}
+properties: []
+slots: {}
