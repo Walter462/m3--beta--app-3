@@ -1,4 +1,4 @@
-from ._anvil_designer import LoanTemplate
+from ._anvil_designer import LoanEditTemplate
 from anvil import *
 import anvil.server
 import anvil.google.auth, anvil.google.drive
@@ -9,12 +9,12 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.users
 
-class Loan(LoanTemplate):
+class LoanEdit(LoanEditTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
-    self.item = app_tables.loan.search(id='1fb40932-06f5-4914-861d-f97ee97986d7')
+    self.item = app_tables.loan.search()[0]
     self.interest_rate_base_dropdown.items = anvil.server.call('get_interest_rate_bases')
     self.base_currency_ticker_dropdown.items = anvil.server.call('get_currency_ticker')
     
@@ -50,4 +50,6 @@ class Loan(LoanTemplate):
     #alert('Feedback submited')
     Notification('Loan saved').show()
     self.clear_inputs()
+
+ 
     
