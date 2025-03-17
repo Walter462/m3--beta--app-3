@@ -1,2 +1,4 @@
+components_by_slot:
+  navigation: []
 is_package: true
 layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationRailLayout'}
