@@ -1,4 +1,5 @@
 components_by_slot:
+  content: []
   sidesheet: []
 is_package: true
 layout: {type: 'form:MainFrame'}
