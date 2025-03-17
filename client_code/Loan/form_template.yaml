@@ -14,7 +14,7 @@ components:
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Lender, tooltip: '', underline: false, visible: true}
       type: Label
     - data_bindings:
-      - {code: 'self.item['''']', property: text, writeback: false}
+      - {code: 'self.item[''lender_name'']', property: text, writeback: false}
       event_bindings: {change: description_box_change}
       layout_properties: {grid_position: 'UATTPD,HAXFQM'}
       name: lender_box
@@ -24,7 +24,8 @@ components:
       name: label_4
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: true, role: input-prompt, spacing_above: small, spacing_below: small, text: Borrower, tooltip: '', underline: false, visible: true}
       type: Label
-    - data_bindings: []
+    - data_bindings:
+      - {code: 'self.item[''borrower_name'']', property: text, writeback: false}
       layout_properties: {grid_position: 'OPXEZO,XYMLIW'}
       name: borrower_box
       properties: {visible: true}
@@ -34,7 +35,7 @@ components:
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: none, spacing_below: none, text: 'Description:', tooltip: '', underline: false, visible: true}
       type: Label
     - data_bindings:
-      - {code: 'self.item['''']', property: text, writeback: false}
+      - {code: 'self.item[''description'']', property: text, writeback: false}
       event_bindings: {change: description_box_change}
       layout_properties: {grid_position: 'KDSRYZ,ROQVMN'}
       name: description_box
@@ -48,7 +49,9 @@ components:
       name: label_5
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Base currency ticker, tooltip: '', underline: false, visible: true}
       type: Label
-    - layout_properties: {grid_position: 'ZEBCXT,QXSRVH'}
+    - data_bindings:
+      - {code: 'self.item[''base_currency'']', property: items, writeback: false}
+      layout_properties: {grid_position: 'ZEBCXT,QXSRVH'}
       name: base_currency_ticker_dropdown
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
@@ -66,7 +69,9 @@ components:
       name: label_8
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Interest rate base, tooltip: '', underline: false, visible: true}
       type: Label
-    - event_bindings: {change: dropdown_menu_1_change}
+    - data_bindings:
+      - {code: 'self.item[''interest_rate_base'']', property: items, writeback: false}
+      event_bindings: {change: dropdown_menu_1_change}
       layout_properties: {grid_position: 'EJXEDK,TAXSNX JRBKWC,QFSWUS'}
       name: interest_rate_base_dropdown
       properties: {}
@@ -109,4 +114,6 @@ components:
 container:
   properties: {col_spacing: medium, wrap_on: mobile}
   type: ColumnPanel
+custom_component: true
 is_package: true
+toolbox_item: {title: Loan_component}
