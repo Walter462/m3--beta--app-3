@@ -1,4 +1,9 @@
 components_by_slot:
+  content:
+  - layout_properties: {}
+    name: spacer_2
+    properties: {}
+    type: Spacer
   navigation:
   - layout_properties: {}
     name: spacer_1
@@ -24,8 +29,21 @@ components_by_slot:
     name: navigation_link_3
     properties: {icon: 'mi:leaderboard', text: Reports}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+  sidesheet:
+  - layout_properties: {}
+    name: spacer_3
+    properties: {}
+    type: Spacer
 is_package: true
 layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationRailLayout'}
 layout_metadata: {title: Main_template}
 properties: []
-slots: {}
+slots:
+  content:
+    index: 1
+    set_layout_properties: {}
+    target: {name: content, type: slot}
+  sidesheet:
+    index: 1
+    set_layout_properties: {}
+    target: {name: sidesheet, type: slot}
