@@ -16,12 +16,12 @@ db_schema:
     - admin_ui: {order: 3, width: 200}
       name: functional_currency
       type: string
-    - admin_ui: {order: -1, width: 200}
-      name: company_id
-      type: number
     - admin_ui: {order: 4, width: 200}
       name: created_on
       type: datetime
+    - admin_ui: {order: -2, width: 200}
+      name: company_id
+      type: string
     server: full
     title: Company
   loan:
@@ -31,10 +31,10 @@ db_schema:
       name: id
       type: string
     - admin_ui: {order: 1, width: 200}
-      name: lender
+      name: lender_name
       type: string
     - admin_ui: {order: 2, width: 200}
-      name: borrower
+      name: borrower_name
       type: string
     - admin_ui: {order: 3, width: 200}
       name: description
@@ -57,16 +57,21 @@ db_schema:
     - admin_ui: {order: 8, width: 200}
       name: created_on
       type: datetime
+    - admin_ui: {order: 0.5, width: 200}
+      name: lender_id
+      target: company
+      type: link_single
+    - admin_ui: {order: 1.5, width: 200}
+      name: borrower_id
+      target: company
+      type: link_single
     server: full
     title: Loan
   subscription:
     client: search
     columns:
-    - admin_ui: {width: 200}
-      name: subscription_id
-      type: number
-    - admin_ui: {width: 200}
-      name: Loan_DB_profile_name
+    - admin_ui: {order: 0, width: 200}
+      name: loan_db_profile_name
       type: string
     - admin_ui: {width: 200}
       name: active
@@ -74,6 +79,9 @@ db_schema:
     - admin_ui: {order: 2, width: 200}
       name: created_on
       type: datetime
+    - admin_ui: {order: -2, width: 200}
+      name: subscription_id
+      type: string
     server: full
     title: Subscription
   subscription_owner:
