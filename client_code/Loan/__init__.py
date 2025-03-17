@@ -14,21 +14,10 @@ class Loan(LoanTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
+    self.item = app_tables.loan.search(id='1fb40932-06f5-4914-861d-f97ee97986d7')
     self.interest_rate_base_dropdown.items = anvil.server.call('get_interest_rate_bases')
     self.base_currency_ticker_dropdown.items = anvil.server.call('get_currency_ticker')
     
-  def subscriptionSubmit_btn_click(self, **event_args):
-    """This method is called when the component is clicked."""
-    name = self.NewLoanDB_name_input_text_box.text
-    anvil.server.call("add_subscrition", name)
-    alert("New subscription saved successfully")
-    self.NewLoanDB_name_input_text_box.text = ""
-
-  def button_1_click(self, **event_args):
-    """This method is called when the component is clicked."""
-    name = 'Vova'
-    anvil.server.call('say_hello', name)
-###############################################################
   def clear_inputs(self):
     self.lender_box.text = ""
     self.borrower_box.text = ""
