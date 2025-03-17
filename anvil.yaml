@@ -158,5 +158,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/google.yml
-startup: {module: Frame_loans, type: form}
+startup: {module: Loan, type: form}
 startup_form: null
