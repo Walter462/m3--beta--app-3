@@ -4,7 +4,7 @@ db_schema:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
-      name: subscription_id
+      name: subscription
       target: subscription
       type: link_single
     - admin_ui: {order: 1, width: 200}
@@ -20,15 +20,18 @@ db_schema:
       name: created_on
       type: datetime
     - admin_ui: {order: -2, width: 200}
-      name: company_id
+      name: uuid
       type: string
+    - admin_ui: {order: 5, width: 200}
+      name: edited_on
+      type: datetime
     server: full
     title: Company
   loan:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
-      name: id
+      name: uuid
       type: string
     - admin_ui: {order: 1, width: 200}
       name: lender_name
@@ -58,11 +61,11 @@ db_schema:
       name: created_on
       type: datetime
     - admin_ui: {order: 0.5, width: 200}
-      name: lender_id
+      name: lender
       target: company
       type: link_single
     - admin_ui: {order: 1.5, width: 200}
-      name: borrower_id
+      name: borrower
       target: company
       type: link_single
     server: full
@@ -80,14 +83,14 @@ db_schema:
       name: created_on
       type: datetime
     - admin_ui: {order: -2, width: 200}
-      name: subscription_id
+      name: uuid
       type: string
     - admin_ui: {order: 3, width: 200}
       name: edited_on
       type: datetime
     server: full
     title: Subscription
-  subscription_owner:
+  subscription_admin:
     client: none
     columns:
     - admin_ui: {width: 200}
@@ -96,14 +99,14 @@ db_schema:
       type: link_single
     - admin_ui: {width: 200}
       name: user_email
-      target: users
+      target: subscription_user
       type: link_single
     - admin_ui: {order: 2, width: 200}
       name: created_on
       type: datetime
     server: full
-    title: Subscription_owner
-  users:
+    title: Subscription_admin
+  subscription_user:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
@@ -134,7 +137,7 @@ db_schema:
       name: email_confirmation_key
       type: string
     server: full
-    title: Users
+    title: Subscription_user
 dependencies:
 - config: {}
   dep_id: dep_lin1x4oec0ytd
