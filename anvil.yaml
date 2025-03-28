@@ -164,5 +164,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/google.yml
-startup: {module: LoanEdit, type: form}
+startup: {module: Home, type: form}
 startup_form: null
