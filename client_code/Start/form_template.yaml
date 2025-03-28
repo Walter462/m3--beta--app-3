@@ -54,7 +54,7 @@ components:
   name: card_1
   properties: {}
   type: form:dep_lin1x4oec0ytd:_Components.Card
-- layout_properties: {grid_position: 'NQYTAH,CJOBPH'}
+- layout_properties: {grid_position: 'PZFYHY,RYVWFV'}
   name: heading_2
   properties:
     spacing:
