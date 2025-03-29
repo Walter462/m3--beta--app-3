@@ -25,7 +25,19 @@ components_by_slot:
     name: navigation_link_2
     properties: {icon: 'mi:handshake', text: Loans}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
-  sidesheet: []
+  - layout_properties: {}
+    name: divider_1
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.Divider
+  - layout_properties: {}
+    name: button_1
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
+  sidesheet:
+  - layout_properties: {}
+    name: rich_text_1
+    properties: {}
+    type: RichText
 is_package: true
 layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationRailLayout'}
 layout_metadata: {title: Main_template}
