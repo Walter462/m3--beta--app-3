@@ -1,0 +1,8 @@
+components_by_slot:
+  navigation:
+  - layout_properties: {}
+    name: navigation_link_1
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+is_package: true
+layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationDrawerLayout'}
