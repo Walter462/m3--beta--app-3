@@ -14,5 +14,6 @@ class MainLayout_Drawer(MainLayout_DrawerTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
+    self.layout.show_sidesheet = True
 
     # Any code you write here will run before the form opens.
