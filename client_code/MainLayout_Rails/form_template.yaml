@@ -30,7 +30,8 @@ components_by_slot:
     properties:
       margin: ['8', null, '8', null]
     type: form:dep_lin1x4oec0ytd:_Components.Divider
-  - layout_properties: {}
+  - event_bindings: {click: navigation_link_3_click}
+    layout_properties: {}
     name: navigation_link_3
     properties: {icon: 'mi:logout', text: Log out}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
