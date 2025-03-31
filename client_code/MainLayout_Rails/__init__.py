@@ -18,7 +18,13 @@ class MainLayout_Rails(MainLayout_RailsTemplate):
     self.init_components(**properties)
     self.layout.show_sidesheet = False
     # Any code you write here will run before the form opens.
-
+  
+  def reset_links(self):
+    self.profile_nav_link.selected = False
+    self.subscriptions_nav_link.selected = False
+    self.companies_nav_link.selected = False
+    self.loans_nav_link.selected = False
+    
   def log_out_button_click(self, **event_args):
     """This method is called when the component is clicked"""
     anvil.users.logout()

@@ -15,15 +15,15 @@ components_by_slot:
     properties: {icon: 'mi:user_attributes', text: Profile, visible: true}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
   - layout_properties: {}
-    name: navigation_link_5
+    name: subscriptions_nav_link
     properties: {icon: 'mi:payment', text: Subscriptions, visible: true}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
   - layout_properties: {}
-    name: navigation_link_1
+    name: companies_nav_link
     properties: {icon: 'mi:corporate_fare', italic: false, text: Companies}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
   - layout_properties: {}
-    name: navigation_link_2
+    name: loans_nav_link
     properties: {icon: 'mi:handshake', text: Loans}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
   - layout_properties: {}

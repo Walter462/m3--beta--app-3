@@ -26,7 +26,7 @@ components_by_slot:
           type: form:dep_lin1x4oec0ytd:_Components.Text
         - data_bindings:
           - {code: 'self.item[''email'']', property: text, writeback: false}
-          layout_properties: {grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
+          layout_properties: {full_width_row: false, grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
           name: email_box
           properties: {}
           type: form:dep_lin1x4oec0ytd:_Components.Text
