@@ -12,7 +12,7 @@ from anvil.tables import app_tables
 
 class MainLayout_Rails(MainLayout_RailsTemplate):
   def __init__(self, **properties):
-    anvil.users.login_with_form()
+    #anvil.users.login_with_form()
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     self.layout.show_sidesheet = False

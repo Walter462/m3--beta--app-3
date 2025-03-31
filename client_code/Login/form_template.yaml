@@ -1,12 +1,12 @@
 components:
 - layout_properties: {grid_position: 'DBZNYM,TRHCRD'}
   name: heading_1
-  properties: {align: center, scale: medium, style: title, text: You have been logged out.}
+  properties: {align: center, bold: false, italic: false, scale: medium, style: title, text: Login into Loan Manager App., underline: false}
   type: form:dep_lin1x4oec0ytd:_Components.Heading
 - event_bindings: {click: login_button_click}
   layout_properties: {grid_position: 'NHTSBJ,LFGPBY'}
   name: login_button
-  properties: {align: center, appearance: elevated, text: Log in}
+  properties: {align: center, appearance: elevated, text: Login}
   type: form:dep_lin1x4oec0ytd:_Components.Button
 container: {type: ColumnPanel}
 is_package: true
