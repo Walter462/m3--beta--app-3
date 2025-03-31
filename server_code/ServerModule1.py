@@ -21,11 +21,13 @@ from uuid import uuid4
 #def say_hello(name):
 #   print("Hello, " + name + "!")
 #   return 42
+
 @anvil.server.callable
 def fetch_user_info():
-  user = anvil.users.get_user()
-  
-  return dict(anvil.users.get_user())
+  user_info_keys= ['email', 'signed_up']
+  user_info = {key: dict(anvil.users.get_user())[key] for key in user_info_keys}
+  user_info['signed_up'] = user_info['signed_up'].date().strftime('%Y-%m-%d')
+  return user_info
 
 @anvil.server.callable
 def add_subscrition(Loan_DB_name):

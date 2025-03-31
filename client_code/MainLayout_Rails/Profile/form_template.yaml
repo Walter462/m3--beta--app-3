@@ -1,29 +1,52 @@
 components_by_slot:
   content:
   - components:
-    - layout_properties: {grid_position: 'IPJMDP,KPEULE LYIZUI,QGBUUO'}
-      name: text_1
-      properties: {text: 'Email:'}
+    - layout_properties: {slot: card-content-slot}
+      name: text_3
+      properties:
+        align: center
+        bold: true
+        font_size: 14
+        icon: mi:info
+        scale: medium
+        spacing:
+          margin: ['6', null, '6', null]
+        style: label
+        text: User info
       type: form:dep_lin1x4oec0ytd:_Components.Text
-    - layout_properties: {grid_position: 'IPJMDP,KPEULE AEITUV,SLFRXZ'}
-      name: text_2
-      properties: {text: 'Created:'}
-      type: form:dep_lin1x4oec0ytd:_Components.Text
-    - data_bindings:
-      - {code: 'self.item[''email'']', property: text, writeback: false}
-      layout_properties: {grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
-      name: email_box
+    - components:
+      - components:
+        - layout_properties: {grid_position: 'IPJMDP,KPEULE LYIZUI,QGBUUO'}
+          name: text_1
+          properties: {bold: true, icon: 'mi:email', text: 'Email:'}
+          type: form:dep_lin1x4oec0ytd:_Components.Text
+        - layout_properties: {grid_position: 'IPJMDP,KPEULE JSXMGP,JAIXTC'}
+          name: text_2
+          properties: {bold: true, icon: 'mi:calendar_add_on', text: 'Created on:'}
+          type: form:dep_lin1x4oec0ytd:_Components.Text
+        - data_bindings:
+          - {code: 'self.item[''email'']', property: text, writeback: false}
+          layout_properties: {grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
+          name: email_box
+          properties: {}
+          type: form:dep_lin1x4oec0ytd:_Components.Text
+        - data_bindings:
+          - {code: 'self.item[''signed_up'']', property: text, writeback: false}
+          layout_properties: {grid_position: 'IPJMDP,IRBHVL IYWFQG,TUDOQI'}
+          name: created_box
+          properties: {icon: '', style: body}
+          type: form:dep_lin1x4oec0ytd:_Components.Text
+        layout_properties: {slot: card-content-container-slot}
+        name: column_panel_1
+        properties: {col_widths: '{"KPEULE":15,"IRBHVL":45}'}
+        type: ColumnPanel
+      layout_properties: {slot: card-content-slot}
+      name: card_content_container_1
       properties: {}
-      type: form:dep_lin1x4oec0ytd:_Components.Text
-    - data_bindings:
-      - {code: 'self.item[''signed_up'']', property: text, writeback: false}
-      layout_properties: {grid_position: 'IPJMDP,IRBHVL IYWFQG,TUDOQI'}
-      name: created_box
-      properties: {icon: '', style: body}
-      type: form:dep_lin1x4oec0ytd:_Components.Text
+      type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
     layout_properties: {}
-    name: column_panel_1
-    properties: {}
-    type: ColumnPanel
+    name: card_1
+    properties: {align: left, appearance: elevated, orientation: column}
+    type: form:dep_lin1x4oec0ytd:_Components.Card
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}
