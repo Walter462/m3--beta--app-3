@@ -33,3 +33,7 @@ class MainLayout_Rails(MainLayout_RailsTemplate):
   def profile_nav_link_click(self, **event_args):
     """This method is called when the component is clicked"""
     open_form('MainLayout_Rails.Profile')
+
+  def subscriptions_nav_link_click(self, **event_args):
+    """This method is called when the component is clicked"""
+    open_form('MainLayout_Rails.Subscriptions')

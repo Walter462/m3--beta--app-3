@@ -14,5 +14,6 @@ class Subscriptions(SubscriptionsTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
-
+    self.layout.reset_links()
+    self.layout.subscriptions_nav_link.selected = True
     # Any code you write here will run before the form opens.
