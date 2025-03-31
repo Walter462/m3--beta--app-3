@@ -20,4 +20,5 @@ class Login(LoginTemplate):
   def login_button_click(self, **event_args):
     """This method is called when the component is clicked."""
     anvil.users.login_with_form()
+    anvil.open_form()
     
