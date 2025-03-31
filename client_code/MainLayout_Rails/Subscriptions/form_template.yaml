@@ -8,20 +8,15 @@ components_by_slot:
       text: Existing subscriptions
     type: form:dep_lin1x4oec0ytd:_Components.Heading
   - components:
-    - components:
-      - name: subscriptions_panel
-        properties: {item_template: Start.RowTemplate1}
-        type: RepeatingPanel
-      layout_properties: {grid_position: 'CARYCI,EDHMCJ'}
-      name: data_grid_1
-      properties:
-        columns:
-        - {data_key: created_on, expand: false, id: VSSJNW, title: Creation date, width: 299.66943359375}
-        - {data_key: Loan_DB_profile_name, id: LCCDBR, title: Loan Data Base profile name}
-      type: DataGrid
+    - name: subscriptions_panel
+      properties: {item_template: Start.RowTemplate1}
+      type: RepeatingPanel
     layout_properties: {}
-    name: column_panel_1
-    properties: {}
-    type: ColumnPanel
+    name: subscriptions_grid
+    properties:
+      columns:
+      - {data_key: created_on, expand: false, id: VSSJNW, title: Creation date, width: 299.66943359375}
+      - {data_key: Loan_DB_profile_name, id: LCCDBR, title: Loan Data Base profile name}
+    type: DataGrid
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}

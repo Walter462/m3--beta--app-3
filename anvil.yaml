@@ -93,12 +93,12 @@ db_schema:
   subscription_admin:
     client: none
     columns:
-    - admin_ui: {width: 200}
-      name: subscription_id
+    - admin_ui: {order: 1, width: 200}
+      name: subscription
       target: subscription
       type: link_single
-    - admin_ui: {width: 200}
-      name: user_email
+    - admin_ui: {order: 0, width: 200}
+      name: user
       target: users
       type: link_single
     - admin_ui: {order: 2, width: 200}
