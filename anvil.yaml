@@ -74,7 +74,7 @@ db_schema:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
-      name: loan_db_profile_name
+      name: loan_bank_name
       type: string
     - admin_ui: {order: 1, width: 200}
       name: archieved

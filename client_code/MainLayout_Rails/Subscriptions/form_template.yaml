@@ -16,7 +16,7 @@ components_by_slot:
     properties:
       columns:
       - {data_key: created_on, expand: false, id: VSSJNW, title: Creation date, width: 299.66943359375}
-      - {data_key: Loan_DB_profile_name, id: LCCDBR, title: Loan Data Base profile name}
+      - {data_key: Loan_DB_profile_name, id: LCCDBR, title: Loan bank name}
     type: DataGrid
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}
