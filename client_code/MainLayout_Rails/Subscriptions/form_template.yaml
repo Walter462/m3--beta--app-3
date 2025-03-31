@@ -1,2 +1,4 @@
+components_by_slot:
+  content: []
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}
