@@ -23,7 +23,7 @@ from uuid import uuid4
 #   return 42
 @anvil.server.callable
 def fetch_user_info():
-  
+  return dict(anvil.users.get_user())
 
 @anvil.server.callable
 def add_subscrition(Loan_DB_name):

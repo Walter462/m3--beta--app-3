@@ -107,7 +107,7 @@ db_schema:
     server: full
     title: Subscription_admin
   users:
-    client: search
+    client: none
     columns:
     - admin_ui: {order: 0, width: 200}
       name: email
