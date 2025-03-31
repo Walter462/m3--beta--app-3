@@ -30,14 +30,10 @@ components_by_slot:
     properties: {}
     type: form:dep_lin1x4oec0ytd:_Components.Divider
   - layout_properties: {}
-    name: logout_button
-    properties: {align: center, appearance: text, icon: 'mi:logout', text: ''}
-    type: form:dep_lin1x4oec0ytd:_Components.Button
-  sidesheet:
-  - layout_properties: {}
-    name: rich_text_1
-    properties: {}
-    type: RichText
+    name: navigation_link_3
+    properties: {icon: 'mi:logout', text: Log out}
+    type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
+  sidesheet: []
 is_package: true
 layout: {type: 'form:dep_lin1x4oec0ytd:Layouts.NavigationRailLayout'}
 layout_metadata: {title: Main_template}
