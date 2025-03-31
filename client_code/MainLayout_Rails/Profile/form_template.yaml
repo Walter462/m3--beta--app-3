@@ -9,11 +9,15 @@ components_by_slot:
       name: text_2
       properties: {text: 'Created:'}
       type: form:dep_lin1x4oec0ytd:_Components.Text
-    - layout_properties: {grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
+    - data_bindings:
+      - {code: 'self.item[''email'']', property: text, writeback: false}
+      layout_properties: {grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
       name: email_box
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.Text
-    - layout_properties: {grid_position: 'IPJMDP,IRBHVL IYWFQG,TUDOQI'}
+    - data_bindings:
+      - {code: 'self.item[''signed_up'']', property: text, writeback: false}
+      layout_properties: {grid_position: 'IPJMDP,IRBHVL IYWFQG,TUDOQI'}
       name: created_box
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.Text

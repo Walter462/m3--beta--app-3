@@ -9,8 +9,9 @@ components_by_slot:
     name: spacer_1
     properties: {height: '32'}
     type: Spacer
-  - layout_properties: {}
-    name: navigation_link_4
+  - event_bindings: {click: profile_nav_link_click}
+    layout_properties: {}
+    name: profile_nav_link
     properties: {icon: 'mi:user_attributes', text: Profile, visible: true}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
   - layout_properties: {}
@@ -30,9 +31,9 @@ components_by_slot:
     properties:
       margin: ['8', null, '8', null]
     type: form:dep_lin1x4oec0ytd:_Components.Divider
-  - event_bindings: {click: navigation_link_3_click}
+  - event_bindings: {click: log_out_button_click}
     layout_properties: {}
-    name: navigation_link_3
+    name: log_out_button
     properties: {icon: 'mi:logout', text: Log out}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
   sidesheet: []

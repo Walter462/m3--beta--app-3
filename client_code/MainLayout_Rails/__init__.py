@@ -1,4 +1,5 @@
 from ._anvil_designer import MainLayout_RailsTemplate
+from .Profile import Profile
 from anvil import *
 import anvil.server
 import anvil.google.auth, anvil.google.drive
@@ -18,7 +19,11 @@ class MainLayout_Rails(MainLayout_RailsTemplate):
     self.layout.show_sidesheet = False
     # Any code you write here will run before the form opens.
 
-  def navigation_link_3_click(self, **event_args):
+  def log_out_button_click(self, **event_args):
     """This method is called when the component is clicked"""
     anvil.users.logout()
     anvil.open_form('LoggedOut_screen')
+
+  def profile_nav_link_click(self, **event_args):
+    """This method is called when the component is clicked"""
+    open_form('MainLayout_Rails.Profile')

@@ -21,6 +21,9 @@ from uuid import uuid4
 #def say_hello(name):
 #   print("Hello, " + name + "!")
 #   return 42
+@anvil.server.callable
+def fetch_user_info():
+  
 
 @anvil.server.callable
 def add_subscrition(Loan_DB_name):
