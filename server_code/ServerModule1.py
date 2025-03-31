@@ -23,6 +23,8 @@ from uuid import uuid4
 #   return 42
 @anvil.server.callable
 def fetch_user_info():
+  user = anvil.users.get_user()
+  
   return dict(anvil.users.get_user())
 
 @anvil.server.callable
