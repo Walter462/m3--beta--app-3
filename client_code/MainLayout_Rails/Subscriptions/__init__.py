@@ -16,4 +16,5 @@ class Subscriptions(SubscriptionsTemplate):
     self.init_components(**properties)
     self.layout.reset_links()
     self.layout.subscriptions_nav_link.selected = True
+    self.subscriptions_panel.items = [{'created_on':'1222'},{'created_on':'333'}]
     # Any code you write here will run before the form opens.

@@ -82,7 +82,7 @@ db_schema:
     - admin_ui: {order: 2, width: 200}
       name: created_on
       type: datetime
-    - admin_ui: {order: -2, width: 200}
+    - admin_ui: {order: 0.5, width: 200}
       name: uuid
       type: string
     - admin_ui: {order: 3, width: 200}
@@ -164,5 +164,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/google.yml
-startup: {module: MainLayout_Rails.Profile, type: form}
+startup: {module: Start, type: form}
 startup_form: null
