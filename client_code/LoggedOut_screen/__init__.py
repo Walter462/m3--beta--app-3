@@ -1,4 +1,4 @@
-from ._anvil_designer import LoginTemplate
+from ._anvil_designer import LoggedOut_screenTemplate
 from ..MainLayout_Rails import MainLayout_Rails
 from anvil import *
 import anvil.server
@@ -11,7 +11,7 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 
 
-class Login(LoginTemplate):
+class LoggedOut_screen(LoggedOut_screenTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)

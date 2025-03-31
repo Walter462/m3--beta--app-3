@@ -1,13 +1,25 @@
 components_by_slot:
   content:
   - components:
-    - layout_properties: {slot: card-content-slot}
-      name: card_content_container_1
+    - layout_properties: {grid_position: 'IPJMDP,KPEULE LYIZUI,QGBUUO'}
+      name: text_1
+      properties: {text: 'Email:'}
+      type: form:dep_lin1x4oec0ytd:_Components.Text
+    - layout_properties: {grid_position: 'IPJMDP,KPEULE AEITUV,SLFRXZ'}
+      name: text_2
+      properties: {text: 'Created:'}
+      type: form:dep_lin1x4oec0ytd:_Components.Text
+    - layout_properties: {grid_position: 'IPJMDP,IRBHVL MKXETN,HZUIVA'}
+      name: email_box
       properties: {}
-      type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
+      type: form:dep_lin1x4oec0ytd:_Components.Text
+    - layout_properties: {grid_position: 'IPJMDP,IRBHVL IYWFQG,TUDOQI'}
+      name: created_box
+      properties: {}
+      type: form:dep_lin1x4oec0ytd:_Components.Text
     layout_properties: {}
-    name: card_1
+    name: column_panel_1
     properties: {}
-    type: form:dep_lin1x4oec0ytd:_Components.Card
+    type: ColumnPanel
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}

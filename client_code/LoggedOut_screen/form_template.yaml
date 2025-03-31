@@ -1,0 +1,12 @@
+components:
+- layout_properties: {grid_position: 'IDTMRG,FBTLWH'}
+  name: heading_1
+  properties: {align: center, bold: true, italic: false, scale: medium, style: title, text: Log in into Loan Manager App, underline: false}
+  type: form:dep_lin1x4oec0ytd:_Components.Heading
+- event_bindings: {click: login_button_click}
+  layout_properties: {grid_position: 'OFWCFV,PXBOEK'}
+  name: login_button
+  properties: {align: center, appearance: elevated, text: Log in}
+  type: form:dep_lin1x4oec0ytd:_Components.Button
+container: {type: ColumnPanel}
+is_package: true

@@ -21,4 +21,4 @@ class MainLayout_Rails(MainLayout_RailsTemplate):
   def navigation_link_3_click(self, **event_args):
     """This method is called when the component is clicked"""
     anvil.users.logout()
-    anvil.open_form('Login')
+    anvil.open_form('LoggedOut_screen')
