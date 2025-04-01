@@ -33,10 +33,12 @@ def fetch_user_info():
 def fetch_subscriptions():
   current_user = anvil.users.get_user()
   subscription = [dict(r) for r in app_tables.subscription_admin.search(user=current_user)]
-  subscriptions= [ ] 
+  subscriptions = [ ] 
   for s in subscription:
-    subscriptions.append(s.get('subscription'))
-    
+    sub_copy = dict(s.get('subscription')).copy()
+    if 'created_on' in sub_copy and isinstance(sub_copy['created_on'], datetime):
+      sub_copy['created_on'] = sub_copy['created_on'].strftime('%Y-%m-%d')
+    subscriptions.append(sub_copy)
   return subscriptions
 
 @anvil.server.callable
