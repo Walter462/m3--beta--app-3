@@ -18,5 +18,5 @@ class Subscriptions(SubscriptionsTemplate):
     self.layout.reset_links()
     self.layout.subscriptions_nav_link.selected = True
     #self.subscriptions_panel.items = [{'created_on':'1222'},{'created_on':'333'}]
-    self.subscriptions_panel.items = anvil.server.call('fetch_subscriptions', user)
+    self.subscriptions_panel.items = anvil.server.call('fetch_subscriptions')
     # Any code you write here will run before the form opens.

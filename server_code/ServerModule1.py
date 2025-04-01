@@ -30,10 +30,13 @@ def fetch_user_info():
   return user_info
 
 @anvil.server.callable
-def fetch_subscriptions(user):
-  subscription = app_tables.subscription_admin.search(user=user)['subscription']
+def fetch_subscriptions():
+  current_user = anvil.users.get_user()
+  subscription = app_tables.subscription_admin.search(user=current_user)
+  subscription = dict(subscription[0])
+  #subscription = dict(r) for r in subscription
   print(subscription)
-  return app_tables.subscription.search()
+  return app_tables.subscriptions.search()
 
 @anvil.server.callable
 def add_subscrition(Loan_DB_name):
