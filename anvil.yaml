@@ -31,13 +31,7 @@ db_schema:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
-      name: uuid
-      type: string
-    - admin_ui: {order: 1, width: 200}
-      name: lender_name
-      type: string
-    - admin_ui: {order: 2, width: 200}
-      name: borrower_name
+      name: loan_id
       type: string
     - admin_ui: {order: 3, width: 200}
       name: description
@@ -68,6 +62,9 @@ db_schema:
       name: borrower
       target: companies
       type: link_single
+    - admin_ui: {order: 7.5, width: 200}
+      name: capitalization_dates
+      type: simpleObject
     server: full
     title: Loans
   subscription_admin:
@@ -86,6 +83,26 @@ db_schema:
       type: datetime
     server: full
     title: Subscription_admin
+  subscription_plans:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: plan_name
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: price
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: payment_periodicity
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      name: loans_count_limit
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: companies_count_limit
+      type: number
+    server: full
+    title: Subscription_plans
   subscriptions:
     client: search
     columns:
@@ -118,11 +135,6 @@ db_schema:
       type: number
     server: full
     title: Subscriptions
-  tarifs:
-    client: none
-    columns: []
-    server: full
-    title: Tarifs
   users:
     client: search
     columns:
