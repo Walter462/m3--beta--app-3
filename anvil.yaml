@@ -8,7 +8,7 @@ db_schema:
       target: subscriptions
       type: link_single
     - admin_ui: {order: 1, width: 200}
-      name: name
+      name: company_name
       type: string
     - admin_ui: {order: 2, width: 200}
       name: website
