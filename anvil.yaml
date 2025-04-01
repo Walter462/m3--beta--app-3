@@ -1,11 +1,11 @@
 allow_embedding: false
 db_schema:
-  company:
+  companies:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
       name: subscription
-      target: subscription
+      target: subscriptions
       type: link_single
     - admin_ui: {order: 1, width: 200}
       name: name
@@ -26,8 +26,8 @@ db_schema:
       name: edited_on
       type: datetime
     server: full
-    title: Company
-  loan:
+    title: Companies
+  loans:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
@@ -62,15 +62,31 @@ db_schema:
       type: datetime
     - admin_ui: {order: 0.5, width: 200}
       name: lender
-      target: company
+      target: companies
       type: link_single
     - admin_ui: {order: 1.5, width: 200}
       name: borrower
-      target: company
+      target: companies
       type: link_single
     server: full
-    title: Loan
-  subscription:
+    title: Loans
+  subscription_admin:
+    client: none
+    columns:
+    - admin_ui: {order: 1, width: 200}
+      name: subscription
+      target: subscriptions
+      type: link_single
+    - admin_ui: {order: 0, width: 200}
+      name: user
+      target: users
+      type: link_single
+    - admin_ui: {order: 2, width: 200}
+      name: created_on
+      type: datetime
+    server: full
+    title: Subscription_admin
+  subscriptions:
     client: search
     columns:
     - admin_ui: {order: 0, width: 200}
@@ -94,24 +110,19 @@ db_schema:
     - admin_ui: {order: 5, width: 200}
       name: tarif
       type: string
+    - admin_ui: {order: 6, width: 200}
+      name: loans_count
+      type: number
+    - admin_ui: {order: 7, width: 200}
+      name: companies_count
+      type: number
     server: full
-    title: Subscription
-  subscription_admin:
+    title: Subscriptions
+  tarifs:
     client: none
-    columns:
-    - admin_ui: {order: 1, width: 200}
-      name: subscription
-      target: subscription
-      type: link_single
-    - admin_ui: {order: 0, width: 200}
-      name: user
-      target: users
-      type: link_single
-    - admin_ui: {order: 2, width: 200}
-      name: created_on
-      type: datetime
+    columns: []
     server: full
-    title: Subscription_admin
+    title: Tarifs
   users:
     client: search
     columns:
