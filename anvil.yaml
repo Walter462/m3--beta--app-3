@@ -88,6 +88,12 @@ db_schema:
     - admin_ui: {order: 3, width: 200}
       name: edited_on
       type: datetime
+    - admin_ui: {order: 4, width: 200}
+      name: expiry_date
+      type: date
+    - admin_ui: {order: 5, width: 200}
+      name: tarif
+      type: string
     server: full
     title: Subscription
   subscription_admin:
@@ -127,7 +133,7 @@ db_schema:
     - admin_ui: {order: 5, width: 200}
       name: confirmed_email
       type: bool
-    - admin_ui: {order: 6, width: 200}
+    - admin_ui: {order: 2.25, width: 200}
       name: signed_up
       type: datetime
     - admin_ui: {order: 7, width: 200}
@@ -136,8 +142,14 @@ db_schema:
     - admin_ui: {width: 200}
       name: email_confirmation_key
       type: string
-    - admin_ui: {order: 0.5, width: 200}
+    - admin_ui: {order: -0.5, width: 200}
       name: name
+      type: string
+    - admin_ui: {order: -1, width: 200}
+      name: id
+      type: string
+    - admin_ui: {order: 0.25, width: 200}
+      name: contact_details
       type: string
     server: full
     title: Users
