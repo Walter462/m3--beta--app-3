@@ -1,7 +1,7 @@
 components_by_slot:
   content:
   - components:
-    - name: repeating_panel_1
+    - name: companies_panel
       properties: {item_template: MainLayout_Rails.Companies.RowTemplate4}
       type: RepeatingPanel
     layout_properties: {}
@@ -10,6 +10,7 @@ components_by_slot:
       columns:
       - {data_key: company_name, id: TFYSPM, title: Company name}
       - {data_key: web_site, id: RGDABF, title: Web site}
+      - {data_key: functional_currency, id: GZHCKV, title: Functional currency}
     type: DataGrid
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}

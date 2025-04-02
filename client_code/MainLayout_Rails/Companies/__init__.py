@@ -16,4 +16,5 @@ class Companies(CompaniesTemplate):
     self.init_components(**properties)
     self.layout.companies_nav_link.selected = True
     # Any code you write here will run before the form opens.
+    self.companies_panel.items = 
 
