@@ -5,7 +5,7 @@ components_by_slot:
       properties: {item_template: MainLayout_Rails.Companies.RowTemplate4}
       type: RepeatingPanel
     layout_properties: {}
-    name: data_grid_1
+    name: companies_grid
     properties:
       columns:
       - {data_key: company_name, id: TFYSPM, title: Company name}
