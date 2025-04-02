@@ -23,6 +23,11 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
+def fetch_companies():
+  return app_tables.companies.search()
+  
+
+@anvil.server.callable
 def fetch_user_info():
   user_info_keys= ['email', 'signed_up']
   user_info = {key: dict(anvil.users.get_user())[key] for key in user_info_keys}
@@ -40,7 +45,7 @@ def fetch_subscriptions():
       sub_copy['created_on'] = sub_copy['created_on'].strftime('%Y-%m-%d')
     subscriptions.append(sub_copy)
   return subscriptions
-
+  
 @anvil.server.callable
 def add_subscrition(Loan_DB_name):
   app_tables.subscription.add_row(

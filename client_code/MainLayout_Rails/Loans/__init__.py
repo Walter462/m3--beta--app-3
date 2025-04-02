@@ -1,4 +1,4 @@
-from ._anvil_designer import CompaniesTemplate
+from ._anvil_designer import LoansTemplate
 from anvil import *
 import anvil.server
 import anvil.google.auth, anvil.google.drive
@@ -10,11 +10,9 @@ import anvil.tables.query as q
 from anvil.tables import app_tables
 
 
-class Companies(CompaniesTemplate):
+class Loans(LoansTemplate):
   def __init__(self, **properties):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
-    self.layout.companies_nav_link.selected = True
-    # Any code you write here will run before the form opens.
-    self.companies_panel.items = anvil.server.call('fetch_companies')
 
+    # Any code you write here will run before the form opens.

@@ -9,7 +9,7 @@ components_by_slot:
     properties:
       columns:
       - {data_key: company_name, id: TFYSPM, title: Company name}
-      - {data_key: web_site, id: RGDABF, title: Web site}
+      - {data_key: website, id: RGDABF, title: Web site}
       - {data_key: functional_currency, id: GZHCKV, title: Functional currency}
     type: DataGrid
 is_package: true
