@@ -5,7 +5,7 @@ components_by_slot:
     properties:
       spacing:
         padding: [null, null, null, 15]
-      text: Existing subscriptions
+      text: Your subscriptions
     type: form:dep_lin1x4oec0ytd:_Components.Heading
   - components:
     - name: subscriptions_panel
@@ -15,7 +15,7 @@ components_by_slot:
     name: subscriptions_grid
     properties:
       columns:
-      - {data_key: created_on, expand: false, id: VSSJNW, title: Creation date, width: 299.66943359375}
+      - {data_key: created_on, expand: false, id: VSSJNW, title: Created on, width: 299.66943359375}
       - {data_key: loan_bank_name, id: LCCDBR, title: Loan bank name}
     type: DataGrid
 is_package: true

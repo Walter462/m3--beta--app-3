@@ -42,4 +42,8 @@ class MainLayout_Rails(MainLayout_RailsTemplate):
     """This method is called when the component is clicked"""
     open_form('MainLayout_Rails.Companies')
 
+  def loans_nav_link_click(self, **event_args):
+    """This method is called when the component is clicked"""
+    open_form('MainLayout_Rails.Loans')
+
   

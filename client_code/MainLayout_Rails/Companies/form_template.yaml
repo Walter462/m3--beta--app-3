@@ -1,5 +1,12 @@
 components_by_slot:
   content:
+  - layout_properties: {}
+    name: heading_2
+    properties:
+      spacing:
+        padding: [null, null, null, 15]
+      text: Companies
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
   - components:
     - name: companies_panel
       properties: {item_template: MainLayout_Rails.Companies.RowTemplate4}
