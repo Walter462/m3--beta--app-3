@@ -19,7 +19,8 @@ components_by_slot:
     name: subscriptions_nav_link
     properties: {icon: 'mi:payment', text: Subscriptions, visible: true}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink
-  - layout_properties: {}
+  - event_bindings: {click: companies_nav_link_click}
+    layout_properties: {}
     name: companies_nav_link
     properties: {icon: 'mi:corporate_fare', italic: false, text: Companies}
     type: form:dep_lin1x4oec0ytd:_Components.NavigationLink

@@ -37,3 +37,9 @@ class MainLayout_Rails(MainLayout_RailsTemplate):
   def subscriptions_nav_link_click(self, **event_args):
     """This method is called when the component is clicked"""
     open_form('MainLayout_Rails.Subscriptions')
+
+  def companies_nav_link_click(self, **event_args):
+    """This method is called when the component is clicked"""
+    open_form('MainLayout_Rails.Companies')
+
+  
