@@ -23,10 +23,13 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
+def fetch_companies_dropdown():
+  return [(company['company_name'], company) for company in app_tables.companies.search()]
+
+@anvil.server.callable
 def fetch_companies():
   return app_tables.companies.search()
   
-
 @anvil.server.callable
 def fetch_user_info():
   user_info_keys= ['email', 'signed_up']

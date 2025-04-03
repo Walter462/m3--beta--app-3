@@ -13,23 +13,19 @@ components:
       name: label_3
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: small, spacing_below: small, text: Lender, tooltip: '', underline: false, visible: true}
       type: Label
-    - data_bindings:
-      - {code: 'self.item[''lender_name'']', property: text, writeback: true}
-      event_bindings: {}
-      layout_properties: {grid_position: 'UATTPD,HAXFQM'}
-      name: lender_box
-      properties: {align: left, background: '', bold: false, border: '', enabled: true, font: '', font_size: null, foreground: '', hide_text: false, italic: false, placeholder: '', role: null, spacing_above: small, spacing_below: small, text: '', tooltip: '', type: text, underline: false, visible: true}
-      type: TextBox
+    - data_bindings: []
+      layout_properties: {grid_position: 'UATTPD,HAVEGC'}
+      name: lender_dropdown
+      properties: {}
+      type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'OPXEZO,JCARUM'}
       name: label_4
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: true, role: input-prompt, spacing_above: small, spacing_below: small, text: Borrower, tooltip: '', underline: false, visible: true}
       type: Label
-    - data_bindings:
-      - {code: 'self.item[''borrower_name'']', property: text, writeback: true}
-      layout_properties: {grid_position: 'OPXEZO,XYMLIW'}
-      name: borrower_box
-      properties: {visible: true}
-      type: TextBox
+    - layout_properties: {grid_position: 'OPXEZO,DWQMXY'}
+      name: borrower_dropdown
+      properties: {}
+      type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'KDSRYZ,FGYSTN'}
       name: label_1
       properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: none, spacing_below: none, text: 'Description:', tooltip: '', underline: false, visible: true}
@@ -105,7 +101,7 @@ components:
       type: FlowPanel
     layout_properties: {grid_position: 'RFCGGO,UOOTAC'}
     name: column_panel_1_copy
-    properties: {col_widths: '{"JCARUM":10,"XYMLIW":50,"CZWOXA":10,"TAXSNX":50,"EGOUKI":15,"FGYSTN":10,"ROQVMN":50,"NCGJJI":5,"QXSRVH":39,"DXFOHB":10,"HAXFQM":50}'}
+    properties: {col_widths: '{"JCARUM":10,"CZWOXA":10,"TAXSNX":50,"EGOUKI":15,"FGYSTN":10,"ROQVMN":50,"NCGJJI":5,"QXSRVH":39,"DXFOHB":10}'}
     type: ColumnPanel
   layout_properties: {grid_position: 'LLMHCT,XKWXJU'}
   name: column_panel_1

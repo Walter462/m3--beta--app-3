@@ -7,5 +7,9 @@ components_by_slot:
         padding: [null, null, null, 15]
       text: Loans
     type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - layout_properties: {}
+    name: repeating_panel_1
+    properties: {item_template: MainLayout_Rails.Loans.ItemTemplate6}
+    type: RepeatingPanel
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}

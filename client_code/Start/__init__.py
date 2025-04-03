@@ -15,8 +15,8 @@ class Start(StartTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     anvil.users.login_with_form()
-    self.repeating_panel_1.items = app_tables.subscription.search()
-    self.repeating_panel_2.items = app_tables.users.search()
+    self.repeating_panel_1.items = anvil.server.call('fetch_subscriptions')
+    self.repeating_panel_2.items = anvil.server.call('fetch_user_info')
 
     # Any code you write here will run before the form opens.
   def subscriptionSubmit_btn_click(self, **event_args):
