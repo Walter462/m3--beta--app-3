@@ -16,7 +16,7 @@ components:
     - data_bindings: []
       layout_properties: {grid_position: 'UATTPD,HAVEGC'}
       name: lender_dropdown
-      properties: {}
+      properties: {appearance: outlined}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'OPXEZO,JCARUM'}
       name: label_4
@@ -24,7 +24,7 @@ components:
       type: Label
     - layout_properties: {grid_position: 'OPXEZO,DWQMXY'}
       name: borrower_dropdown
-      properties: {}
+      properties: {appearance: outlined}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {grid_position: 'KDSRYZ,FGYSTN'}
       name: label_1

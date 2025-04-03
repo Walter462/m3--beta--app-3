@@ -23,6 +23,10 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
+def fetch_loan_info():
+  return app_tables.loans.search()[0]
+
+@anvil.server.callable
 def fetch_companies_dropdown():
   return [(company['company_name'], company) for company in app_tables.companies.search()]
 
