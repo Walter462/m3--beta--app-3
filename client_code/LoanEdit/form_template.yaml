@@ -88,13 +88,12 @@ components:
     - data_bindings: []
       layout_properties: {}
       name: static_radio_button
-      properties: {selected: false, text: Static rate, value: ''}
+      properties: {selected: false, text: Static rate, tooltip: Interest rate is set once and stays immutable during the loan lifetime., value: static}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
-    - data_bindings:
-      - {code: 'self.item[''dynamic_interest_rate'']', property: selected, writeback: false}
+    - data_bindings: []
       layout_properties: {}
       name: dynamic_radio_button
-      properties: {selected: false, text: Dynamic rate, value: ''}
+      properties: {selected: false, text: Dynamic rate, tooltip: Interest rate is subject to changes during the loan lifetime., value: dynamic}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     data_bindings:
     - {code: 'self.item[''interest_rate_type'']', property: selected_value, writeback: true}
