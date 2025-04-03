@@ -122,7 +122,7 @@ components:
     properties: {checked: true, text: Repayment date exclusive counting}
     type: form:dep_lin1x4oec0ytd:_Components.Checkbox
   - data_bindings:
-    - {code: 'self.item[''capitalization'']', property: text, writeback: false}
+    - {code: 'self.item[''capitalization'']', property: checked, writeback: true}
     layout_properties: {grid_position: 'LVFCWZ,BJNKKL'}
     name: capitalization_checkbox
     properties: {checked: false, text: Capitalization}
