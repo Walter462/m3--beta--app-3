@@ -30,7 +30,7 @@ components:
     type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
   - layout_properties: {grid_position: 'XAGIQA,PPQSYB'}
     name: label_1
-    properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: 'mi:info', icon_align: left, italic: false, role: input-prompt, spacing_above: none, spacing_below: none, text: 'Contract credentials:', tooltip: 'Add name, number, short description', underline: false, visible: true}
+    properties: {align: left, background: '', bold: false, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: input-prompt, spacing_above: none, spacing_below: none, text: 'Contract credentials:', tooltip: 'Add name, number, short description', underline: false, visible: true}
     type: Label
   - layout_properties: {grid_position: 'XAGIQA,LWREFG'}
     name: description_box
@@ -56,6 +56,10 @@ components:
     name: date_picker_2
     properties: {}
     type: DatePicker
+  - layout_properties: {grid_position: 'GFDCPY,BNNTQC'}
+    name: spacer_1
+    properties: {}
+    type: Spacer
   - layout_properties: {grid_position: 'WELFGT,AJCZEN'}
     name: label_6_copy
     properties: {align: center, background: '', bold: true, border: '', font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: headline, spacing_above: small, spacing_below: medium, text: Financial terms, tooltip: '', underline: false, visible: true}
