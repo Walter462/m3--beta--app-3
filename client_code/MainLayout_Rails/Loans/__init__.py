@@ -8,6 +8,7 @@ import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
+from ...Forms.LoanEdit import LoanEdit
 
 class Loans(LoansTemplate):
   def __init__(self, **properties):
@@ -19,4 +20,7 @@ class Loans(LoansTemplate):
 
   def add_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
-    alert(content = LoanEdit())
+    alert(content = LoanEdit(),
+         large = True,
+         title = 'Loan edit',
+         buttons = [("Save", True), ("Cancel", False)])
