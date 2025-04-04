@@ -88,7 +88,7 @@ components:
     - data_bindings: []
       layout_properties: {}
       name: static_radio_button
-      properties: {selected: false, text: Static rate, tooltip: Interest rate is set once and stays immutable during the loan lifetime., value: static}
+      properties: {align: left, selected: false, text: Static rate, tooltip: Interest rate is set once and stays immutable during the loan lifetime., value: static}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     - data_bindings: []
       layout_properties: {}
@@ -96,9 +96,9 @@ components:
       properties: {selected: false, text: Dynamic rate, tooltip: Interest rate is subject to changes during the loan lifetime., value: dynamic}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     data_bindings:
-    - {code: 'self.item[''interest_rate_type'']', property: selected_value, writeback: true}
+    - {code: 'self.item[''interest_rate_type'']', property: selected_value, writeback: false}
     layout_properties: {grid_position: 'JDHTUP,WYIOKD'}
-    name: radio_group_panel_1
+    name: interest_rate_type_radio_group_panel
     properties: {}
     type: form:dep_lin1x4oec0ytd:_Components.RadioGroupPanel
   - layout_properties: {grid_position: 'QNOIQM,XWKKFO'}
@@ -130,16 +130,6 @@ components:
     name: capitalization_checkbox
     properties: {checked: false, text: Capitalization}
     type: form:dep_lin1x4oec0ytd:_Components.Checkbox
-  - components:
-    - event_bindings: {click: save_button_click}
-      layout_properties: {expand: false, grid_position: 'JSCBTN,XLTHLD'}
-      name: save_button
-      properties: {align: right, background: '', bold: false, border: '', enabled: true, font: '', font_size: null, foreground: '', icon: '', icon_align: left, italic: false, role: null, spacing_above: small, spacing_below: small, text: Save, tooltip: '', underline: false, visible: true}
-      type: Button
-    layout_properties: {grid_position: 'JSCBTN,AIQRTR'}
-    name: flow_panel_1
-    properties: {align: right, background: '', border: '', foreground: '', role: null, spacing: medium, spacing_above: none, spacing_below: none, tooltip: '', visible: true}
-    type: FlowPanel
   layout_properties: {grid_position: 'MCRTIS,AILSIL'}
   name: column_panel_1_copy
   properties: {col_widths: '{"NWPEHL":20,"CKBKTN":40,"LBXWQY":20,"WYIOKD":40,"XWKKFO":20,"PEKZXM":40,"EHACBF":20,"FOARHM":25,"BDKDOE":20,"CQHALH":25,"EPIRVU":20,"EMGTMO":40,"CQSCDI":20,"OZXIQY":40,"HQPCCU":20,"LGMGCM":40}'}

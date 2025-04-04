@@ -22,7 +22,9 @@ class Loans(LoansTemplate):
     # Initialise an empty dictionary to store the user inputs
     new_loan = { }
     """This method is called when the component is clicked."""
-    alert(content = LoanEdit(items = new_loan),
+    save_cliked = alert(content = LoanEdit(item = new_loan),
          large = True,
          title = 'Loan edit',
-         buttons = [("Save", True), ("Cancel", False)])
+         buttons = [("Save", True, "elevated"), ("Cancel", False)])
+    if save_cliked:
+      print(new_loan)

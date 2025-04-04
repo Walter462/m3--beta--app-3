@@ -14,7 +14,15 @@ class LoanEdit(LoanEditTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
-    #self.item = anvil.server.call('fetch_loan_info')
+    self.item = anvil.server.call('fetch_loan_info')
+    self.interest_rate_type_radio_group_panel.selected_value = self.item['interest_rate_type']
+    print(dict(self.item))
+    print(self.item['interest_rate_type'])
+    print(self.interest_rate_type_radio_group_panel.selected_value)
+    self.dynamic_radio_button.selected = True
+    #print(self.dynamic_radio_button.get_group_value())
+
+    
     self.lender_dropdown.items = anvil.server.call('fetch_companies_dropdown')
     self.borrower_dropdown.items = anvil.server.call('fetch_companies_dropdown')
     self.interest_rate_base_dropdown.items = anvil.server.call('get_interest_rate_bases')
@@ -30,7 +38,7 @@ class LoanEdit(LoanEditTemplate):
     self.repayment_date_exclusive_counting_checkbox.checked = True
     self.capitalization_checkbox.checked = False
 
-  def save_button_click(self, **event_args):
+  def save_button_click1(self, **event_args):
     """This method is called when the button is clicked"""
     lender = self.lender_box.text
     borrower = self.borrower_box.text
@@ -52,6 +60,5 @@ class LoanEdit(LoanEditTemplate):
     #alert('Feedback submited')
     Notification('Loan saved').show()
     self.clear_inputs()
-
  
     
