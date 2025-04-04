@@ -7,9 +7,10 @@ components_by_slot:
         padding: [null, null, null, 15]
       text: Loans
     type: form:dep_lin1x4oec0ytd:_Components.Heading
-  - layout_properties: {}
-    name: repeating_panel_1
-    properties: {item_template: MainLayout_Rails.Loans.ItemTemplate6}
-    type: RepeatingPanel
+  - event_bindings: {click: add_loan_button_click}
+    layout_properties: {}
+    name: add_loan_button
+    properties: {align: center, appearance: outlined, icon: 'mi:add_circle', text: Add loan}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}
