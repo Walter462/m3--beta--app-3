@@ -8,7 +8,6 @@ import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
-from ..LoanEdit import LoanEdit
 
 class Loans(LoansTemplate):
   def __init__(self, **properties):
