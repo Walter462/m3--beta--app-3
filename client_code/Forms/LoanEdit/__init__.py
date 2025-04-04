@@ -14,7 +14,7 @@ class LoanEdit(LoanEditTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
-    self.item = anvil.server.call('fetch_loan_info')
+    #self.item = anvil.server.call('fetch_loan_info')
     self.lender_dropdown.items = anvil.server.call('fetch_companies_dropdown')
     self.borrower_dropdown.items = anvil.server.call('fetch_companies_dropdown')
     self.interest_rate_base_dropdown.items = anvil.server.call('get_interest_rate_bases')
