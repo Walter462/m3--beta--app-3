@@ -72,17 +72,8 @@ db_schema:
       name: contract_end_date
       type: date
     - admin_ui: {order: 11, width: 200}
-      name: interest_rate_type1
-      type: string
-    - admin_ui: {order: 12, width: 200}
-      name: static_interest_rate
-      type: bool
-    - admin_ui: {order: 13, width: 200}
-      name: dynamic_interest_rate
-      type: bool
-    - admin_ui: {order: 10.5, width: 200}
       name: interest_rate_type
-      type: simpleObject
+      type: string
     server: full
     title: Loans
   subscription_admin:
