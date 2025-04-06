@@ -14,14 +14,13 @@ class LoanEdit(LoanEditTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     # Any code you write here will run before the form opens.
-    self.item = anvil.server.call('fetch_loan_info')
-    self.interest_rate_type_radio_group_panel.selected_value = self.item['interest_rate_type']
-    print(dict(self.item))
-    print(self.item['interest_rate_type'])
-    print(self.interest_rate_type_radio_group_panel.selected_value)
+    #self.item = anvil.server.call('fetch_loan_info')
+    #self.interest_rate_type_radio_group_panel.selected_value = self.item['interest_rate_type']
+    #print(dict(self.item))
+    #print(self.item['interest_rate_type'])
+    #print(self.interest_rate_type_radio_group_panel.selected_value)
     self.dynamic_radio_button.selected = True
     #print(self.dynamic_radio_button.get_group_value())
-
     
     self.lender_dropdown.items = anvil.server.call('fetch_companies_dropdown')
     self.borrower_dropdown.items = anvil.server.call('fetch_companies_dropdown')

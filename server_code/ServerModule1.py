@@ -23,6 +23,11 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
+def add_loan(new_loan):
+  print(*new_loan)
+  #app_tables.loans.add_row(**kwargs)
+
+@anvil.server.callable
 def fetch_loan_info():
   return app_tables.loans.search()[0]
 
@@ -71,7 +76,7 @@ def get_currency_ticker():
   return(currency_tickers)
 
 @anvil.server.callable
-def add_loan(lender,
+def add_loan1(lender,
               borrower,
               description,
               base_currency,

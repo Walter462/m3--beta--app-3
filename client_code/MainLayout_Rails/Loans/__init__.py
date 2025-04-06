@@ -27,4 +27,4 @@ class Loans(LoansTemplate):
          title = 'Loan edit',
          buttons = [("Save", True, "elevated"), ("Cancel", False)])
     if save_cliked:
-      print(new_loan)
+      anvil.server.call('add_loan', new_loan)
