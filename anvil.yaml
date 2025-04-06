@@ -7,7 +7,7 @@ db_schema:
       name: subscription
       target: subscriptions
       type: link_single
-    - admin_ui: {order: 1, width: 200}
+    - admin_ui: {order: -3, width: 200}
       name: company_name
       type: string
     - admin_ui: {order: 2, width: 200}
