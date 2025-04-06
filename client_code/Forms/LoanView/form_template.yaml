@@ -4,7 +4,9 @@ components:
     name: text_1
     properties: {text: 'Contract date:'}
     type: form:dep_lin1x4oec0ytd:_Components.Text
-  - layout_properties: {grid_position: 'ZVQLOW,WNUFPR'}
+  - data_bindings:
+    - {code: 'self.item[''contract_start_date'']', property: text, writeback: false}
+    layout_properties: {grid_position: 'ZVQLOW,WNUFPR'}
     name: contract_start_date_box
     properties: {}
     type: form:dep_lin1x4oec0ytd:_Components.Text
@@ -12,7 +14,9 @@ components:
     name: text_4
     properties: {text: 'Credentials:'}
     type: form:dep_lin1x4oec0ytd:_Components.Text
-  - layout_properties: {grid_position: 'VXUWCQ,UHBMSN'}
+  - data_bindings:
+    - {code: 'self.item[''credentials'']', property: text, writeback: false}
+    layout_properties: {grid_position: 'VXUWCQ,UHBMSN'}
     name: credentials_box
     properties: {text: ''}
     type: form:dep_lin1x4oec0ytd:_Components.Text
@@ -20,17 +24,21 @@ components:
     name: text_2
     properties: {text: 'Lender:'}
     type: form:dep_lin1x4oec0ytd:_Components.Text
-  - layout_properties: {grid_position: 'ANRPCK,QPXOIY'}
-    name: text_8
+  - data_bindings:
+    - {code: 'self.item[''lender'']', property: text, writeback: false}
+    layout_properties: {grid_position: 'ANRPCK,QPXOIY'}
+    name: lender_box
     properties: {}
     type: form:dep_lin1x4oec0ytd:_Components.Text
   - layout_properties: {grid_position: 'MMRTIN,SPWNLB'}
     name: text_3
     properties: {text: 'Borrower:'}
     type: form:dep_lin1x4oec0ytd:_Components.Text
-  - layout_properties: {grid_position: 'MMRTIN,NOWIAI'}
-    name: text_9
-    properties: {}
+  - data_bindings:
+    - {code: 'self.item[''borrower'']', property: text, writeback: false}
+    layout_properties: {grid_position: 'MMRTIN,NOWIAI'}
+    name: borrower_box
+    properties: {text: ''}
     type: form:dep_lin1x4oec0ytd:_Components.Text
   layout_properties: {grid_position: 'PEVEUW,CAFSYX'}
   name: column_panel_1

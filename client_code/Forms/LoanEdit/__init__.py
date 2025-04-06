@@ -16,7 +16,6 @@ class LoanEdit(LoanEditTemplate):
     # Any code you write here will run before the form opens.        
     # assign radio buttons to a single group
     self.static_radio_button.group = self.interest_rate_type_radio_group_panel
-    self.static_radio_button.text = "Static rate TANYA"
     self.dynamic_radio_button.group = self.interest_rate_type_radio_group_panel
     # fetch form values
     self.lender_dropdown.items = anvil.server.call('fetch_companies_dropdown')

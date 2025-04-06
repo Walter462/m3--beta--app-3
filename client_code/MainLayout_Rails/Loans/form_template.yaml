@@ -7,6 +7,10 @@ components_by_slot:
         padding: [null, null, null, 15]
       text: Loans
     type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - layout_properties: {}
+    name: loans_repeating_panel
+    properties: {item_template: Forms.LoanView}
+    type: RepeatingPanel
   - event_bindings: {click: add_loan_button_click}
     layout_properties: {}
     name: add_loan_button
