@@ -19,9 +19,9 @@ class Loans(LoansTemplate):
     # Any code you write here will run before the form opens.
 
   def add_loan_button_click(self, **event_args):
+    """This method is called when the component is clicked."""
     # Initialise an empty dictionary to store the user inputs
     new_loan = { }
-    """This method is called when the component is clicked."""
     save_cliked = alert(content = LoanEdit(item = new_loan),
          large = True,
          title = 'Loan edit',
