@@ -24,13 +24,14 @@ from uuid import uuid4
 
 @anvil.server.callable
 def add_loan(new_loan):
-  for k,v in new_loan.items():
-    print(k,v)
-  #app_tables.loans.add_row(**kwargs)
+  app_tables.loans.add_row(
+    loan_id=str(str(uuid4())),
+    created_on = datetime.now(),
+    **new_loan)
 
 @anvil.server.callable
 def fetch_loan_info():
-  return app_tables.loans.search()[0]
+  return app_tables.loans.search()[1]
 
 @anvil.server.callable
 def fetch_companies_dropdown():

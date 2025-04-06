@@ -33,7 +33,7 @@ components:
     properties: {icon: 'mi:info', text: 'Contract credentials:', tooltip: 'Add name, number, short description'}
     type: form:dep_lin1x4oec0ytd:_Components.Text
   - data_bindings:
-    - {code: 'self.item[''credentials'']', property: text, writeback: false}
+    - {code: 'self.item[''credentials'']', property: text, writeback: true}
     layout_properties: {full_width_row: false, grid_position: 'BYNIRR,EMGTMO'}
     name: description_box
     properties: {appearance: outlined, character_limit: 200}
@@ -96,7 +96,7 @@ components:
       properties: {selected: false, text: Dynamic rate, tooltip: Interest rate is subject to changes during the loan lifetime., value: dynamic}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     data_bindings:
-    - {code: 'self.item[''interest_rate_type'']', property: selected_value, writeback: false}
+    - {code: 'self.item[''interest_rate_type'']', property: selected_value, writeback: true}
     layout_properties: {grid_position: 'JDHTUP,WYIOKD'}
     name: interest_rate_type_radio_group_panel
     properties: {}
