@@ -31,6 +31,8 @@ def add_loan(new_loan):
 
 @anvil.server.callable
 def fetch_loan_info():
+  loan_info_keys = ['lender', 'borrower', 'contract_start_date', 'credentials']
+  loan_info = 
   return app_tables.loans.search()[4]
 
 @anvil.server.callable
