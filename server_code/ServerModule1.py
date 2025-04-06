@@ -24,7 +24,8 @@ from uuid import uuid4
 
 @anvil.server.callable
 def add_loan(new_loan):
-  print(*new_loan)
+  for k,v in new_loan.items():
+    print(k,v)
   #app_tables.loans.add_row(**kwargs)
 
 @anvil.server.callable
@@ -38,7 +39,7 @@ def fetch_companies_dropdown():
 @anvil.server.callable
 def fetch_companies():
   return app_tables.companies.search()
-  
+
 @anvil.server.callable
 def fetch_user_info():
   user_info_keys= ['email', 'signed_up']
