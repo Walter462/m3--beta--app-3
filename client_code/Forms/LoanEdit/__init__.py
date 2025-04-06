@@ -16,6 +16,7 @@ class LoanEdit(LoanEditTemplate):
     # Any code you write here will run before the form opens.        
     # assign radio buttons to a single group
     self.static_radio_button.group = self.interest_rate_type_radio_group_panel
+    self.static_radio_button.text = "Static rate TANYA"
     self.dynamic_radio_button.group = self.interest_rate_type_radio_group_panel
     # fetch form values
     self.lender_dropdown.items = anvil.server.call('fetch_companies_dropdown')
@@ -23,8 +24,8 @@ class LoanEdit(LoanEditTemplate):
     self.interest_rate_base_dropdown.items = anvil.server.call('get_interest_rate_bases')
     self.base_currency_ticker_dropdown.items = anvil.server.call('get_currency_ticker')
     # populate foem values
-    # self.item = anvil.server.call('fetch_loan_info')   
-    # self.interest_rate_type_radio_group_panel.selected_value = self.item['interest_rate_type']
+    self.item = anvil.server.call('fetch_loan_info')   
+    self.interest_rate_type_radio_group_panel.selected_value = self.item['interest_rate_type']
 
   """
   def clear_inputs(self):

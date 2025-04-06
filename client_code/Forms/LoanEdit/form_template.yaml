@@ -98,7 +98,7 @@ components:
   - components:
     - layout_properties: {}
       name: static_radio_button
-      properties: {text: Static rate, value: static}
+      properties: {text: Static, value: static}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     - layout_properties: {}
       name: dynamic_radio_button
@@ -128,6 +128,16 @@ components:
     name: capitalization_checkbox
     properties: {checked: false, text: Capitalization}
     type: form:dep_lin1x4oec0ytd:_Components.Checkbox
+  - components:
+    - components: []
+      layout_properties: {slot: default}
+      name: radio_group_panel_2
+      properties: {}
+      type: form:dep_lin1x4oec0ytd:_Components.RadioGroupPanel
+    layout_properties: {grid_position: 'FXEYDU,BXXEUR'}
+    name: radio_group_panel_1
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.RadioGroupPanel
   layout_properties: {grid_position: 'MCRTIS,AILSIL'}
   name: column_panel_1_copy
   properties: {col_widths: '{"EPIRVU":20,"EMGTMO":40,"CQSCDI":20,"OZXIQY":40,"HQPCCU":20,"LGMGCM":40,"BPBLLP":20,"NNPZAY":40,"LIRGNE":20,"XHZVBW":40,"BVQOFN":20,"LANIUN":40,"WMJRNB":20,"MMBIJQ":40,"TFIKGN":20,"YENVIH":40}'}

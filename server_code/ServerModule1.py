@@ -31,7 +31,7 @@ def add_loan(new_loan):
 
 @anvil.server.callable
 def fetch_loan_info():
-  return app_tables.loans.search()[0]
+  return app_tables.loans.search()[4]
 
 @anvil.server.callable
 def fetch_companies_dropdown():
