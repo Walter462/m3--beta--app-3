@@ -12,12 +12,14 @@ from ...Forms.LoanEdit import LoanEdit
 
 class Loans(LoansTemplate):
   def __init__(self, **properties):
+    # Any code you write here will run before the form opens.
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     self.layout.loans_nav_link.selected = True
-    self.loans_repeating_panel.items = anvil.server.call('fetch_loans_list_info')   
-    # Any code you write here will run before the form opens.
-    anvil.server.call('fetch_loans_list_info')
+    self.refresh_loans_list()   
+    
+  def refresh_loans_list(self):
+    self.loans_repeating_panel.items = anvil.server.call('fetch_loans_list_info')
     
   def add_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
@@ -29,3 +31,4 @@ class Loans(LoansTemplate):
          buttons = [("Save", True, "elevated"), ("Cancel", False)])
     if save_cliked:
       anvil.server.call('add_loan', new_loan)
+      self.refresh_loans_list()

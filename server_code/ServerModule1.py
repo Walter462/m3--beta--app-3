@@ -47,7 +47,6 @@ def fetch_loans_list_info():
       else:
         loan_data[key] = value
     results.append(loan_data)
-  print(results)
   return results
 
 @anvil.server.callable
