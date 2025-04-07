@@ -23,9 +23,12 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
-def update_loan(loan, updated_loan):
+def update_loan(loan, edited_loan):
   if app_tables.loans.has_row(loan):
-    loan.update
+    edited_loan['updated'] = datetime.now()
+    loan.update(**edited_loan)
+  else:
+    raise Exception("Loan does not exist")
 
 @anvil.server.callable
 def add_loan(new_loan):

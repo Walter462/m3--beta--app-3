@@ -6,8 +6,7 @@ components:
         name: text_1
         properties: {bold: true, text: 'Contract date:'}
         type: form:dep_lin1x4oec0ytd:_Components.Text
-      - data_bindings:
-        - {code: 'self.item[''contract_start_date''].strftime(''%Y-%m-%d'')', property: text, writeback: false}
+      - data_bindings: []
         layout_properties: {grid_position: 'ZVQLOW,WNUFPR'}
         name: contract_start_date_box
         properties: {}
@@ -47,7 +46,8 @@ components:
           name: edit_loan_button
           properties: {align: right, appearance: elevated, icon: 'mi:edit_note', text: Contarct details}
           type: form:dep_lin1x4oec0ytd:_Components.Button
-        - layout_properties: {}
+        - event_bindings: {click: delete_loan_button_click}
+          layout_properties: {}
           name: delete_loan_button
           properties: {appearance: elevated, icon: 'mi:delete'}
           type: form:dep_lin1x4oec0ytd:_Components.Button

@@ -16,7 +16,7 @@ class Loans(LoansTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     self.layout.loans_nav_link.selected = True
-    self.refresh_loans_list()   
+    self.refresh_loans_list()
     
   def refresh_loans_list(self):
     self.loans_repeating_panel.items = anvil.server.call('fetch_loans_info')
