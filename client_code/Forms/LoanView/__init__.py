@@ -19,7 +19,8 @@ class LoanView(LoanViewTemplate):
 
   def edit_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
-    alert(content = LoanEdit(item = self.item),
+    loan_copy = dict(self.item)
+    alert(content = LoanEdit(item = loan_copy),
          title = "View and edit contract details",
          large = True,
          buttons = [("Save", True), ("Cancel", False)])

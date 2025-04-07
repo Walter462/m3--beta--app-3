@@ -23,31 +23,16 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
+def update_loan(loan, updated_loan):
+  if app_tables.loans.has_row(loan):
+    loan.update
+
+@anvil.server.callable
 def add_loan(new_loan):
   app_tables.loans.add_row(
     loan_id=str(str(uuid4())),
     created_on = datetime.now(),
     **new_loan)
-
-@anvil.server.callable
-def fetch_loans_list_info():
-  loan_info_keys = ['lender', 'borrower', 'contract_start_date', 'credentials']
-  results = [ ]
-  for item in app_tables.loans.search():
-    loan_data = { }
-    for key in loan_info_keys:
-      value = item[key]
-      if key in ['lender', 'borrower']:
-        loan_data[key] =  item[key]['company_name'] if value else None
-      elif key == 'contract_start_date':
-        if value:
-          loan_data[key] = value.strftime('%Y-%m-%d')
-        else:
-          loan_data[key] = None
-      else:
-        loan_data[key] = value
-    results.append(loan_data)
-  return results
 
 @anvil.server.callable
 def fetch_loans_info():
@@ -96,3 +81,25 @@ def get_interest_rate_bases():
 def get_currency_ticker():
   currency_tickers =['USD', 'EUR', 'GBP', 'JPY']
   return(currency_tickers)
+
+
+# Unused section
+@anvil.server.callable
+def fetch_loans_list_info():
+  loan_info_keys = ['lender', 'borrower', 'contract_start_date', 'credentials']
+  results = [ ]
+  for item in app_tables.loans.search():
+    loan_data = { }
+    for key in loan_info_keys:
+      value = item[key]
+      if key in ['lender', 'borrower']:
+        loan_data[key] =  item[key]['company_name'] if value else None
+      elif key == 'contract_start_date':
+        if value:
+          loan_data[key] = value.strftime('%Y-%m-%d')
+        else:
+          loan_data[key] = None
+      else:
+        loan_data[key] = value
+    results.append(loan_data)
+  return results
