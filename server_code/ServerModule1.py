@@ -21,6 +21,7 @@ from uuid import uuid4
 #def say_hello(name):
 #   print("Hello, " + name + "!")
 #   return 42
+
 @anvil.server.callable
 def delete_loan(loan):
   if app_tables.loans.has_row(loan):
