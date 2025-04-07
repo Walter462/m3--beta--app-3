@@ -17,6 +17,7 @@ class Loans(LoansTemplate):
     self.layout.loans_nav_link.selected = True
     #self.loans_repeating_panel.items = anvil.server.call('fetch_loans_list_info')   
     # Any code you write here will run before the form opens.
+    anvil.server.call('fetch_loans_list_info')
     
   def add_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
