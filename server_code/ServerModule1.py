@@ -32,8 +32,23 @@ def add_loan(new_loan):
 @anvil.server.callable
 def fetch_loans_list_info():
   loan_info_keys = ['lender', 'borrower', 'contract_start_date', 'credentials']
+  results = [ ]
   for item in app_tables.loans.search():
-    print(dict(item))
+    loan_data = { }
+    for key in loan_info_keys:
+      value = item[key]
+      if key in ['lender', 'borrower']:
+        loan_data[key] =  item[key]['company_name'] if value else None
+      elif key == 'contract_start_date':
+          if isinstance(value, datetime):
+              loan_data[key] = value.date().strftime('%Y-%m-%d')
+          else:
+              loan_data[key] = None
+      else:
+        loan_data[key] = value
+    results.append(loan_data)
+  print(results)
+  return results
 
 @anvil.server.callable
 def fetch_loan_info():
