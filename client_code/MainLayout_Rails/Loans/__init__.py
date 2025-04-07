@@ -15,10 +15,9 @@ class Loans(LoansTemplate):
     # Set Form properties and Data Bindings.
     self.init_components(**properties)
     self.layout.loans_nav_link.selected = True
-    self.loans_repeating_panel.items = anvil.server.call('fetch_loan_info')   
-
+    #self.loans_repeating_panel.items = anvil.server.call('fetch_loans_list_info')   
     # Any code you write here will run before the form opens.
-
+    
   def add_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
     # Initialise an empty dictionary to store the user inputs
