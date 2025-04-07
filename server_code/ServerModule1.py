@@ -40,10 +40,10 @@ def fetch_loans_list_info():
       if key in ['lender', 'borrower']:
         loan_data[key] =  item[key]['company_name'] if value else None
       elif key == 'contract_start_date':
-          if isinstance(value, datetime):
-              loan_data[key] = value.date().strftime('%Y-%m-%d')
-          else:
-              loan_data[key] = None
+        if value:
+          loan_data[key] = value.strftime('%Y-%m-%d')
+        else:
+          loan_data[key] = None
       else:
         loan_data[key] = value
     results.append(loan_data)
