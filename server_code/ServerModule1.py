@@ -50,8 +50,8 @@ def fetch_loans_list_info():
   return results
 
 @anvil.server.callable
-def fetch_loan_info():
-  return app_tables.loans.search()[4]
+def fetch_loans_info():
+  return app_tables.loans.search()
 
 @anvil.server.callable
 def fetch_companies_dropdown():
@@ -96,24 +96,3 @@ def get_interest_rate_bases():
 def get_currency_ticker():
   currency_tickers =['USD', 'EUR', 'GBP', 'JPY']
   return(currency_tickers)
-
-@anvil.server.callable
-def add_loan1(lender,
-              borrower,
-              description,
-              base_currency,
-              interest_rate_base,
-              lending_date_exclusive_counting,
-              repayment_date_exclusive_counting,
-              capitalization):
-  app_tables.loan.add_row(id=str(str(uuid4())),
-                              created_on = datetime.now(),
-                              lender = lender,
-                              borrower = borrower,
-                              description = description,
-                              base_currency = base_currency,
-                              interest_rate_base = interest_rate_base,
-                              lending_date_exclusive_counting = lending_date_exclusive_counting,
-                              repayment_date_exclusive_counting = repayment_date_exclusive_counting,
-                              capitalization = capitalization)
-  

@@ -19,7 +19,7 @@ class Loans(LoansTemplate):
     self.refresh_loans_list()   
     
   def refresh_loans_list(self):
-    self.loans_repeating_panel.items = anvil.server.call('fetch_loans_list_info')
+    self.loans_repeating_panel.items = anvil.server.call('fetch_loans_info')
     
   def add_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
