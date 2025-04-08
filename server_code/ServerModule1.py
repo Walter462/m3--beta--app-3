@@ -6,9 +6,14 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
-from datetime import datetime
+from datetime import datetime, timedelta
 from uuid import uuid4
-
+#calc section
+from dataclasses import dataclass, field, asdict
+from typing import Optional, List, Dict, Union, Literal
+from collections import defaultdict
+from decimal import Decimal, getcontext, localcontext
+import pandas as pd
 
 # This is a server module. It runs on the Anvil server,
 # rather than in the user's browser.
@@ -22,8 +27,11 @@ from uuid import uuid4
 #   print("Hello, " + name + "!")
 #   return 42
 
+#====================
+# 1. Calc core
+#====================
 @anvil.server.callable
-def fetch_loan_events():
+def calc_fetch_loan_events():
   interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
                    app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
   lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
@@ -31,16 +39,20 @@ def fetch_loan_events():
   repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in app_tables.repayments.search(loan=app_tables.loans.search()[0])]
 
   events_list_raw = interest_rates + lendings + repayments
-  #print(events_list_raw)
+  print(events_list_raw)
   return events_list_raw
 
 @anvil.server.callable
-def fetch_loan_info():
+def calc_fetch_loan_info():
   loans_list = [dict(app_tables.loans.search()[0])]
   print(loans_list)
   return loans_list
 
-# Frontend functions
+
+#=========================
+#2. Frontend functions
+#=========================
+
 @anvil.server.callable
 def delete_loan(loan):
   if app_tables.loans.has_row(loan):

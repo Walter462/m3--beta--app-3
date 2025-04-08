@@ -296,7 +296,7 @@ native_deps: null
 package_name: M3__beta__App_3
 runtime_options:
   client_version: '3'
-  server_spec: {base: python310-minimal}
+  server_spec: {base: python310-standard}
   server_version: python3-full
   version: 3
 services:
