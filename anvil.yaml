@@ -88,6 +88,9 @@ db_schema:
     - admin_ui: {order: 12, width: 200}
       name: updated
       type: datetime
+    - admin_ui: {order: 13, width: 200}
+      name: archived
+      type: bool
     server: full
     title: Loans
   subscription_admin:
