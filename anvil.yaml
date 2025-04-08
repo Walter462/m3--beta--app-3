@@ -27,6 +27,17 @@ db_schema:
       type: datetime
     server: full
     title: Companies
+  event_categories:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: category_id
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: name
+      type: string
+    server: full
+    title: Event_categories
   loans:
     client: search
     columns:
