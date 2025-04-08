@@ -23,6 +23,16 @@ from uuid import uuid4
 #   return 42
 
 @anvil.server.callable
+def fetch_loan_events():
+  lendings = [{**dict(item), "event_type": "lending"} for item in 
+              app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
+  repayments = [{**dict(item), "event_type": "repayment"} for item in 
+                app_tables.repayments.search(loan=app_tables.loans.search()[0])]
+  combined_events = lendings + repayments
+  print(combined_events)
+
+# Frontend 
+@anvil.server.callable
 def delete_loan(loan):
   if app_tables.loans.has_row(loan):
     loan.delete()
@@ -81,7 +91,7 @@ def add_subscrition(Loan_DB_name):
     created_on=datetime.now(),
     Loan_DB_profile_name=Loan_DB_name
   )
-
+  
 @anvil.server.callable
 def get_interest_rate_bases():
   interest_rate_bases =['360', '365', 'calendar']
@@ -91,6 +101,7 @@ def get_interest_rate_bases():
 def get_currency_ticker():
   currency_tickers =['USD', 'EUR', 'GBP', 'JPY']
   return(currency_tickers)
+
 
 
 # Unused section

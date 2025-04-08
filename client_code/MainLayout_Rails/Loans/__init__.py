@@ -19,7 +19,8 @@ class Loans(LoansTemplate):
     self.refresh_loans_list()
     self.loans_repeating_panel.set_event_handler('x-delete-loan', self.delete_loan)
     self.loans_repeating_panel.set_event_handler('x-edit-loan', self.edit_loan)
-
+    anvil.server.call('fetch_loan_events')
+    
   def edit_loan(self, loan, **event_args):
     loan_copy = dict(loan)
     save_clicked = alert(content = LoanEdit(item = loan_copy),
