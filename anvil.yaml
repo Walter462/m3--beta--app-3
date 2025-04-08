@@ -38,6 +38,24 @@ db_schema:
       type: string
     server: full
     title: Event_categories
+  interest_rates:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: loan
+      target: loans
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: event_id
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: date
+      type: date
+    - admin_ui: {order: 3, width: 200}
+      name: value
+      type: number
+    server: full
+    title: Interest_rates
   loans:
     client: search
     columns:
@@ -93,6 +111,33 @@ db_schema:
       type: bool
     server: full
     title: Loans
+  principal_lendings:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: loan
+      target: loans
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: event_id
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: date
+      type: date
+    - admin_ui: {order: 3, width: 200}
+      name: currency_sum
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: currency_ticker
+      type: string
+    - admin_ui: {order: 5, width: 200}
+      name: currency_to_loan_rate
+      type: number
+    - admin_ui: {order: 6, width: 200}
+      name: principal_lending_sum
+      type: number
+    server: full
+    title: Principal_lendings
   subscription_admin:
     client: none
     columns:
