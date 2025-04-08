@@ -17,8 +17,12 @@ class Loans(LoansTemplate):
     self.init_components(**properties)
     self.layout.loans_nav_link.selected = True
     self.refresh_loans_list()
+    self.loans_repeating_panel.set_event_handler('x-delete-loan', self.delete_loan)
+
+  def delete_loan(self, loan, **event_args):
+    anvil.server.call('delete_loan', loan)
     
-  def refresh_loans_list(self):
+  def refresh_loans_list(self, **event_args):
     self.loans_repeating_panel.items = anvil.server.call('fetch_loans_info')
     
   def add_loan_button_click(self, **event_args):

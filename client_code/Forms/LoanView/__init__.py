@@ -32,5 +32,7 @@ class LoanView(LoanViewTemplate):
 
   def delete_loan_button_click(self, **event_args):
     """This method is called when the component is clicked."""
-    confirm(f"Are you sure you want to delete {self.item['credentials']}?")
+    if confirm(f"Are you sure you want to delete {self.item['credentials']}?"):
+      self.parent.raise_event('x-delete-loan', loan=self.item)
+    
     
