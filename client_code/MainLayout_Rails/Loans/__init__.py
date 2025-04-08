@@ -18,9 +18,21 @@ class Loans(LoansTemplate):
     self.layout.loans_nav_link.selected = True
     self.refresh_loans_list()
     self.loans_repeating_panel.set_event_handler('x-delete-loan', self.delete_loan)
+    self.loans_repeating_panel.set_event_handler('x-edit-loan', self.edit_loan)
 
+  def edit_loan(self, loan, **event_args):
+    loan_copy = dict(loan)
+    save_clicked = alert(content = LoanEdit(item = loan_copy),
+         title = "View and edit contract details",
+         large = True,
+         buttons = [("Save", True), ("Cancel", False)])
+    if save_clicked:
+      anvil.server.call('update_loan', loan, loan_copy)
+      self.refresh_loans_list()
+    
   def delete_loan(self, loan, **event_args):
     anvil.server.call('delete_loan', loan)
+    self.refresh_loans_list()
     
   def refresh_loans_list(self, **event_args):
     self.loans_repeating_panel.items = anvil.server.call('fetch_loans_info')

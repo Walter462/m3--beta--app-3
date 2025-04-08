@@ -94,6 +94,7 @@ def get_currency_ticker():
 
 
 # Unused section
+"""
 @anvil.server.callable
 def fetch_loans_list_info():
   loan_info_keys = ['lender', 'borrower', 'contract_start_date', 'credentials']
@@ -113,3 +114,4 @@ def fetch_loans_list_info():
         loan_data[key] = value
     results.append(loan_data)
   return results
+"""
