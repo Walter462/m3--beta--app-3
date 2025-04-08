@@ -24,14 +24,18 @@ from uuid import uuid4
 
 @anvil.server.callable
 def fetch_loan_events():
-  lendings = [{**dict(item), "event_type": "lending"} for item in 
+  interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":} for item in
+                   app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
+  lendings = [{**dict(item), "event_type": "Lending"} for item in 
               app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
-  repayments = [{**dict(item), "event_type": "repayment"} for item in 
-                app_tables.repayments.search(loan=app_tables.loans.search()[0])]
-  combined_events = lendings + repayments
-  print(combined_events)
+  repayments = [{**dict(item), "event_type": "Repayment"} for item in app_tables.repayments.search(loan=app_tables.loans.search()[0])]
 
-# Frontend 
+  events_list_raw = interest_rates + lendings + repayments
+  print(events_list_raw)
+
+@anvil.server.callable
+
+# Frontend functions
 @anvil.server.callable
 def delete_loan(loan):
   if app_tables.loans.has_row(loan):
