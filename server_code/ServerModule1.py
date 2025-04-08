@@ -24,16 +24,21 @@ from uuid import uuid4
 
 @anvil.server.callable
 def fetch_loan_events():
-  interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":} for item in
+  interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
                    app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
-  lendings = [{**dict(item), "event_type": "Lending"} for item in 
+  lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
               app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
-  repayments = [{**dict(item), "event_type": "Repayment"} for item in app_tables.repayments.search(loan=app_tables.loans.search()[0])]
+  repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in app_tables.repayments.search(loan=app_tables.loans.search()[0])]
 
   events_list_raw = interest_rates + lendings + repayments
-  print(events_list_raw)
+  #print(events_list_raw)
+  return events_list_raw
 
 @anvil.server.callable
+def fetch_loan_info():
+  loans_list = [dict(app_tables.loans.search()[0])]
+  print(loans_list)
+  return loans_list
 
 # Frontend functions
 @anvil.server.callable
