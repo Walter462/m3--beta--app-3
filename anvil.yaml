@@ -314,3 +314,4 @@ services:
   source: /runtime/services/google.yml
 startup: {module: MainLayout_Rails.Loans, type: form}
 startup_form: null
+uplink_visible: true
