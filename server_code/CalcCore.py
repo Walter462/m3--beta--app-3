@@ -31,7 +31,7 @@ def calc_fetch_loan_events():
 #@anvil.server.callable
 def calc_fetch_loan_info():
   loans_list = [dict(app_tables.loans.search()[0])]
-  print(loans_list)
+  #print(loans_list)
   return loans_list
 
 
@@ -125,7 +125,8 @@ class AggregatedEvent:
 # 2. Sample input data (Loans, Events)
 # ==============================
 
-loans_list_raw = [{'contract_end_date': date(2025, 1, 30), 
+loans_list_raw = calc_fetch_loan_info()
+[{'contract_end_date': date(2025, 1, 30), 
               'lender': 'Lender Name',  # Placeholder for LiveObject
               'created_on': datetime(2025, 3, 14, 9, 35, 55, 689377), 
               'updated': datetime(2025, 4, 8, 1, 31, 25, 506190), 
@@ -143,14 +144,14 @@ loans_list_raw = [{'contract_end_date': date(2025, 1, 30),
               'capitalization': True}]
 
 @anvil.server.callable
-def loans_listing(loans_list):
+def loans_listing():
+  loans_list = calc_fetch_loan_info()
   loans_list = [Loan(**loan) for loan in loans_list_raw]
   print(loans_list)
-  return loans_list
+  #return loans_list
 
 
-loans_list = loans_listing(loans_list_raw)
-
-loan_mapping = {loan.loan_id: loan for loan in loans_list}
+#loans_list = loans_listing(loans_list_raw)
+#loan_mapping = {loan.loan_id: loan for loan in loans_list}
 
 
