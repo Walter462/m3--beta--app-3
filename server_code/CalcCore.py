@@ -6,11 +6,11 @@ import anvil.tables as tables
 import anvil.tables.query as q
 from anvil.tables import app_tables
 import anvil.server
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from uuid import uuid4
 # Additional import
 from dataclasses import dataclass, field, asdict
-from typing import Optional, List, Dict, Union, Literal
+from typing import Optional, List, Dict, Union, Literal, Any
 from collections import defaultdict
 from decimal import Decimal, getcontext, localcontext
 import pandas as pd
@@ -42,12 +42,23 @@ getcontext().prec = 6
 # ==============================
 @dataclass
 class Loan:
-    loan_id: int
+    loan_id: str
     base_currency: str
     interest_rate_base: Union[Literal[360, 365], Literal['calendar']] = 365
     lending_date_exclusive_counting: bool = False
     repayment_date_exclusive_counting: bool = True
     capitalization: bool = False
+    # Additional fields from the loan data
+    contract_start_date: Optional[date] = None
+    contract_end_date: Optional[date] = None
+    lender: Optional[Any] = None
+    borrower: Optional[Any] = None
+    created_on: Optional[datetime] = None
+    updated: Optional[datetime] = None
+    credentials: Optional[str] = None
+    archived: bool = False
+    interest_rate_type: Optional[str] = None
+    capitalization_dates: Optional[Any] = None
 
 @dataclass
 class Currency:
@@ -114,12 +125,32 @@ class AggregatedEvent:
 # 2. Sample input data (Loans, Events)
 # ==============================
 
+loans_list_raw = [{'contract_end_date': date(2025, 1, 30), 
+              'lender': 'Lender Name',  # Placeholder for LiveObject
+              'created_on': datetime(2025, 3, 14, 9, 35, 55, 689377), 
+              'updated': datetime(2025, 4, 8, 1, 31, 25, 506190), 
+              'borrower': 'Borrower Name',  # Placeholder for LiveObject
+              'interest_rate_base': 'calendar', 
+              'repayment_date_exclusive_counting': True, 
+              'lending_date_exclusive_counting': False, 
+              'base_currency': 'USD', 
+              'credentials': 'Contract # 1', 
+              'loan_id': '0eb8f023-87a2-4a36-b045-d7892519a643', 
+              'archived': False, 
+              'interest_rate_type': 'static', 
+              'contract_start_date': date(2024, 1, 5), 
+              'capitalization_dates': None, 
+              'capitalization': True}]
+
 @anvil.server.callable
-def loans_list():
-  loans_list_raw = calc_fetch_loan_info()
+def loans_listing(loans_list):
   loans_list = [Loan(**loan) for loan in loans_list_raw]
   print(loans_list)
+  return loans_list
 
-#loan_mapping = {loan.loan_id: loan for loan in loans_list}
+
+loans_list = loans_listing(loans_list_raw)
+
+loan_mapping = {loan.loan_id: loan for loan in loans_list}
 
 
