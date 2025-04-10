@@ -15,47 +15,21 @@ from collections import defaultdict
 from decimal import Decimal, getcontext, localcontext
 import pandas as pd
 import json
-import os
 
+#=====================
+# 0. Remote connection
+#=====================
 def open_remote_connection():
-    config_file_path = 'config/uplink_config.json'
-    
-    if os.path.exists(config_file_path):
-        with open(config_file_path, 'r') as config_file:
-            config = json.load(config_file)
-            anvil.server.connect(config['anvil_server_key'])
-    else:
-      pass
-    
-def open_remote_connection2():
-    config_file_path = 'config/uplink_config.json'
-    
     try:
-        with open(config_file_path, 'r') as config_file:
+        with open('config/uplink_config.json', 'r') as config_file:
             config = json.load(config_file)
-            anvil.server.connect(config['anvil_server_key'])
-    except: pass
+            key = config.get('anvil_server_key')
+            if key:
+                anvil.server.connect(key)
+    except FileNotFoundError:
+        pass  # No config file? No problem — just skip connection.
 
-open_remote_connection2()
-
-@anvil.server.callable
-def calc_fetch_loan_events():
-  interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
-                    app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
-  lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
-              app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
-  repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in 
-                app_tables.repayments.search(loan=app_tables.loans.search()[0])]
-
-  events_list_raw = interest_rates + lendings + repayments
-  print(events_list_raw)
-  return events_list_raw
-
-#@anvil.server.callable
-def calc_fetch_loan_info():
-  loans_list = [dict(app_tables.loans.search()[0])]
-  #print(loans_list)
-  return loans_list
+open_remote_connection()
 
 
 # Set global precision to 6 decimal places
@@ -147,26 +121,26 @@ class AggregatedEvent:
 # ==============================
 # 2. Sample input data (Loans, Events)
 # ==============================
+@anvil.server.callable
+def calc_fetch_loan_events():
+  interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
+                    app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
+  lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
+              app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
+  repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in 
+                app_tables.repayments.search(loan=app_tables.loans.search()[0])]
+
+  events_list_raw = interest_rates + lendings + repayments
+  print(events_list_raw)
+  return events_list_raw
+
+#@anvil.server.callable
+def calc_fetch_loan_info():
+  loans_list = [dict(app_tables.loans.search()[0])]
+  #print(loans_list)
+  return loans_list
 
 loans_list_raw = calc_fetch_loan_info()
-
-[{'contract_end_date': date(2025, 1, 30), 
-              'lender': 'Lender Name',  # Placeholder for LiveObject
-              'created_on': datetime(2025, 3, 14, 9, 35, 55, 689377), 
-              'updated': datetime(2025, 4, 8, 1, 31, 25, 506190), 
-              'borrower': 'Borrower Name',  # Placeholder for LiveObject
-              'interest_rate_base': 'calendar', 
-              'repayment_date_exclusive_counting': True, 
-              'lending_date_exclusive_counting': False, 
-              'base_currency': 'USD', 
-              'credentials': 'Contract # 1', 
-              'loan_id': '0eb8f023-87a2-4a36-b045-d7892519a643', 
-              'archived': False, 
-              'interest_rate_type': 'static', 
-              'contract_start_date': date(2024, 1, 5), 
-              'capitalization_dates': None, 
-              'capitalization': True}]
-
 @anvil.server.callable
 def loans_listing():
   loans_list = calc_fetch_loan_info()

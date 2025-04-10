@@ -20,7 +20,7 @@ class Loans(LoansTemplate):
     self.loans_repeating_panel.set_event_handler('x-delete-loan', self.delete_loan)
     self.loans_repeating_panel.set_event_handler('x-edit-loan', self.edit_loan)
     #anvil.server.call('calc_fetch_loan_events')
-    anvil.server.call('loans_listing')
+    #anvil.server.call('loans_listing')
     
   def edit_loan(self, loan, **event_args):
     loan_copy = dict(loan)
