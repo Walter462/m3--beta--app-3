@@ -152,10 +152,10 @@ db_schema:
       name: event_fact_date
       type: date
     - admin_ui: {order: 3, width: 200}
-      name: principal_currency_allocation
+      name: principal_repayment_currency
       type: number
     - admin_ui: {order: 4, width: 200}
-      name: interest_currency_allocation
+      name: interest_repayment_currency
       type: number
     - admin_ui: {order: 5, width: 200}
       name: total_currency_sum
