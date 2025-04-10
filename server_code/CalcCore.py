@@ -14,15 +14,38 @@ from typing import Optional, List, Dict, Union, Literal, Any
 from collections import defaultdict
 from decimal import Decimal, getcontext, localcontext
 import pandas as pd
+import json
+import os
 
+def open_remote_connection():
+    config_file_path = 'config/uplink_config.json'
+    
+    if os.path.exists(config_file_path):
+        with open(config_file_path, 'r') as config_file:
+            config = json.load(config_file)
+            anvil.server.connect(config['anvil_server_key'])
+    else:
+      pass
+    
+def open_remote_connection2():
+    config_file_path = 'config/uplink_config.json'
+    
+    try:
+        with open(config_file_path, 'r') as config_file:
+            config = json.load(config_file)
+            anvil.server.connect(config['anvil_server_key'])
+    except: pass
+
+open_remote_connection2()
 
 @anvil.server.callable
 def calc_fetch_loan_events():
   interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
-                   app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
+                    app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
   lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
               app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
-  repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in app_tables.repayments.search(loan=app_tables.loans.search()[0])]
+  repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in 
+                app_tables.repayments.search(loan=app_tables.loans.search()[0])]
 
   events_list_raw = interest_rates + lendings + repayments
   print(events_list_raw)
@@ -126,6 +149,7 @@ class AggregatedEvent:
 # ==============================
 
 loans_list_raw = calc_fetch_loan_info()
+
 [{'contract_end_date': date(2025, 1, 30), 
               'lender': 'Lender Name',  # Placeholder for LiveObject
               'created_on': datetime(2025, 3, 14, 9, 35, 55, 689377), 
@@ -148,10 +172,5 @@ def loans_listing():
   loans_list = calc_fetch_loan_info()
   loans_list = [Loan(**loan) for loan in loans_list_raw]
   print(loans_list)
-  #return loans_list
-
-
-#loans_list = loans_listing(loans_list_raw)
-#loan_mapping = {loan.loan_id: loan for loan in loans_list}
-
-
+  
+loans_listing()
