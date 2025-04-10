@@ -128,7 +128,7 @@ db_schema:
       name: principal_lending_currency
       type: number
     - admin_ui: {order: 4, width: 200}
-      name: currency_ticker
+      name: currency
       type: string
     - admin_ui: {order: 5, width: 200}
       name: currency_to_loan_rate
@@ -161,7 +161,7 @@ db_schema:
       name: total_currency_sum
       type: number
     - admin_ui: {order: 6, width: 200}
-      name: currency_ticker
+      name: currency
       type: string
     - admin_ui: {order: 7, width: 200}
       name: currency_to_loan_rate
