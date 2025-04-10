@@ -49,7 +49,7 @@ db_schema:
       name: event_id
       type: string
     - admin_ui: {order: 2, width: 200}
-      name: date
+      name: event_fact_date
       type: date
     - admin_ui: {order: 3, width: 200}
       name: value
@@ -122,7 +122,7 @@ db_schema:
       name: event_id
       type: string
     - admin_ui: {order: 2, width: 200}
-      name: date
+      name: event_fact_date
       type: date
     - admin_ui: {order: 3, width: 200}
       name: currency_sum
@@ -149,7 +149,7 @@ db_schema:
       name: event_id
       type: string
     - admin_ui: {order: 2, width: 200}
-      name: date
+      name: event_fact_date
       type: date
     - admin_ui: {order: 3, width: 200}
       name: principal_currency_allocation
