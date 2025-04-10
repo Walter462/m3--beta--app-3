@@ -15,7 +15,12 @@ from collections import defaultdict
 from decimal import Decimal, getcontext, localcontext
 import pandas as pd
 import json
+import warnings
 
+'''
+- [ ] STYLE(rename): principal_repayment_currency -> principal_currency_allocation
+- [ ] STYLE(rename): interest_repayment_currency -> interest_currency_allocation
+'''
 #=====================
 # 0. Remote connection
 #=====================
@@ -119,8 +124,42 @@ class AggregatedEvent:
 # ==============================
 # 2. Fetch data (Loans, Events)
 #============================
+# 2.1. Loans
+#============================
+def fetch_raw_loan_info()->dict:
+  '''
+  Fetches raw loan data from the database.
+  '''
+  loans_list = [dict(app_tables.loans.search()[0])]
+  return loans_list
 
-def calc_fetch_loan_events():
+def loans_dataclass_listing()->List[Loan]:
+  '''
+  Converts raw loan data to Loan dataclass instances.
+  '''
+  loans_list_raw = fetch_raw_loan_info()
+  loans_dataclass_list = [Loan(**loan) for loan in loans_list_raw]
+  return loans_dataclass_list
+
+def loans_mapping(loans_dataclass_list) -> Dict[str, Loan]:
+  '''
+  Creates a dictionary mapping loan IDs to Loan dataclass instances.
+  '''
+  loans_mapping = {loan.loan_id: loan for loan in loans_dataclass_list}
+  return loans_mapping
+
+
+#============================
+# 2.2. Events
+#============================
+def fetch_loan_events():
+  '''
+  Fetch loan events from the database.
+  - Interest rates
+  - Lendings
+  - Repayments\n
+  Returns a list of dictionaries with the combined event data.
+  '''
   interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
                     app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
   lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
@@ -130,13 +169,185 @@ def calc_fetch_loan_events():
   events_list_raw = interest_rates + lendings + repayments
   return events_list_raw
 
-def calc_fetch_loan_info():
-  loans_list = [dict(app_tables.loans.search()[0])]
-  return loans_list
 
-def loans_listing():
-  loans_list_raw = calc_fetch_loan_info()
-  loans_list = [Loan(**loan) for loan in loans_list_raw]
-  print(loans_list)
-  
-loans_listing()
+print(*[fetch_loan_events()], sep ="\n")
+
+def events_dataclass_listing(events_list_raw)->List[Event]:
+  loan_mapping = loans_mapping(loans_dataclass_listing())
+  events_list = []
+  for event in events_list_raw:
+      loan = loan_mapping.get(event.get("loan_id"))
+      if not loan:
+          raise ValueError(f"Loan with ID {event.get('loan_id')} not found.")
+      event_fact_date = event["event_fact_date"]
+      event_start_date: Optional[datetime] = event_fact_date
+      principal_lending_currency = None
+      principal_lending = None
+
+      principal_repayment_currency = None
+      principal_repayment = None
+      interest_repayment_currency = None
+      interest_repayment = None
+
+      capitalization = None
+      interest_rate = None
+      principal_balance_correction = None
+      interest_balance_correction = None
+
+      if "principal_lending_currency" in event:
+          lending_date_exclusive_counting = loan.lending_date_exclusive_counting
+          if event.get("currency") is None:
+            warnings.warn(f"Currency is explicitly set to None for Event ID {event['event_id']}.\
+                          Defaulting to loan base currency: {loan.base_currency}.", UserWarning)
+          currency_ticker = event.get("currency") if event.get("currency") is not None else loan.base_currency # Event currency
+          currency_rate = event.get("currency_to_loan_rate", None)  # Fetch conversion rate
+          # If currencies are different but no conversion rate is provided, raise an error
+          if currency_ticker != loan.base_currency and currency_rate is None:
+              raise ValueError(
+                  f"Missing currency conversion rate for Event ID {event['event_id']}: "
+                  f"{currency_ticker} → {loan.base_currency}"
+              )
+          # Ensure currency_rate is Decimal, default to 1.0 if same currency
+          currency_rate = Decimal(str(currency_rate)) if currency_rate is not None else Decimal('1.0')
+          # Create Currency object
+          principal_lending_currency = Currency(
+              currency_amount=Decimal(event["principal_lending_currency"]),
+              ticker=currency_ticker,
+              currency_to_loan_rate=currency_rate
+          )
+          # Convert amount if necessary
+          principal_lending = (
+              principal_lending_currency.converted_amount()
+              if currency_ticker != loan.base_currency
+              else principal_lending_currency.currency_amount
+          )
+          if lending_date_exclusive_counting == True:
+              event_start_date += timedelta(days=1)
+          else:
+            event_start_date = event_fact_date
+
+      if "principal_repayment_currency" in event and (event.get("principal_repayment_currency") is not None 
+                                                      and Decimal(event["principal_repayment_currency"]) >= 0):
+          repayment_date_exclusive_counting = loan.repayment_date_exclusive_counting
+          if event.get("currency") is None:
+            warnings.warn(f"Currency is explicitly set to None for Event ID {event['event_id']}.\
+                          Defaulting to loan base currency: {loan.base_currency}.", UserWarning)
+          currency_ticker = event.get("currency") if event.get("currency") is not None else loan.base_currency # Event currency
+          currency_rate = event.get("currency_to_loan_rate", None)  # Fetch conversion rate
+          # If currencies are different but no conversion rate is provided, raise an error
+          if currency_ticker != loan.base_currency and currency_rate is None:
+              raise ValueError(
+                  f"Missing currency conversion rate for Event ID {event['event_id']}: "
+                  f"{currency_ticker} → {loan.base_currency}"
+              )
+          # Ensure currency_rate is Decimal, default to 1.0 if same currency
+          currency_rate = Decimal(str(currency_rate)) if currency_rate is not None else Decimal('1.0')
+          # Create Currency object
+          principal_repayment_currency = Currency(
+              currency_amount=Decimal(event["principal_repayment_currency"]),
+              ticker=currency_ticker,
+              currency_to_loan_rate=currency_rate
+          )
+          # Convert amount if necessary
+          principal_repayment = (
+              principal_repayment_currency.converted_amount()
+              if currency_ticker != loan.base_currency
+              else principal_repayment_currency.currency_amount
+          )
+          if repayment_date_exclusive_counting == True:
+              event_start_date += timedelta(days=1)
+          else:
+            event_start_date = event_fact_date
+
+      if "interest_repayment_currency" in event and (event.get("interest_repayment_currency") is not None 
+                                                    and Decimal(event["interest_repayment_currency"]) >= 0):
+          repayment_date_exclusive_counting = loan.repayment_date_exclusive_counting
+          currency_ticker = event.get("currency") if event.get("currency") is not None else loan.base_currency # Event currency
+          if currency_ticker is None:
+            warnings.warn(f"Currency is explicitly set to None for Event ID {event['event_id']}.\
+                          Defaulting to loan base currency: {loan.base_currency}.", UserWarning)
+          currency_rate = event.get("currency_to_loan_rate", None)  # Fetch conversion rate
+          # If currencies are different but no conversion rate is provided, raise an error
+          if currency_ticker != loan.base_currency and currency_rate is None:
+              raise ValueError(
+                  f"Missing currency conversion rate for Event ID {event['event_id']}: "
+                  f"{currency_ticker} → {loan.base_currency}"
+              )
+          # Ensure currency_rate is Decimal, default to 1.0 if same currency
+          currency_rate = Decimal(str(currency_rate)) if currency_rate is not None else Decimal('1.0')
+          # Create Currency object
+          interest_repayment_currency = Currency(
+              currency_amount=Decimal(event["interest_repayment_currency"]),
+              ticker=currency_ticker,
+              currency_to_loan_rate=currency_rate
+          )
+          # Convert amount if necessary
+          interest_repayment = (
+              interest_repayment_currency.converted_amount()
+              if currency_ticker != loan.base_currency
+              else interest_repayment_currency.currency_amount
+          )
+          if repayment_date_exclusive_counting == True:
+              event_start_date += timedelta(days=1)
+          else:
+            event_start_date = event_fact_date
+      
+      if "capitalization" in event:
+        capitalization=Decimal(event.get("capitalization"))
+      if "interest_rate" in event:
+        interest_rate=Decimal(event.get("interest_rate"))
+      if "principal_balance_correction" in event:
+        principal_balance_correction=Decimal(event.get("principal_balance_correction"))
+      if "interest_balance_correction" in event:
+        interest_balance_correction=Decimal(event.get("interest_balance_correction"))
+      # Create the Event instance
+      events_list.append(
+          Event(
+              event_id=event["event_id"],
+              event_fact_date=event_fact_date,
+              event_start_date = event_start_date,
+              loan=loan,
+              principal_lending_currency=principal_lending_currency,
+              principal_lending = principal_lending,
+              principal_repayment_currency = principal_repayment_currency,
+              principal_repayment = principal_repayment,
+              interest_repayment_currency = interest_repayment_currency,
+              interest_repayment = interest_repayment,
+              capitalization=capitalization,
+              interest_rate=interest_rate,
+              principal_balance_correction=principal_balance_correction,
+              interest_balance_correction=interest_balance_correction
+          )
+      )
+  return events_list
+
+events_list = events_dataclass_listing(events_list_raw = fetch_loan_events())
+events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.event_start_date, e.event_id))
+
+print(*events_list_sorted, sep="\n")
+# After populating the Event instance
+
+#for event in events_list_sorted:
+#  print(f"Event ID: {event.event_fact_date}. {event.principal_lending_currency.currency_amount}")#, Principal Lending: {principal_lending}, Principal Repayment: {principal_repayment}, Interest Repayment: {interest_repayment}")
+
+
+
+print("-" * 180)
+print(f"{'Date':<12} {'Start event date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Principal repayment':>18} {'Interest repayment':>18} {'Event IDs':>12}")
+print("-" * 180)
+for event in events_list_sorted:
+    event_fact_date = str(event.event_fact_date)  # Ensure event_fact_date is a string
+    event_start_date = str(event.event_start_date) 
+    lending_amount = f"{event.principal_lending_currency.currency_amount:.2f}" if event.principal_lending_currency and event.principal_lending_currency.currency_amount is not None else ""
+    lending_currency = event.principal_lending_currency.ticker if event.principal_lending_currency else ""
+    currency_rate = f"{event.principal_lending_currency.currency_to_loan_rate:.4f}" if event.principal_lending_currency and event.principal_lending_currency.currency_to_loan_rate is not None else ""
+    principal_lending = f"{event.principal_lending:.2f}" if event.principal_lending is not None else ""
+    principal_repayment = f"{event.principal_repayment:.2f}" if event.principal_repayment is not None else ""
+    interest_repayment = f"{event.interest_repayment:.2f}" if event.interest_repayment is not None else ""
+    event_id = str(event.event_id) if event.event_id is not None else ""
+
+    print(f"{event_fact_date:<12} {event_start_date:<12}{lending_amount:>18} {lending_currency:>10} {currency_rate:>10} {principal_lending:>18} {principal_repayment:>18} {interest_repayment:>18} {event_id:>12}")
+
+print("-" * 180)
+
+

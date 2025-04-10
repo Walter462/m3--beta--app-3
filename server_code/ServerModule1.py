@@ -41,7 +41,7 @@ def update_loan(loan, edited_loan):
 @anvil.server.callable
 def add_loan(new_loan):
   app_tables.loans.add_row(
-    loan_id=str(str(uuid4())),
+    loan_id=str(uuid4()),
     created_on = datetime.now(),
     **new_loan)
 
