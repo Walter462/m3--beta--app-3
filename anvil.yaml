@@ -125,7 +125,7 @@ db_schema:
       name: event_fact_date
       type: date
     - admin_ui: {order: 3, width: 200}
-      name: currency_sum
+      name: principal_lending_currency
       type: number
     - admin_ui: {order: 4, width: 200}
       name: currency_ticker
