@@ -167,8 +167,8 @@ def fetch_raw_loan_info()->List[dict]:
   Fetches raw loan data from the database.
   Normally it is a single loan.
   '''
-  #loans_list = [dict(app_tables.loans.search()[0])]
-  raw_loans_list = RawLoansListCache().get_loans()
+  raw_loans_list = [dict(app_tables.loans.search()[0])]
+  #raw_loans_list = RawLoansListCache().get_loans()
   return raw_loans_list
 
 def loans_dataclass_listing()->List[Loan]:
@@ -220,7 +220,6 @@ def fetch_loan_events()->List[dict]:
   - Repayments\n
   Returns a list of dictionaries with the combined event data.
   '''
-  """
   interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
                     app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
   lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
@@ -228,8 +227,7 @@ def fetch_loan_events()->List[dict]:
   repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in 
                 app_tables.repayments.search(loan=app_tables.loans.search()[0])]
   raw_events_list = interest_rates + lendings + repayments
-  """
-  raw_events_list = RawEventsListCache().get_events()
+  #raw_events_list = RawEventsListCache().get_events()
   return raw_events_list
 
 def events_dataclass_listing()->List[Event]:
@@ -396,7 +394,8 @@ def extract_sorted_events_properties() -> List[Dict[str, str]]:
     Extracts properties from each event and returns a list of dictionaries.
     Each dictionary contains the specified parameters for an event.
     """
-    events_list = events_dataclass_listing()  # Get the list of Event instances
+  
+    events_list = sort_events_list()  # Get the list of Event instances
     event_properties_list = []
 
     for event in events_list:
@@ -405,11 +404,12 @@ def extract_sorted_events_properties() -> List[Dict[str, str]]:
             "event_fact_date": str(event.event_fact_date),
             "event_start_date": str(event.event_start_date),
             "event_id": str(event.event_id),
+            "event_type": event.event_type if hasattr(event, 'event_type') else None, 
             "principal_lending_currency.currency_amount": str(event.principal_lending_currency.currency_amount) if event.principal_lending_currency else None,
             "principal_lending_currency.ticker": event.principal_lending_currency.ticker if event.principal_lending_currency else None,
             "principal_lending_currency.currency_to_loan_rate": str(event.principal_lending_currency.currency_to_loan_rate) if event.principal_lending_currency else None,
             "principal_lending": str(event.principal_lending) if event.principal_lending is not None else None,
-            "interest_rate": str(event.interest_rate) if event.interest_rate is not None else None,
+            "interest_rate": f"{event.interest_rate:.2f}" if event.interest_rate is not None else None,
             "interest_rate_base": str(event.interest_rate_base) if event.interest_rate_base is not None else None,
             "principal_repayment_currency.currency_amount": str(event.principal_repayment_currency.currency_amount) if event.principal_repayment_currency else None,
             "principal_repayment_currency.ticker": event.principal_repayment_currency.ticker if event.principal_repayment_currency else None,
@@ -675,3 +675,31 @@ def print_calculated_loan():
   print("-" * 180)
 #print_calculated_loan()
 #***************************************************************************
+@anvil.server.callable
+def extract_calculated_loan_properties() -> List[Dict[str, str]]:
+    """
+    Extracts properties from each calculated loan event and returns a list of dictionaries.
+    Each dictionary contains the specified parameters for a calculated loan event.
+    """
+    calculated_loan = loan_parameters_calculations()  # Get the list of calculated loan events
+    loan_properties_list = []
+
+    for event in calculated_loan:
+        loan_dict = {
+            "Event": str(event.event_fact_date),
+            "Start": str(event.event_start_date),
+            "Days": event.days_count,
+            "End": str(event.event_end_date),
+            "Lending": str(event.principal_lending) if event.principal_lending is not None else None,
+            "Cap": str(event.capitalization) if event.capitalization is not None else None,
+            "Pr_rep": str(event.principal_repayment) if event.principal_repayment is not None else None,
+            "Pr_balance": str(event.principal_balance) if event.principal_balance is not None else None,
+            "Int_rate": f"{event.interest_rate:.2f}" if event.interest_rate is not None else None,
+            "Int_base": str(event.interest_rate_base) if event.interest_rate_base is not None else None,
+            "Int_accrued": str(event.interest_accrued) if event.interest_accrued is not None else None,
+            "Int_rep": str(event.interest_repayment) if event.interest_repayment is not None else None,
+            "Int_balance": str(event.interest_balance) if event.interest_balance is not None else None,
+        }
+        loan_properties_list.append(loan_dict)
+
+    return loan_properties_list

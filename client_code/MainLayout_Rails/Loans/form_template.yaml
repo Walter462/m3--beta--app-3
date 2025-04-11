@@ -16,5 +16,53 @@ components_by_slot:
     name: add_loan_button
     properties: {align: center, appearance: filled, icon: 'mi:add_circle', text: Add loan}
     type: form:dep_lin1x4oec0ytd:_Components.Button
+  - layout_properties: {}
+    name: heading_1
+    properties: {text: First Loan events schedule}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - components:
+    - name: sorted_events_panel
+      properties: {item_template: MainLayout_Rails.Loans.RowTemplate5}
+      type: RepeatingPanel
+    layout_properties: {}
+    name: sorted_events_grid
+    properties:
+      columns:
+      - {data_key: event_fact_date, id: WZPXLK, title: Event fact date}
+      - {data_key: event_start_date, id: QAKPCT, title: Event start date}
+      - {data_key: interest_rate, id: YQVQRY, title: Interest rate}
+      - {data_key: principal_lending_currency.currency_amount, id: YBEOCU, title: Lending currency amount}
+      - {data_key: principal_lending_currency.ticker, id: GBNSQQ, title: Lending currency ticker}
+      - {data_key: principal_lending_currency.currency_to_loan_rate, id: NURJCT, title: Lending currency to loan rate}
+      - {data_key: principal_lending, id: BPXYNM, title: Lending currency sum}
+      - {data_key: principal_repayment, id: XJQCYK, title: Principal repayment}
+      - {data_key: interest_repayment, id: CULCTF, title: Interest repayment}
+    type: DataGrid
+  - layout_properties: {}
+    name: heading_3
+    properties: {text: Loan calculations}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - components:
+    - name: calculated_loan_repeating_panel
+      properties: {item_template: MainLayout_Rails.Loans.RowTemplate6}
+      type: RepeatingPanel
+    layout_properties: {}
+    name: calculated_loan_grid
+    properties:
+      columns:
+      - {data_key: Event, id: TLCPMP, title: Event fact date}
+      - {data_key: Start, id: PTRHIR, title: Event start date}
+      - {data_key: Days, id: WIQHRW, title: Days count}
+      - {data_key: End, id: WFNRNS, title: Event end date}
+      - {data_key: Lending, id: IWNKNA, title: Lending sum}
+      - {data_key: Cap, id: WACMXI, title: Capitalization}
+      - {data_key: Pr_rep, id: GDXKOG, title: Principal repayment}
+      - {data_key: Pr_balance, id: CFUIUR, title: Principal balance}
+      - {data_key: Int_rate, id: OIBLDN, title: Interest rate}
+      - {data_key: Int_base, id: AAXKRV, title: Interest rate base}
+      - {data_key: Int_accrued, id: PTQJXL, title: Interest accrued}
+      - {data_key: Int_rep, id: YPBNXX, title: Interest repayment}
+      - {data_key: Int_balance, id: RRGPCH, title: Interest balance}
+    type: DataGrid
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}
