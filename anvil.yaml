@@ -25,6 +25,9 @@ db_schema:
     - admin_ui: {order: 5, width: 200}
       name: edited_on
       type: datetime
+    - admin_ui: {order: 6, width: 200}
+      name: edited_by
+      type: string
     server: full
     title: Companies
   event_categories:
