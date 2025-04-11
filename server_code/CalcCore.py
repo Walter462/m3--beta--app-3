@@ -22,6 +22,8 @@ import warnings
 - [ ] STYLE(rename): interest_repayment_currency -> interest_currency_allocation
 - [ ] REF: avoid unnecessary data sorting stages
 - [ ] REV: date and datetime datatypes consistency
+- [ ] FEAT(front): # DEBUG: print sorted List[Event] 390
+
 '''
 #=====================
 # 0. Remote connection
@@ -171,8 +173,8 @@ def loans_dataclass_listing()->List[Loan]:
   '''
   Converts raw loan data to Loan dataclass instances list.
   '''
-  loans_list_raw = fetch_raw_loan_info()
-  loans_dataclass_list = [Loan(**loan) for loan in loans_list_raw]
+  loans_list_raw: List[dict]= fetch_raw_loan_info()
+  loans_dataclass_list: List[Loan] = [Loan(**loan) for loan in loans_list_raw]
   return loans_dataclass_list
 
 def loans_mapping() -> Dict[str, Loan]:
@@ -180,7 +182,7 @@ def loans_mapping() -> Dict[str, Loan]:
   Creates a dictionary mapping loan IDs to Loan dataclass instances.
   Useful in multiple loans statistics aggregated by company.
   '''
-  loans_dataclass_list = loans_dataclass_listing()
+  loans_dataclass_list: List[Loan] = loans_dataclass_listing()
   loans_mapping = {loan.loan_id: loan for loan in loans_dataclass_list}
   return loans_mapping
 
@@ -232,8 +234,8 @@ def events_dataclass_listing()->List[Event]:
   '''
   Parses multiple events of different types to Event dataclass instances.
   '''
-  raw_events_list = fetch_loan_events()
-  loan_mapping = loans_mapping()
+  raw_events_list: List[dict] = fetch_loan_events()
+  loan_mapping: Dict[str, Loan] = loans_mapping()
   events_list = []
   for event in raw_events_list:
       loan = loan_mapping.get(event.get("loan_id"))
@@ -408,13 +410,12 @@ def print_events_list()->None:
 
   print("-" * 180)
 
-print_events_list()
+#print_events_list()
 #********************************
 
 # ==============================
 # 3. Aggregate Events by Date
 # ==============================
-
 def agregate_events_by_date() -> Dict[datetime, AggregatedEvent]:
   '''
   Sum existing values for each event_fact_date (ex: 2 repayment events in a day).
@@ -510,7 +511,7 @@ def add_generated_dates_to_aggregated_events_list()->List[AggregatedEvent]:
 # Convert to sorted list
   aggregated_events_added_dates = aggregated_events
   events_list_date_aggregated_sorted = sorted(aggregated_events_added_dates.values(), key=lambda e: e.event_start_date)
-  return events_list_date_aggregated_sorted
+  return events_list_date_aggregated_sorted, capitalization_generated_dates
 
 #******************************************
 # DEBUG: print sorted List[AggregatedEvent]
@@ -518,7 +519,7 @@ def print_aggregated_events_list():
   print("-" * 140)
   print(f"{'Date':<12} {'Lending':>8} {'Pr_rep':>10}{'Int_rep':>10}{'Event IDs':>30}")  # Adjusted width for Event IDs
   print("-" * 140)
-  events_list_date_aggregated_sorted = add_generated_dates_to_aggregated_events_list()
+  events_list_date_aggregated_sorted, capitalization_generated_dates = add_generated_dates_to_aggregated_events_list()
   for event in events_list_date_aggregated_sorted:
       event_start_date = str(event.event_start_date)
       print(f"{event_start_date:<12}" 
@@ -528,6 +529,110 @@ def print_aggregated_events_list():
             f"{str(event.event_ids):<30}")  # Adjusted width for Event IDs
   print("-" * 140)
   
-print_aggregated_events_list()
+#print_aggregated_events_list()
 #*******************************************
 
+# ==============================
+# 5. Calculate Principal Balances, Days Count & Interest
+# ==============================
+  
+def loan_parameters_calculations():
+  loan: Loan = loans_mapping()['0eb8f023-87a2-4a36-b045-d7892519a643']
+  events_list_date_aggregated_sorted, capitalization_generated_dates = add_generated_dates_to_aggregated_events_list()
+  principal_balance = Decimal('0.0')
+  interest_balance = Decimal('0.0')
+  current_interest_rate = Decimal('0.0')  # Default interest rate
+  
+  for i, event in enumerate(events_list_date_aggregated_sorted):
+      # Update current_interest_rate if there's a rate change on this event_fact_date
+      if event.interest_rate > 0:
+          current_interest_rate = Decimal(str(event.interest_rate))
+      event.interest_rate = current_interest_rate
+
+      if loan.capitalization == True:
+        if event.event_start_date in capitalization_generated_dates:
+            event.capitalization = interest_balance
+            #print(f"Capitalization on {event.event_start_date} amount: {interest_balance}")
+      # Update principal balance
+      principal_balance += (
+          Decimal(event.principal_lending) +
+          Decimal(event.capitalization) -
+          Decimal(event.principal_repayment) +
+          Decimal(event.principal_balance_correction)
+      )
+      event.principal_balance = principal_balance  
+      #print(principal_balance)
+      
+      # Calculate days_count (difference between next event event_fact_date and current event_fact_date)
+      if i < len(events_list_date_aggregated_sorted) - 1:
+          next_event = events_list_date_aggregated_sorted[i + 1]
+          event.days_count = (next_event.event_start_date - event.event_start_date).days
+      else:
+          event.days_count = 0  # Last event has no next event_fact_date
+
+      if i < len(events_list_date_aggregated_sorted) - 1 and event.days_count >1:
+          event.event_end_date = (event.event_start_date+timedelta(event.days_count-1))
+      else:
+          event.event_end_date = event.event_start_date
+
+      # Calculate interest accrued
+      if loan.interest_rate_base == 'calendar': 
+        interest_rate_base = 366 if pd.Timestamp(event.event_start_date).is_leap_year else 365
+        event.interest_accrued = (current_interest_rate / interest_rate_base) * Decimal(event.days_count) * event.principal_balance
+      else:
+        interest_rate_base = loan.interest_rate_base
+        event.interest_accrued = (current_interest_rate / interest_rate_base) * Decimal(event.days_count) * event.principal_balance
+      event.interest_rate_base = interest_rate_base
+      # Update interest balance
+      interest_balance += (
+          Decimal(event.interest_accrued) -
+          Decimal(event.capitalization) -
+          Decimal(event.interest_repayment)+
+          Decimal(event.interest_balance_correction)
+      )
+      event.interest_balance = interest_balance
+  calculated_loan = events_list_date_aggregated_sorted
+  return calculated_loan
+
+
+# ***************************************
+# DEBUG  print loan calculations results
+def print_calculated_loan():
+  print("-" * 180)
+  print(
+    f"{'Event'        :<12}"\
+    f"{'Start'        :>12}" \
+    f"{'Days'         :>8}" \
+    f"{'End'          :>12}" \
+    f"{'Lending'      :>12}" \
+    f"{'Cap'          :>12}" \
+    f"{'Pr_rep'       :>12}" \
+    f"{'Pr_balance'   :>14}" \
+    f"{'Int_rate'     :>12}" \
+    f"{'Int_base'     :>12}" \
+    f"{'Int_accrued'  :>14}" \
+    f"{'Int_rep'      :>12}" \
+    f"{'Int_balance'  :>14}")
+  print("-" * 180)
+  calculated_loan = loan_parameters_calculations()
+  for event in calculated_loan:
+      event_fact_date = str(event.event_fact_date)
+      event_start_date = str(event.event_start_date)
+      event_end_date = str(event.event_end_date)
+      print(f"{event_fact_date:<12}" 
+          f"{event_start_date:>12}" 
+            f"{event.days_count:>8}" 
+            f"{event_end_date:>12}"  # Right-aligned for consistency
+            f"{event.principal_lending:>12.2f}" 
+            f"{event.capitalization:>12.2f}"
+            f"{event.principal_repayment:>12.2f}" 
+            f"{event.principal_balance:>14.2f}" 
+            f"{event.interest_rate:>12.2f}"
+            f"{event.interest_rate_base:>12.2f}"
+            f"{float(event.interest_accrued):>14.2f}" 
+            f"{event.interest_repayment:>12.2f}" 
+            f"{float(event.interest_balance):>14.2f}"
+            )
+  print("-" * 180)
+print_calculated_loan()
+#***************************************************************************
