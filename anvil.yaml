@@ -51,8 +51,8 @@ db_schema:
     - admin_ui: {order: 2, width: 200}
       name: event_fact_date
       type: date
-    - admin_ui: {order: 3, width: 200}
-      name: value
+    - admin_ui: {width: 200}
+      name: interest_rate
       type: number
     server: full
     title: Interest_rates
