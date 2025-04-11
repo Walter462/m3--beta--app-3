@@ -380,7 +380,7 @@ for generated_report_date in generated_reporting_dates:
 
 
 # Convert to sorted list
-events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: e.event_start_date)
+events_list_date_aggregated_sorted = sorted(aggregated_events.values(), key=lambda e: pd.Timestamp(e.event_start_date))
 
 print("-" * 140)
 print(f"{'Date':<12} {'Lending':>8} {'Pr_rep':>10}{'Int_rep':>10}{'Event IDs':>12}")
