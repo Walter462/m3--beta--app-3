@@ -16,6 +16,7 @@ from decimal import Decimal, getcontext, localcontext
 import pandas as pd
 import json
 import warnings
+import logging
 
 '''
 - [ ] STYLE(rename): principal_repayment_currency -> principal_currency_allocation
@@ -23,6 +24,7 @@ import warnings
 - [ ] REF: avoid unnecessary data sorting stages
 - [ ] REV: date and datetime datatypes consistency
 - [ ] FEAT(front): # DEBUG: print sorted List[Event] 390
+- [ ] DEBUG: add logger
 
 '''
 #=====================
@@ -388,8 +390,45 @@ def sort_events_list()->List[Event]:
   events_list_sorted: List[Event] = sorted(events_list, key=lambda e: (e.event_start_date, e.event_id))
   return events_list_sorted
 
+@anvil.server.callable
+def extract_sorted_events_properties() -> List[Dict[str, str]]:
+    """
+    Extracts properties from each event and returns a list of dictionaries.
+    Each dictionary contains the specified parameters for an event.
+    """
+    events_list = events_dataclass_listing()  # Get the list of Event instances
+    event_properties_list = []
+
+    for event in events_list:
+        event_dict = {
+            "loan": event.loan.loan_id,
+            "event_fact_date": str(event.event_fact_date),
+            "event_start_date": str(event.event_start_date),
+            "event_id": str(event.event_id),
+            "principal_lending_currency.currency_amount": str(event.principal_lending_currency.currency_amount) if event.principal_lending_currency else None,
+            "principal_lending_currency.ticker": event.principal_lending_currency.ticker if event.principal_lending_currency else None,
+            "principal_lending_currency.currency_to_loan_rate": str(event.principal_lending_currency.currency_to_loan_rate) if event.principal_lending_currency else None,
+            "principal_lending": str(event.principal_lending) if event.principal_lending is not None else None,
+            "interest_rate": str(event.interest_rate) if event.interest_rate is not None else None,
+            "interest_rate_base": str(event.interest_rate_base) if event.interest_rate_base is not None else None,
+            "principal_repayment_currency.currency_amount": str(event.principal_repayment_currency.currency_amount) if event.principal_repayment_currency else None,
+            "principal_repayment_currency.ticker": event.principal_repayment_currency.ticker if event.principal_repayment_currency else None,
+            "principal_repayment_currency.currency_to_loan_rate": str(event.principal_repayment_currency.currency_to_loan_rate) if event.principal_repayment_currency else None,
+            "principal_repayment": str(event.principal_repayment) if event.principal_repayment is not None else None,
+            "interest_repayment_currency.currency_amount": str(event.interest_repayment_currency.currency_amount) if event.interest_repayment_currency else None,
+            "interest_repayment_currency.ticker": event.interest_repayment_currency.ticker if event.interest_repayment_currency else None,
+            "interest_repayment_currency.currency_to_loan_rate": str(event.interest_repayment_currency.currency_to_loan_rate) if event.interest_repayment_currency else None,
+            "interest_repayment": str(event.interest_repayment) if event.interest_repayment is not None else None,
+        }
+        event_properties_list.append(event_dict)
+
+    return event_properties_list
+  
+  
 #********************************
 # DEBUG: print sorted List[Event]
+#print(type(sort_events_list()[0]))
+#print(sort_events_list()[0])
 def print_events_list()->None:
   print("-" * 180)
   print(f"{'Date':<12} {'Start event date':<12} {'Currency lending':>18} {'Currency':>10} {'Rate':>10} {'Principal lending':>18} {'Principal repayment':>18} {'Interest repayment':>18} {'Event IDs':>12}")
@@ -634,5 +673,5 @@ def print_calculated_loan():
             f"{float(event.interest_balance):>14.2f}"
             )
   print("-" * 180)
-print_calculated_loan()
+#print_calculated_loan()
 #***************************************************************************
