@@ -30,4 +30,5 @@ unique_ids:
   scripts: {}
   server_modules:
     CalcCore: '1744161020440496760347840.1483'
+    Logging_config: '1744511876118486527462263.46924'
     ServerModule1: '173770758756059674705267.9083'
