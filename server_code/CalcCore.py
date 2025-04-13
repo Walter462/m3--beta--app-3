@@ -25,7 +25,8 @@ import logging
 - [ ] REV: date and datetime datatypes consistency
 - [ ] FEAT(front): # DEBUG: print sorted List[Event] 390
 - [ ] DEBUG: add logger
-
+- [ ] DEBUG: add logger level(execution time tracking)
+- [ ] FEAT: capitalization TRUE/FALSE handling in def loan_parameters_calculations():
 '''
 #=====================
 # 0. Remote connection
