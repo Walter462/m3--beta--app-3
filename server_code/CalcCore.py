@@ -35,7 +35,7 @@ import Logging_config
 #=====================
 Logging_config.setup_logging()
 
-@Logging_config.execution_time_tracking
+#@Logging_config.execution_time_tracking
 def open_remote_connection():
     try:
         with open('config/uplink_config.json', 'r') as config_file:
@@ -45,7 +45,7 @@ def open_remote_connection():
                 anvil.server.connect(key)
     except FileNotFoundError:
         pass  # No config file? No problem — just skip connection.
-open_remote_connection()
+#open_remote_connection()
 
 # Set global precision to 6 decimal places
 getcontext().prec = 6
@@ -168,7 +168,7 @@ class RawLoansListCache:
       self._loans_cache = [dict(app_tables.loans.search()[0])]
     return self._loans_cache
 
-@Logging_config.execution_time_tracking
+#@Logging_config.execution_time_tracking
 def fetch_raw_loan_info()->List[dict]:
   '''
   Fetches raw loan data from the database.
@@ -219,7 +219,7 @@ class RawEventsListCache:
       self._events_cache = raw_events_list
     return self._events_cache
     
-@Logging_config.execution_time_tracking
+#@Logging_config.execution_time_tracking
 def fetch_loan_events()->List[dict]:
   '''
   Fetch loan events from the database.
