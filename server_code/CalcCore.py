@@ -709,3 +709,6 @@ def extract_calculated_loan_properties() -> List[Dict[str, str]]:
             "Int_balance": str(event.interest_balance) if event.interest_balance is not None else None,
         }
         loan_properties_list.append(loan_dict)
+    return loan_properties_list
+  
+#print(extract_calculated_loan_properties())
