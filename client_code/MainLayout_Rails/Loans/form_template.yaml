@@ -63,6 +63,7 @@ components_by_slot:
       - {data_key: Int_accrued, id: PTQJXL, title: Interest accrued}
       - {data_key: Int_rep, id: YPBNXX, title: Interest repayment}
       - {data_key: Int_balance, id: RRGPCH, title: Interest balance}
+      visible: true
     type: DataGrid
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}

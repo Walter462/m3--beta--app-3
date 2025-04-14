@@ -168,7 +168,7 @@ class RawLoansListCache:
       self._loans_cache = [dict(app_tables.loans.search()[0])]
     return self._loans_cache
 
-#@Logging_config.execution_time_tracking
+@Logging_config.execution_time_tracking
 def fetch_raw_loan_info()->List[dict]:
   '''
   Fetches raw loan data from the database.
@@ -219,7 +219,7 @@ class RawEventsListCache:
       self._events_cache = raw_events_list
     return self._events_cache
     
-#@Logging_config.execution_time_tracking
+@Logging_config.execution_time_tracking
 def fetch_loan_events()->List[dict]:
   '''
   Fetch loan events from the database.
