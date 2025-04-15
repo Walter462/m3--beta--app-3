@@ -9,7 +9,7 @@ def setup_logging(
   logging_level = logging.DEBUG,
   ):
     '''
-    name: 
+    name: 'CalcCore', 
     enable: True, False
     logging_level: DEBUG, INFO, WARNING, ERROR, CRITICAL
     '''
@@ -42,11 +42,11 @@ def func_calling(func):
     
 def print_traceback_stack(func):
     def wrapper(*args, **kwargs):
-        logger = logging.getLogger('CalcCore')
-        logger.debug(f"Calling <{func.__name__}>")
+        logger = logging.getLogger('traceback')
+        #logger.debug(f"Calling <{func.__name__}>")
         result = func(*args, **kwargs)
         logger.debug(f"Stack trace for <{func.__name__}>:")
-        logger.debug("".join(traceback.format_stack()))  # Log the stack trace
+        logger.debug(traceback.print_stack())
         return result
     return wrapper
   
@@ -56,8 +56,10 @@ def execution_time_tracking(func):
     result = func(*args, **kwargs)
     end_time = time.time()
     execution_time = end_time - start_time
-    logger = logging.getLogger('CalcCore')  # Use the metrics logger
+    logger = logging.getLogger('CalcCore')
     logger.debug(f"Execution time for <{func.__name__}()> is: {execution_time:.4f} seconds")
     return result
   return wrapper
-  
+
+
+#@profile # Add this line to enable line_profiler. bash: kernprof -l -v ./server_code/CalcCore.py

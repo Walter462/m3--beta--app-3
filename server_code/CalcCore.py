@@ -1,6 +1,7 @@
 import anvil.google.auth, anvil.google.drive, anvil.google.mail
 from anvil.google.drive import app_files
 import anvil.facebook.auth
+import anvil.tables
 import anvil.users
 import anvil.tables as tables
 import anvil.tables.query as q
@@ -150,11 +151,11 @@ class AggregatedEvent:
 #============================
 # 2.1. Loans
 #============================
-# DEBUG: Speed up debugging by LoanCache class
-class RawLoansListCache:
+"""
+class RawLoansListCache1:
   '''
   Loan data storage class. Helps caching to avoid multiple DB requests.
-  - get_loans() - fetch loan data from cache or DB
+  - get_dicted_loans_list() - fetch loan data from cache or DB
   '''
   _instance = None
   _loans_cache = None
@@ -162,11 +163,37 @@ class RawLoansListCache:
     if cls._instance is None:
       cls._instance = super().__new__(cls)
     return cls._instance
-  def get_loans(self)->List[dict]:
+  def get_dicted_loans_list(self)->List[dict]:
     if self._loans_cache is None:
       # fetch a single loan
       self._loans_cache = [dict(app_tables.loans.search()[0])]
     return self._loans_cache
+"""
+
+class RawLoansListCache:
+  '''
+  Loan data storage class. Helps caching to avoid multiple DB requests.
+  - cache_raw_loans_data() - fetch loan data from DB and save it in cache (Server RAM)
+  - get_dicted_loans_list() - convert cached loan data to dict
+  '''
+  _instance = None
+  _loans_cache = None
+  _loans_cache_dicted = None
+  def __new__(cls):
+    if cls._instance is None:
+      cls._instance = super().__new__(cls)
+    return cls._instance
+  def cache_raw_loans_data(self)->List[anvil.tables.Row]:
+    if self._loans_cache is None:
+      # fetch a single loan
+      self._loans_cache = [app_tables.loans.search()[0]]
+      return self._loans_cache
+  def get_dicted_loans_list(self)->List[dict]:
+    if self._loans_cache_dicted is None:
+      # fetch a single loan
+        raw_loans_data = self.cache_raw_loans_data()
+        self._loans_cache_dicted = [dict(row) for row in raw_loans_data]
+    return self._loans_cache_dicted
 
 @Logging_config.execution_time_tracking
 def fetch_raw_loan_info()->List[dict]:
@@ -174,8 +201,8 @@ def fetch_raw_loan_info()->List[dict]:
   Fetches raw loan data from the database.
   Normally it is a single loan.
   '''
-  #raw_loans_list = [dict(app_tables.loans.search()[0])]
-  raw_loans_list = RawLoansListCache().get_loans()
+  #raw_loans_list = [dict(loan) for loan in RawLoansListCache().get_dicted_loans_list()]
+  raw_loans_list = RawLoansListCache().get_dicted_loans_list()
   return raw_loans_list
 
 def loans_dataclass_listing()->List[Loan]:
@@ -208,7 +235,6 @@ class RawEventsListCache:
     return cls._instance
   def get_events(self):
     if self._events_cache is None:
-      #open_remote_connection()
       interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
                   app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
       lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
@@ -237,6 +263,49 @@ def fetch_loan_events()->List[dict]:
   raw_events_list = interest_rates + lendings + repayments
   #raw_events_list = RawEventsListCache().get_events()
   return raw_events_list
+
+@Logging_config.execution_time_tracking
+def fetch_interest_rates()->anvil.tables.SearchIterator:
+  loan = app_tables.loans.search()[0]
+  #interest_rates = [item.__dict__['_spec']['itemCache'] for item in app_tables.interest_rates.search(loan=loan)]
+  interest_rates = app_tables.interest_rates.search(loan=loan)
+  return interest_rates
+#print(fetch_interest_rates())
+
+@Logging_config.execution_time_tracking
+def dict_fetched_interest_rates()->List[dict]:
+  result = [dict(item) for item in fetch_interest_rates()]
+  return result
+#print(dict_fetched_interest_rates())
+
+
+@Logging_config.execution_time_tracking
+def dict_interest_rates():
+  loan = app_tables.loans.search()[0]
+  result = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in app_tables.interest_rates.search(loan=loan)]
+  return result
+#print(dict_interest_rates())
+
+@Logging_config.execution_time_tracking
+def fetch_loan_events1()->List[dict]:
+  '''
+  Fetch loan events from the database.
+  - Interest rates
+  - Lendings
+  - Repayments\n
+  Returns a list of dictionaries with the combined event data.
+  '''
+  loan = app_tables.loans.search()[0]
+  interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
+                    app_tables.interest_rates.search(loan=loan)]
+  lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
+              app_tables.principal_lendings.search(loan=loan)]
+  repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in 
+                app_tables.repayments.search(loan=loan)]
+  raw_events_list = interest_rates + lendings + repayments
+  #raw_events_list = RawEventsListCache().get_events()
+  return raw_events_list
+#fetch_loan_events1()
 
 def events_dataclass_listing()->List[Event]:
   '''
