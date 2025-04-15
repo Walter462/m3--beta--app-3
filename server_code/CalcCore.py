@@ -46,7 +46,7 @@ def open_remote_connection():
                 anvil.server.connect(key)
     except FileNotFoundError:
         pass  # No config file? No problem — just skip connection.
-open_remote_connection()
+#open_remote_connection()
 
 # Set global precision to 6 decimal places
 getcontext().prec = 6
@@ -781,4 +781,4 @@ def extract_calculated_loan_properties() -> List[Dict[str, str]]:
         loan_properties_list.append(loan_dict)
     return loan_properties_list
   
-print(extract_calculated_loan_properties())
+#print(extract_calculated_loan_properties())
