@@ -46,7 +46,7 @@ def open_remote_connection():
                 anvil.server.connect(key)
     except FileNotFoundError:
         pass  # No config file? No problem — just skip connection.
-#open_remote_connection()
+open_remote_connection()
 
 # Set global precision to 6 decimal places
 getcontext().prec = 6
@@ -254,15 +254,17 @@ def fetch_loan_events()->List[dict]:
   - Repayments\n
   Returns a list of dictionaries with the combined event data.
   '''
+  loan = app_tables.loans.search()[0]
   interest_rates = [{**dict(item), "event_type":"Interest rate", "loan_id":item['loan']['loan_id']} for item in
-                    app_tables.interest_rates.search(loan=app_tables.loans.search()[0])]
+                    app_tables.interest_rates.search(loan=loan)]
   lendings = [{**dict(item), "event_type": "Lending", "loan_id":item['loan']['loan_id']} for item in 
-              app_tables.principal_lendings.search(loan=app_tables.loans.search()[0])]
+              app_tables.principal_lendings.search(loan=loan)]
   repayments = [{**dict(item), "event_type": "Repayment", "loan_id":item['loan']['loan_id']} for item in 
-                app_tables.repayments.search(loan=app_tables.loans.search()[0])]
+                app_tables.repayments.search(loan=loan)]
   raw_events_list = interest_rates + lendings + repayments
   #raw_events_list = RawEventsListCache().get_events()
   return raw_events_list
+
 
 @Logging_config.execution_time_tracking
 def fetch_interest_rates()->anvil.tables.SearchIterator:
@@ -305,7 +307,6 @@ def fetch_loan_events1()->List[dict]:
   raw_events_list = interest_rates + lendings + repayments
   #raw_events_list = RawEventsListCache().get_events()
   return raw_events_list
-#fetch_loan_events1()
 
 def events_dataclass_listing()->List[Event]:
   '''
@@ -780,4 +781,4 @@ def extract_calculated_loan_properties() -> List[Dict[str, str]]:
         loan_properties_list.append(loan_dict)
     return loan_properties_list
   
-#print(extract_calculated_loan_properties())
+print(extract_calculated_loan_properties())

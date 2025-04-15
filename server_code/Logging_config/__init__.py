@@ -2,6 +2,7 @@ import sys
 import logging
 import traceback
 import time
+import timeit
 
 def setup_logging(
   logger_name = 'CalcCore',
@@ -63,3 +64,11 @@ def execution_time_tracking(func):
 
 
 #@profile # Add this line to enable line_profiler. bash: kernprof -l -v ./server_code/CalcCore.py
+
+def average_function_execution_time(func):
+  def wrapper(*args, **kwargs):
+    result = func(*args, **kwargs)
+    logger = logging.getLogger('CalcCore')
+    logger.debug(f"Average execution time for <{func.__name__}()> is: {timeit.timeit(func, number=10):.4f} seconds")
+    return result
+  return wrapper
