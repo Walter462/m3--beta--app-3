@@ -55,7 +55,14 @@ def fetch_companies_dropdown():
 
 @anvil.server.callable
 def fetch_companies():
-  return app_tables.companies.search()
+  if anvil.server.cookies.local.get('companies'):
+    companies_cookie = anvil.server.cookies.local.get('companies')
+    print(f'Found a cookie: {companies_cookie}')
+    return companies_cookie
+  else:
+    print("Fetching companies info from database")
+    companies_cookie = anvil.server.cookies.local.set(1, companies = app_tables.companies.search())
+    return companies_cookie.get('companies')
 
 @anvil.server.callable
 def fetch_user_info():
