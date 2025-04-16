@@ -19,8 +19,8 @@ class Loans(LoansTemplate):
     self.refresh_loans_list()
     self.loans_repeating_panel.set_event_handler('x-delete-loan', self.delete_loan)
     self.loans_repeating_panel.set_event_handler('x-edit-loan', self.edit_loan)
-    self.sorted_events_panel.items = anvil.server.call('extract_sorted_events_properties')
-    self.calculated_loan_repeating_panel.items = anvil.server.call('extract_calculated_loan_properties')
+    #self.sorted_events_panel.items = anvil.server.call('extract_sorted_events_properties')
+    #self.calculated_loan_repeating_panel.items = anvil.server.call('extract_calculated_loan_properties')
     
   def edit_loan(self, loan, **event_args):
     loan_copy = dict(loan)
