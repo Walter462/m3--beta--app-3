@@ -58,20 +58,30 @@ def clear_cookies():
   print(f"Cookie {anvil.server.cookies.local} cleared")
   return anvil.server.cookies.local.clear()
 
+def companies_check(companies_data):
+  for row in companies_data:
+    if app_tables.companies.has_row(row) is False:
+      print(f'Row {row} needs to be refresh')
+    else:
+      print("Ok")
 
 @anvil.server.callable
 def fetch_companies():
   if anvil.server.cookies.local.get('companies', None) is not None:
     companies_cookie = anvil.server.cookies.local.get('companies')
     print(f'Found a cookie: {companies_cookie}')
+    companies_check(companies_cookie)
     return companies_cookie
   else:
     # Fetch from database and store in cookie
     #companies_data = "bla bla bla"
     companies_data = [dict(item) for item in app_tables.companies.search()]
+    #companies_data = app_tables.companies.search()
     anvil.server.cookies.local['companies'] = companies_data
     print(f"Fetching companies info from database: {anvil.server.cookies.local.get('companies')}")
+    companies_check(companies_data)
     return companies_data
+      
 
 @anvil.server.callable
 def fetch_user_info():
