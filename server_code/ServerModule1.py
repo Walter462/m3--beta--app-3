@@ -61,12 +61,13 @@ def clear_cookies():
 
 @anvil.server.callable
 def fetch_companies():
-  if anvil.server.cookies.local.get('companies_data', None) is not None:
+  if anvil.server.cookies.local.get('companies', None) is not None:
     companies_cookie = anvil.server.cookies.local.get('companies')
     print(f'Found a cookie: {companies_cookie}')
     return companies_cookie
   else:
     # Fetch from database and store in cookie
+    #companies_data = "bla bla bla"
     companies_data = [dict(item) for item in app_tables.companies.search()]
     anvil.server.cookies.local['companies'] = companies_data
     print(f"Fetching companies info from database: {anvil.server.cookies.local.get('companies')}")
