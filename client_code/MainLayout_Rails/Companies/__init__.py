@@ -18,7 +18,8 @@ class Companies(CompaniesTemplate):
     # Any code you write here will run before the form opens.
     self.companies_panel.items = anvil.server.call('fetch_companies')
 
-  def clear_cookie_click(self, **event_args):
+  def clear_cookie_click_click(self, **event_args):
     """This method is called when the component is clicked."""
-    anvil.server.cookies.local.clear()
+    Notification(f"Cookie cleared")
+    anvil.server.call('clear_cookies')
 
