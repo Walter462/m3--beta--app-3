@@ -36,7 +36,7 @@ import Logging_config
 #=====================
 Logging_config.setup_logging()
 
-#@Logging_config.execution_time_tracking
+@Logging_config.execution_time_tracking
 def open_remote_connection():
     try:
         with open('config/uplink_config.json', 'r') as config_file:
