@@ -74,7 +74,7 @@ def fetch_companies():
     #return companies_cookie
   else:
     #companies_data = [dict(item) for item in app_tables.companies.search()]
-    companies_cookie = [row for row in app_tables.companies.search()]
+    companies_cookie = [dict(row) for row in app_tables.companies.search()]
     anvil.server.cookies.local['companies'] = companies_cookie
     print(f"Fetching companies info from database: {anvil.server.cookies.local.get('companies')}")
     companies_check(companies_cookie)
