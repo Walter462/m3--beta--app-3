@@ -61,7 +61,7 @@ def clear_cookies():
 def companies_check(companies_data):
   for row in companies_data:
     if app_tables.companies.has_row(row) is False:
-      print(f'Row {row} needs to be refresh')
+      print(f'Row {row} needs to be refreshed')
     else:
       print("Ok")
 
@@ -73,10 +73,8 @@ def fetch_companies():
     companies_check(companies_cookie)
     return companies_cookie
   else:
-    # Fetch from database and store in cookie
-    #companies_data = "bla bla bla"
-    companies_data = [dict(item) for item in app_tables.companies.search()]
-    #companies_data = app_tables.companies.search()
+    #companies_data = [dict(item) for item in app_tables.companies.search()]
+    companies_data = [row for row in app_tables.companies.search()]
     anvil.server.cookies.local['companies'] = companies_data
     print(f"Fetching companies info from database: {anvil.server.cookies.local.get('companies')}")
     companies_check(companies_data)
