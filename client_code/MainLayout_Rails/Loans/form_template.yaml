@@ -69,5 +69,9 @@ components_by_slot:
       show_page_controls: true
       visible: true
     type: DataGrid
+  - layout_properties: {}
+    name: tabulator_1
+    properties: {visible: false}
+    type: form:dep_9u874npwq1bim:Tabulator
 is_package: true
 layout: {type: 'form:MainLayout_Rails'}
