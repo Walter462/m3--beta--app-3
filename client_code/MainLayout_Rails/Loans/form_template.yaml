@@ -28,8 +28,8 @@ components_by_slot:
     name: sorted_events_grid
     properties:
       columns:
-      - {data_key: event_fact_date, id: WZPXLK, title: Event fact date}
-      - {data_key: event_start_date, id: QAKPCT, title: Event start date}
+      - {data_key: event_fact_date, id: WZPXLK, title: Transaction date}
+      - {data_key: event_start_date, id: QAKPCT, title: Accounting date}
       - {data_key: interest_rate, id: YQVQRY, title: Interest rate}
       - {data_key: principal_lending_currency.currency_amount, id: YBEOCU, title: Lending currency amount}
       - {data_key: principal_lending_currency.ticker, id: GBNSQQ, title: Lending currency ticker}
@@ -51,10 +51,10 @@ components_by_slot:
     name: calculated_loan_grid
     properties:
       columns:
-      - {data_key: Event, id: TLCPMP, title: Event fact date}
-      - {data_key: Start, id: PTRHIR, title: Event start date}
+      - {data_key: Event, id: TLCPMP, title: Transaction date}
+      - {data_key: Start, id: PTRHIR, title: Accounting date}
       - {data_key: Days, id: WIQHRW, title: Days count}
-      - {data_key: End, id: WFNRNS, title: Event end date}
+      - {data_key: End, id: WFNRNS, title: Eveend date}
       - {data_key: Lending, id: IWNKNA, title: Lending sum}
       - {data_key: Cap, id: WACMXI, title: Capitalization}
       - {data_key: Pr_rep, id: GDXKOG, title: Principal repayment}
