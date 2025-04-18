@@ -294,6 +294,9 @@ dependencies:
   dep_id: dep_lin1x4oec0ytd
   resolution_hints: {app_id: 4UK6WHQ6UX7AKELK, name: Material 3 Theme, package_name: m3}
   version: {version_tag: v1.2.1}
+- dep_id: dep_9u874npwq1bim
+  resolution_hints: {app_id: TGQCF3WT6FVL2EM2, name: Tabulator, package_name: tabulator}
+  version: {version_tag: v3.0.5}
 name: M3 (beta) App 3
 native_deps: null
 package_name: M3__beta__App_3
