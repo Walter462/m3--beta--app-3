@@ -480,8 +480,8 @@ def extract_sorted_events_properties() -> List[Dict[str, str]]:
     for event in events_list:
         event_dict = {
             "loan": event.loan.loan_id,
-            "event_fact_date": str(event.event_fact_date),
-            "event_start_date": str(event.event_start_date),
+            "event_fact_date": str(event.event_fact_date.strftime("%d-%m-%Y")),
+            "event_start_date": str(event.event_start_date.strftime("%d-%m-%Y")),
             "event_id": str(event.event_id),
             "event_type": event.event_type if hasattr(event, 'event_type') else None, 
             "principal_lending_currency.currency_amount": str(f"{event.principal_lending_currency.currency_amount:,.2f}") if event.principal_lending_currency else None,
@@ -765,10 +765,10 @@ def extract_calculated_loan_properties() -> List[Dict[str, str]]:
 
     for event in calculated_loan:
         loan_dict = {
-            "Event": str(event.event_fact_date),
-            "Start": str(event.event_start_date),
+            "Event": str(event.event_fact_date.strftime("%d-%m-%Y")),
+            "Start": str(event.event_start_date.strftime("%d-%m-%Y")),
             "Days": event.days_count,
-            "End": str(event.event_end_date),
+            "End": str(event.event_end_date.strftime("%d-%m-%Y")),
             "Lending": str(f"{event.principal_lending:,.2f}") if event.principal_lending is not None else None,
             "Cap": str(f"{event.capitalization:,.2f}") if event.capitalization is not None else None,
             "Pr_rep": str(f"{event.principal_repayment:,.2f}") if event.principal_repayment is not None else None,
