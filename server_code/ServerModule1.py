@@ -9,20 +9,16 @@ import anvil.server
 from datetime import datetime, timedelta
 from uuid import uuid4
 
-
-# This is a server module. It runs on the Anvil server,
-# rather than in the user's browser.
-#
-# To allow anvil.server.call() to call functions here, we mark
-# them with @anvil.server.callable.
-# Here is an example - you can replace it with your own:
-#
-#@anvil.server.callable
-#def say_hello(name):
-#   print("Hello, " + name + "!")
-#   return 42
+# User info
+@anvil.server.callable
+def fetch_user_info():
+  user_info_keys= ['email', 'signed_up']
+  user_info = {key: dict(anvil.users.get_user())[key] for key in user_info_keys}
+  user_info['signed_up'] = user_info['signed_up'].date().strftime('%Y-%m-%d')
+  return user_info
 
 
+# Loan 
 @anvil.server.callable
 def delete_loan(loan):
   if app_tables.loans.has_row(loan):
@@ -49,14 +45,10 @@ def add_loan(new_loan):
 def fetch_loans_info():
   return app_tables.loans.search()
 
+# Companies
 @anvil.server.callable
 def fetch_companies_dropdown():
   return [(company['company_name'], company) for company in app_tables.companies.search()]
-
-@anvil.server.callable
-def clear_cookies():
-  print(f"Cookie {anvil.server.cookies.local} cleared")
-  return anvil.server.cookies.local.clear()
 
 def companies_check(companies_data):
   for row in companies_data:
@@ -80,14 +72,7 @@ def fetch_companies():
     companies_check(companies_cookie)
     return companies_cookie
       
-
-@anvil.server.callable
-def fetch_user_info():
-  user_info_keys= ['email', 'signed_up']
-  user_info = {key: dict(anvil.users.get_user())[key] for key in user_info_keys}
-  user_info['signed_up'] = user_info['signed_up'].date().strftime('%Y-%m-%d')
-  return user_info
-
+# Subscriptions
 @anvil.server.callable
 def fetch_subscriptions():
   current_user = anvil.users.get_user()
@@ -98,6 +83,8 @@ def fetch_subscriptions():
     if 'created_on' in sub_copy and isinstance(sub_copy['created_on'], datetime):
       sub_copy['created_on'] = sub_copy['created_on'].strftime('%Y-%m-%d')
     subscriptions.append(sub_copy)
+  anvil.server.session["subscriptions"] = subscriptions
+  print(f"Got session data {anvil.server.session.get('subscriptions')}")
   return subscriptions
   
 @anvil.server.callable
@@ -116,28 +103,3 @@ def get_interest_rate_bases():
 def get_currency_ticker():
   currency_tickers =['USD', 'EUR', 'GBP', 'JPY']
   return(currency_tickers)
-
-
-
-# Unused section
-"""
-@anvil.server.callable
-def fetch_loans_list_info():
-  loan_info_keys = ['lender', 'borrower', 'contract_start_date', 'credentials']
-  results = [ ]
-  for item in app_tables.loans.search():
-    loan_data = { }
-    for key in loan_info_keys:
-      value = item[key]
-      if key in ['lender', 'borrower']:
-        loan_data[key] =  item[key]['company_name'] if value else None
-      elif key == 'contract_start_date':
-        if value:
-          loan_data[key] = value.strftime('%Y-%m-%d')
-        else:
-          loan_data[key] = None
-      else:
-        loan_data[key] = value
-    results.append(loan_data)
-  return results
-"""

@@ -1,3 +1,4 @@
+import anvil
 import sys
 import logging
 import traceback
@@ -72,3 +73,13 @@ def average_function_execution_time(func):
     logger.debug(f"Average execution time for <{func.__name__}()> is: {timeit.timeit(func, number=10):.4f} seconds")
     return result
   return wrapper
+
+# Utils
+@anvil.server.callable
+def clear_cookies():
+  print(f"Cookie {anvil.server.cookies.local} cleared")
+  return anvil.server.cookies.local.clear()
+
+@anvil.server.callable
+def session_data(key):
+  print(f"Got session data {anvil.server.session.get(str(key))}")
