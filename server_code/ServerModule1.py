@@ -60,7 +60,6 @@ def clear_cookies():
 
 def companies_check(companies_data):
   for row in companies_data:
-    print({app_tables.companies.get(uuid=row['uuid'])})
     if row == dict(app_tables.companies.get(uuid=row['uuid'])):
       print("EQUAL")
     else:
