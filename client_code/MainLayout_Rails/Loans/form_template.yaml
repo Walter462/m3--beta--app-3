@@ -55,7 +55,7 @@ components_by_slot:
       - {data_key: Event, expand: false, id: TLCPMP, title: Transaction date}
       - {data_key: Start, id: PTRHIR, title: Accounting date}
       - {data_key: Days, id: WIQHRW, title: Days count}
-      - {data_key: End, id: WFNRNS, title: Eveend date}
+      - {data_key: End, id: WFNRNS, title: Period end date}
       - {data_key: Lending, id: IWNKNA, title: Lending sum}
       - {data_key: Cap, id: WACMXI, title: Capitalization}
       - {data_key: Pr_rep, id: GDXKOG, title: Principal repayment}
