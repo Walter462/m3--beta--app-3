@@ -93,16 +93,16 @@ components:
     type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
   - layout_properties: {grid_position: 'YQQAQL,BPBLLP'}
     name: text_8
-    properties: {text: 'Interest rate type:'}
+    properties: {text: 'Interest rate type:', visible: false}
     type: form:dep_lin1x4oec0ytd:_Components.Text
   - components:
     - layout_properties: {}
       name: static_radio_button
-      properties: {text: Static, value: static}
+      properties: {text: Static, value: static, visible: false}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     - layout_properties: {}
       name: dynamic_radio_button
-      properties: {text: Dynamic, value: dynamic}
+      properties: {text: Dynamic, value: dynamic, visible: false}
       type: form:dep_lin1x4oec0ytd:_Components.RadioButton
     data_bindings:
     - {code: 'self.item[''interest_rate_type'']', property: selected_value, writeback: true}
@@ -114,13 +114,13 @@ components:
     - {code: 'self.item[''lending_date_exclusive_counting'']', property: checked, writeback: true}
     layout_properties: {grid_position: 'GJQMZZ,ICFWZG'}
     name: lending_date_exclusive_counting_checkbox
-    properties: {text: Exclusive lending date}
+    properties: {text: Exclude lending date}
     type: form:dep_lin1x4oec0ytd:_Components.Checkbox
   - data_bindings:
     - {code: 'self.item[''repayment_date_exclusive_counting'']', property: checked, writeback: true}
     layout_properties: {grid_position: 'ZWJIOK,PGZHML'}
     name: repayment_date_exclusive_counting_checkbox
-    properties: {checked: true, text: 'Exclusive repayment date '}
+    properties: {checked: true, text: 'Exclude repayment date '}
     type: form:dep_lin1x4oec0ytd:_Components.Checkbox
   - data_bindings:
     - {code: 'self.item[''capitalization'']', property: checked, writeback: true}

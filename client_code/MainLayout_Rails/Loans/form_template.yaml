@@ -50,8 +50,9 @@ components_by_slot:
     layout_properties: {}
     name: calculated_loan_grid
     properties:
+      auto_header: true
       columns:
-      - {data_key: Event, id: TLCPMP, title: Transaction date}
+      - {data_key: Event, expand: false, id: TLCPMP, title: Transaction date}
       - {data_key: Start, id: PTRHIR, title: Accounting date}
       - {data_key: Days, id: WIQHRW, title: Days count}
       - {data_key: End, id: WFNRNS, title: Eveend date}
@@ -64,6 +65,8 @@ components_by_slot:
       - {data_key: Int_accrued, id: PTQJXL, title: Interest accrued}
       - {data_key: Int_rep, id: YPBNXX, title: Interest repayment}
       - {data_key: Int_balance, id: RRGPCH, title: Interest balance}
+      rows_per_page: 7
+      show_page_controls: true
       visible: true
     type: DataGrid
 is_package: true
