@@ -297,9 +297,9 @@ dependencies:
 - dep_id: dep_9u874npwq1bim
   resolution_hints: {app_id: TGQCF3WT6FVL2EM2, name: Tabulator, package_name: tabulator}
   version: {version_tag: v3.0.5}
-name: M3 (beta) App 3
+name: M3 (beta) App 3 Loan Manager
 native_deps: null
-package_name: M3__beta__App_3
+package_name: M3__beta__App_3_Loan_Manager
 runtime_options:
   client_version: '3'
   server_spec: {base: python310-standard}
